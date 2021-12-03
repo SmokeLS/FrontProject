@@ -18,7 +18,7 @@ Profile.propTypes = {
 export default function Profile({ myProfile, posts }) {
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
         <Stack spacing={3}>
           <ProfileFollowInfo profile={myProfile} />
           <ProfileAbout profile={myProfile} />
@@ -26,7 +26,7 @@ export default function Profile({ myProfile, posts }) {
         </Stack>
       </Grid>
 
-      <Grid item xs={12} md={8}>
+      <Grid item xs={12} md={6}>
         <Stack spacing={3}>
           <ProfilePostInput />
           {posts.map((post) => (

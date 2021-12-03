@@ -24,48 +24,29 @@ ProfileAbout.propTypes = {
 };
 
 export default function ProfileAbout({ profile }) {
-  const { quote, country, email, role, company, school } = profile;
+  const { follower } = profile;
+
+  console.log(profile);
 
   return (
     <Card>
-      <CardHeader title="About" />
+      <CardHeader title="Информация" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Typography variant="body2">{quote}</Typography>
-
         <Stack direction="row">
-          <IconStyle icon={pinFill} />
-          <Typography variant="body2">
-            Live at &nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {country}
-            </Link>
-          </Typography>
+          <Typography variant="body2">ИНН: {follower}</Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={emailFill} />
-          <Typography variant="body2">{email}</Typography>
+          <Typography variant="body2">Регион: Самарская область</Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={roundBusinessCenter} />
-          <Typography variant="body2">
-            {role} at &nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {company}
-            </Link>
-          </Typography>
+          <Typography variant="body2">Город: Самара</Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={roundBusinessCenter} />
-          <Typography variant="body2">
-            Studied at &nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {school}
-            </Link>
-          </Typography>
+          <Typography variant="body2">Адрес: Ставропольский район, Приморский поселок, ясная улица, дом 7</Typography>
         </Stack>
       </Stack>
     </Card>

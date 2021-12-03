@@ -50,7 +50,11 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.user.root,
         icon: ICONS.user,
         children: [
-          { title: 'Все компании', path: PATH_DASHBOARD.user.list },
+          {
+            title: 'Все компании',
+            path: PATH_DASHBOARD.user.list,
+            children: [{ title: 'Все компании', path: PATH_DASHBOARD.user.id }]
+          },
           { title: 'Мои компании', path: PATH_DASHBOARD.user.cards },
           { title: 'Новые компании', path: PATH_DASHBOARD.user.profile },
           { title: 'Архив', path: PATH_DASHBOARD.user.newUser }

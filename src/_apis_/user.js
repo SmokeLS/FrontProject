@@ -50,6 +50,7 @@ mock.onGet('/api/user/manage-users').reply(() => {
   const users = [...Array(24)].map((_, index) => ({
     id: mockData.id(index),
     avatarUrl: mockData.image.avatar(index),
+    individualNumber: mockData.individualNumber(index),
     name: mockData.name.fullName(index),
     email: mockData.email(index),
     phoneNumber: mockData.phoneNumber(index),
@@ -60,7 +61,7 @@ mock.onGet('/api/user/manage-users').reply(() => {
     zipCode: '85807',
     company: mockData.company(index),
     isVerified: mockData.boolean(index),
-    status: sample(['active', 'banned']) || 'active',
+    status: sample(['Active', 'banned']) || 'active',
     role: mockData.role(index)
   }));
 

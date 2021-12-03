@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material
 import { useTheme } from '@mui/material/styles';
 import {
@@ -13,7 +13,7 @@ import {
   Avatar,
   Button,
   TextField,
-  Checkbox,
+  Box,
   TableRow,
   TableBody,
   TableCell,
@@ -21,6 +21,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Link,
   TextareaAutosize
 } from '@mui/material';
 // redux
@@ -45,8 +46,7 @@ const TABLE_HEAD = [
   { id: 'InvidialNumber', label: 'ИНН', alignRight: false },
   { id: 'contactdate', label: 'Дата контакта', alignRight: false },
   { id: 'status', label: 'Статус', alignRight: false },
-  { id: 'Commentary', label: 'Комментарий', alignRight: false },
-  { id: '' }
+  { id: 'Commentary', label: 'Комментарий', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -83,6 +83,7 @@ function applySortFilter(array, comparator, query) {
 export default function UserList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userList } = useSelector((state) => state.user);
   const [page, setPage] = useState(0);
@@ -174,7 +175,7 @@ export default function UserList() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+            <TableContainer>
               <Table>
                 <UserListHead
                   order={order}
@@ -187,7 +188,7 @@ export default function UserList() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, isVerified } = row;
+                    const { id, name, role, status, individualNumber } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -198,15 +199,23 @@ export default function UserList() {
                         role="checkbox"
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
+                        sx={{ verticalAlign: 'top' }}
                       >
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            navigate(`/dashboard/user/list/${id}`);
+                          }}
+                        >
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{individualNumber}</TableCell>
                         <TableCell align="left">{role}</TableCell>
                         <TableCell align="left">
                           <Label
@@ -216,19 +225,38 @@ export default function UserList() {
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
-                        <TableCell sx={{ width: '40%' }}>
-                          <Typography variant="caption" display="block" gutterBottom>
-                            11.03.2021 15:30, Иванов И.И.
-                          </Typography>
-                          <TextareaAutosize
-                            maxRows={4}
-                            aria-label="maximum height"
-                            value="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-      ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-      ut labore et dolore magna aliqua"
-                            disabled
-                            style={{ width: '100%', resize: 'none' }}
-                          />
+                        <TableCell ml={4} sx={{ width: '40%' }}>
+                          <Box
+                            sx={{
+                              maxHeight: '200px',
+                              overflowY: 'scroll',
+                              outline: '1px solid #ccc',
+                              borderRadius: '10px'
+                            }}
+                          >
+                            <Typography variant="caption" display="block" gutterBottom>
+                              11.03.2021 15:30, Иванов И.И.
+                            </Typography>
+                            <Typography mb={2} sx={{ fontSize: '14px' }}>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                            </Typography>
+                            <Typography variant="caption" display="block" gutterBottom>
+                              11.03.2021 16:30, Иванов И.И.
+                            </Typography>
+                            <Typography mb={2} sx={{ fontSize: '14px' }}>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                              ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+                            </Typography>
+                            <Typography variant="caption" display="block" gutterBottom>
+                              11.03.2021 16:30, Иванов И.И.
+                            </Typography>
+                            <Typography mb={2} sx={{ fontSize: '14px' }}>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                              ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+                            </Typography>
+                          </Box>
                         </TableCell>
                       </TableRow>
                     );
