@@ -54,7 +54,7 @@ BlogPostsSearch.propTypes = {
 export default function BlogPostsSearch({ sx }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const linkTo = (title) => `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
+  const linkTo = (title) => `${PATH_DASHBOARD.employee.root}/post/${paramCase(title)}`;
 
   const handleChangeSearch = async (event) => {
     try {

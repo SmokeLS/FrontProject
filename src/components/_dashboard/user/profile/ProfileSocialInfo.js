@@ -7,7 +7,7 @@ import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Link, Card, CardHeader, Stack, Button, Box, Typography } from '@mui/material';
+import { Link, Card, CardHeader, Stack, Button, Box, Typography, Divider } from '@mui/material';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
@@ -59,11 +59,17 @@ export default function ProfileSocialInfo({ profile }) {
   return (
     <Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <CardHeader title="Контакты" sx={{ mr: 2, mb: 1 }} />
-        <Button variant="contained" sx={{ mr: 2, mb: 1 }} component={RouterLink} to={PATH_DASHBOARD.user.newUser}>
+        <CardHeader title="Контакты" sx={{ mr: 2 }} />
+        <Typography
+          variant="body1"
+          sx={{ mr: 2, textDecoration: 'none', fontSize: '1.125rem' }}
+          component={RouterLink}
+          to={PATH_DASHBOARD.user.newUser}
+        >
           Новая карточка
-        </Button>
+        </Typography>
       </Box>
+      <Divider />
       <Stack spacing={2} sx={{ p: 3, maxHeight: '287px', overflowY: 'scroll' }}>
         {CONTACTS.map((contact, index) => (
           <Box key={index}>

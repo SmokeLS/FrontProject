@@ -61,7 +61,7 @@ mock.onGet('/api/user/manage-users').reply(() => {
     zipCode: '85807',
     company: mockData.company(index),
     isVerified: mockData.boolean(index),
-    status: sample(['Active', 'banned']) || 'active',
+    status: sample(['В архиве', 'Новый', 'В работе']) || 'В архиве',
     role: mockData.role(index)
   }));
 

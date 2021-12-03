@@ -73,9 +73,9 @@ export const PATH_DASHBOARD = {
     checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
     invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice')
   },
-  blog: {
-    root: path(ROOTS_DASHBOARD, '/blog'),
-    posts: path(ROOTS_DASHBOARD, '/blog/posts'),
+  employee: {
+    root: path(ROOTS_DASHBOARD, '/employee'),
+    list: path(ROOTS_DASHBOARD, '/employee/list'),
     post: path(ROOTS_DASHBOARD, '/blog/post/:title'),
     postById: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
     newPost: path(ROOTS_DASHBOARD, '/blog/new-post')

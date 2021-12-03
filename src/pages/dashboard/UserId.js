@@ -27,6 +27,7 @@ import {
   ProfileGallery,
   ProfileFollowers
 } from '../../components/_dashboard/user/profile';
+import ProfileFollowInfo from '../../components/_dashboard/user/profile/ProfileFollowInfo';
 
 // ----------------------------------------------------------------------
 
@@ -115,6 +116,7 @@ export default function UserId() {
         >
           <Box sx={{ pl: 5, pt: 3, zIndex: 200, position: 'relative' }}>
             <Typography variant="h5">OOO "ГИМА"</Typography>
+            {/* <ProfileFollowInfo profile={myProfile} /> */}
             <Typography variant="caption" display="block">
               Текущее время: 13:50:34, UTC+3
             </Typography>

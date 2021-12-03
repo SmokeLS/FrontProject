@@ -220,9 +220,13 @@ export default function UserList() {
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'banned' && 'error') || 'success'}
+                            color={
+                              (status === 'В архиве' && 'error') ||
+                              (status === 'В работе' && 'info') ||
+                              (status === 'Новый' && 'success')
+                            }
                           >
-                            {sentenceCase(status)}
+                            {status}
                           </Label>
                         </TableCell>
                         <TableCell ml={4} sx={{ width: '40%' }}>

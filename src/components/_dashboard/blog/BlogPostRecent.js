@@ -34,7 +34,7 @@ PostItem.propTypes = {
 
 function PostItem({ post }) {
   const { cover, title, view, comment, share, author, createdAt } = post;
-  const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
+  const linkTo = `${PATH_DASHBOARD.employee.root}/post/${paramCase(title)}`;
 
   const POST_INFO = [
     { number: comment, icon: messageCircleFill },

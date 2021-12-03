@@ -56,7 +56,7 @@ export default function BlogPost() {
           heading="Post Details"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Blog', href: PATH_DASHBOARD.blog.root },
+            { name: 'Blog', href: PATH_DASHBOARD.employee.root },
             { name: sentenceCase(title) }
           ]}
         />

@@ -27,7 +27,7 @@ export default function Profile({ myProfile, posts }) {
         </Stack>
       </Grid>
 
-      <Grid item xs={12} md={8} sx={{ minHeight: '100vh' }}>
+      <Grid item xs={12} md={8}>
         <Stack spacing={3}>
           <Chat />
         </Stack>

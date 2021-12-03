@@ -105,10 +105,10 @@ export default function Router() {
           ]
         },
         {
-          path: 'blog',
+          path: 'employee',
           children: [
-            { element: <Navigate to="/dashboard/blog/posts" replace /> },
-            { path: 'posts', element: <BlogPosts /> },
+            { element: <Navigate to="/dashboard/employee/list" replace /> },
+            { path: 'list', element: <BlogPosts /> },
             { path: 'post/:title', element: <BlogPost /> },
             { path: 'new-post', element: <BlogNewPost /> }
           ]
