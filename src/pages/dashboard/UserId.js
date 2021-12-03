@@ -8,7 +8,7 @@ import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
 import { styled } from '@mui/material/styles';
-import { Tab, Box, Card, Tabs, Container, Typography } from '@mui/material';
+import { Tab, Box, Card, Tabs, Container, Typography, Grid } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getPosts, getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
@@ -110,16 +110,22 @@ export default function UserId() {
         <Card
           sx={{
             mb: 3,
-            height: 100,
+            height: 200,
             position: 'relative'
           }}
         >
-          <Box sx={{ pl: 5, pt: 3, zIndex: 200, position: 'relative' }}>
-            <Typography variant="h5">OOO "ГИМА"</Typography>
-            {/* <ProfileFollowInfo profile={myProfile} /> */}
-            <Typography variant="caption" display="block">
-              Текущее время: 13:50:34, UTC+3
-            </Typography>
+          <Box>
+            <Box>
+              <Box sx={{ pl: 5, pt: 3, zIndex: 200, position: 'relative' }}>
+                <Typography variant="h5">OOO "ГИМА"</Typography>
+                <Typography variant="caption" display="block">
+                  Текущее время: 13:50:34, UTC+3
+                </Typography>
+              </Box>
+            </Box>
+            <Box sx={{ pl: 5, pt: 3, zIndex: 200, position: 'relative' }}>
+              <ProfileFollowInfo profile={myProfile} />
+            </Box>
           </Box>
           <TabsWrapperStyle>
             <Tabs

@@ -27,7 +27,7 @@ export default function Chat() {
   return (
     <Page title="Chat | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Card sx={{ minHeight: '770px', display: 'flex' }}>
+        <Card sx={{ minHeight: '620px', display: 'flex' }}>
           <ChatWindow />
         </Card>
       </Container>

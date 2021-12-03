@@ -42,12 +42,6 @@ export default function GeneralApp() {
           <Grid item xs={12} md={6} lg={3}>
             <AppWidgetsStats item xs={4} />
           </Grid>
-          {/* <Grid item xs={12} md={6} lg={4}>
-            <Stack spacing={3}>
-              <AppWidgets1 />
-              <AppWidgets2 />
-            </Stack>
-          </Grid> */}
         </Grid>
       </Container>
     </Page>

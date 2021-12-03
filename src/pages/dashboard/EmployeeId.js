@@ -143,15 +143,9 @@ export default function UserId() {
         <Grid item xs={12} md={6}>
           <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
             <Stack spacing={2} direction="row">
-              <Button variant="outlined" ml={{ marginLeft: 3 }}>
-                Заблокировать
-              </Button>
-              <Button variant="outlined" ml={3}>
-                Изменить
-              </Button>
-              <Button variant="outlined" ml={3}>
-                Удалить
-              </Button>
+              <Button variant="outlined">Заблокировать</Button>
+              <Button variant="outlined">Изменить</Button>
+              <Button variant="outlined">Удалить</Button>
             </Stack>
           </Typography>
           {filteredUser && (

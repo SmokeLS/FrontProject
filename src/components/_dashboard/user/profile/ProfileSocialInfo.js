@@ -66,7 +66,7 @@ export default function ProfileSocialInfo({ profile }) {
           component={RouterLink}
           to={PATH_DASHBOARD.user.newUser}
         >
-          Новая карточка
+          Новый контакт
         </Typography>
       </Box>
       <Divider />
@@ -75,6 +75,22 @@ export default function ProfileSocialInfo({ profile }) {
           <Box key={index}>
             <Typography variant="body2">
               Контакт <Typography variant="caption">#2382</Typography>
+              <Typography
+                variant="body1"
+                sx={{ ml: 5, textDecoration: 'none', fontSize: '0.875rem', textAlign: 'right' }}
+                component={RouterLink}
+                to={PATH_DASHBOARD.user.newUser}
+              >
+                Изменить
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ ml: 1, textDecoration: 'none', fontSize: '0.875rem', textAlign: 'right' }}
+                component={RouterLink}
+                to={PATH_DASHBOARD.user.newUser}
+              >
+                Удалить
+              </Typography>
             </Typography>
             <Typography variant="body2" component="div">
               {contact.name}, {contact.position}

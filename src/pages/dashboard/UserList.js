@@ -48,18 +48,6 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Статус', alignRight: false },
   { id: 'Commentary', label: 'Комментарий', alignRight: false }
 ];
-
-// const TABLE_HEAD = [
-//   { id: 'name', label: 'Название', alignRight: false },
-//   { id: 'invidialNumber', label: 'ИНН', alignRight: false },
-//   { id: 'address', label: 'Адрес', alignRight: false },
-//   { id: 'telephone', label: 'Номер телефона', alignRight: false },
-//   { id: 'manager', label: 'Менеджер', alignRight: false },
-//   { id: 'status', label: 'Статус', alignRight: false },
-//   { id: 'currentDate', label: 'Текущая дата', alignRight: false },
-//   { id: 'region', label: 'Адрес', alignRight: false },
-//   { id: 'commentary', label: 'Комментарий', alignRight: false }
-// ];
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -188,7 +176,7 @@ export default function UserList() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
-            <TableContainer>
+            <TableContainer sx={{ overflowX: 'auto' }}>
               <Table>
                 <UserListHead
                   order={order}
@@ -242,7 +230,7 @@ export default function UserList() {
                             {status}
                           </Label>
                         </TableCell>
-                        <TableCell ml={4} sx={{ width: '40%' }}>
+                        <TableCell ml={4} sx={{ width: '40%', minWidth: '240px' }}>
                           <Box
                             sx={{
                               maxHeight: '200px',
