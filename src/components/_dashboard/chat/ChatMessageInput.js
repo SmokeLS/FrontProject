@@ -42,12 +42,6 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, ...
     setMessage(event.target.value);
   };
 
-  const handleKeyUp = (event) => {
-    if (event.key === 'Enter') {
-      handleSend();
-    }
-  };
-
   const handleSend = () => {
     if (!message) {
       return '';
@@ -73,27 +67,10 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, ...
         fullWidth
         value={message}
         disableUnderline
-        onKeyUp={handleKeyUp}
         onChange={handleChangeMessage}
-        placeholder="Type a message"
-        startAdornment={
-          <InputAdornment position="start">
-            <EmojiPicker disabled={disabled} value={message} setValue={setMessage} />
-          </InputAdornment>
-        }
-        endAdornment={
-          <Stack direction="row" spacing={0.5} mr={1.5}>
-            <IconButton disabled={disabled} size="small" onClick={handleAttach}>
-              <Icon icon={roundAddPhotoAlternate} width={24} height={24} />
-            </IconButton>
-            <IconButton disabled={disabled} size="small" onClick={handleAttach}>
-              <Icon icon={attach2Fill} width={24} height={24} />
-            </IconButton>
-            <IconButton disabled={disabled} size="small">
-              <Icon icon={micFill} width={24} height={24} />
-            </IconButton>
-          </Stack>
-        }
+        multiline
+        maxRows={4}
+        placeholder="Текст комментария"
         sx={{ height: '100%' }}
       />
 

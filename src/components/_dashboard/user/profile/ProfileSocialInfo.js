@@ -7,7 +7,7 @@ import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Link, Card, CardHeader, Stack, Button, Box } from '@mui/material';
+import { Link, Card, CardHeader, Stack, Button, Box, Typography } from '@mui/material';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
@@ -29,45 +29,57 @@ ProfileSocialInfo.propTypes = {
 export default function ProfileSocialInfo({ profile }) {
   const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
 
-  const SOCIALS = [
+  const CONTACTS = [
     {
-      name: 'Linkedin',
-      icon: <IconStyle icon={linkedinFill} color="#006097" />,
-      href: linkedinLink
+      name: 'Иванов Иван Иванович',
+      position: 'Директор',
+      email: 'example@domain.com',
+      tel: '+79854327365'
     },
     {
-      name: 'Twitter',
-      icon: <IconStyle icon={twitterFill} color="#1C9CEA" />,
-      href: twitterLink
+      name: 'Иванов Иван Иванович',
+      position: 'Директор',
+      email: 'example@domain.com',
+      tel: '+79854327365'
     },
     {
-      name: 'Instagram',
-      icon: <IconStyle icon={instagramFilled} color="#D7336D" />,
-      href: instagramLink
+      name: 'Иванов Иван Иванович',
+      position: 'Директор',
+      email: 'example@domain.com',
+      tel: '+79854327365'
     },
     {
-      name: 'Facebook',
-      icon: <IconStyle icon={facebookFill} color="#1877F2" />,
-      href: facebookLink
+      name: 'Иванов Иван Иванович',
+      position: 'Директор',
+      email: 'example@domain.com',
+      tel: '+79854327365'
     }
   ];
 
   return (
     <Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <CardHeader title="Контакты" />
-        <Button variant="contained" sx={{ marginRight: 2 }} component={RouterLink} to={PATH_DASHBOARD.user.newUser}>
+        <CardHeader title="Контакты" sx={{ mr: 2, mb: 1 }} />
+        <Button variant="contained" sx={{ mr: 2, mb: 1 }} component={RouterLink} to={PATH_DASHBOARD.user.newUser}>
           Новая карточка
         </Button>
       </Box>
-      <Stack spacing={2} sx={{ p: 3 }}>
-        {SOCIALS.map((link) => (
-          <Stack key={link.name} direction="row" alignItems="center">
-            {link.icon}
-            <Link component="span" variant="body2" color="text.primary" noWrap>
-              {link.href}
-            </Link>
-          </Stack>
+      <Stack spacing={2} sx={{ p: 3, maxHeight: '287px', overflowY: 'scroll' }}>
+        {CONTACTS.map((contact, index) => (
+          <Box key={index}>
+            <Typography variant="body2">
+              Контакт <Typography variant="caption">#2382</Typography>
+            </Typography>
+            <Typography variant="body2" component="div">
+              {contact.name}, {contact.position}
+            </Typography>
+            <Typography variant="body2" component="div">
+              Email: {contact.email}
+            </Typography>
+            <Typography variant="body2" component="div">
+              Телефон: {contact.tel}
+            </Typography>
+          </Box>
         ))}
       </Stack>
     </Card>

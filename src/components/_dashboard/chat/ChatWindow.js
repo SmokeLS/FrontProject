@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 // material
-import { Box, Divider, Stack } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
 import {
@@ -88,15 +88,9 @@ export default function ChatWindow() {
 
   return (
     <Stack sx={{ flexGrow: 1, minWidth: '1px' }}>
-      {mode === 'DETAIL' ? (
-        <ChatHeaderDetail participants={displayParticipants} />
-      ) : (
-        <ChatHeaderCompose
-          recipients={recipients}
-          contacts={Object.values(contacts.byId)}
-          onAddRecipients={handleAddRecipients}
-        />
-      )}
+      <Box pt={3} pl={3}>
+        <Typography variant="body2">Комментарии</Typography>
+      </Box>
 
       <Divider />
 
@@ -112,8 +106,6 @@ export default function ChatWindow() {
             disabled={pathname === PATH_DASHBOARD.chat.new}
           />
         </Stack>
-
-        {mode === 'DETAIL' && <ChatRoom conversation={conversation} participants={displayParticipants} />}
       </Box>
     </Stack>
   );

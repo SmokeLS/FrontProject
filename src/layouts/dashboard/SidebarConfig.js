@@ -71,9 +71,9 @@ const sidebarConfig = [
       // MANAGEMENT : USER
       {
         title: 'Сотрудники',
-        path: PATH_DASHBOARD.blog.newPost,
+        path: PATH_DASHBOARD.blog.posts,
         icon: ICONS.user,
-        children: [{ title: 'Все сотрудники', path: PATH_DASHBOARD.blog.newPost }]
+        children: [{ title: 'Все сотрудники', path: PATH_DASHBOARD.blog.posts }]
       }
     ]
   }

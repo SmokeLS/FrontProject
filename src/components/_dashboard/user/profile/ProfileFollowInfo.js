@@ -37,11 +37,11 @@ export default function ProfileFollowInfo({ profile }) {
   return (
     <Card sx={{ py: 3 }}>
       <Stack direction="row" divider={<Divider orientation="vertical" flexItem />}>
-        <Stack width={1} textAlign="center">
+        <Stack textAlign="center">
           <Typography variant="body2" pl={2} sx={{ color: '#00AB55', textAlign: 'left' }}>
             Текущий статус
           </Typography>
-          <Box ml={2} sx={{ width: 230 }}>
+          <Box ml={2} sx={{ width: 160 }}>
             <FormControl fullWidth>
               <Select
                 sx={{ textAlign: 'left', height: '40px' }}
@@ -58,11 +58,11 @@ export default function ProfileFollowInfo({ profile }) {
           </Box>
         </Stack>
 
-        <Stack width={1} textAlign="center">
+        <Stack textAlign="center">
           <Typography variant="body2" pl={2} sx={{ color: '#3366FF', textAlign: 'left' }}>
             Дата контакта
           </Typography>
-          <Box ml={2} sx={{ width: 230 }}>
+          <Box ml={2} sx={{ width: 160 }}>
             <FormControl fullWidth>
               <OutlinedInput
                 id="outlined-adornment-weight"
@@ -70,7 +70,6 @@ export default function ProfileFollowInfo({ profile }) {
                 onChange={handleChange}
                 aria-describedby="outlined-weight-helper-text"
                 sx={{ height: '40px' }}
-                placeholder="dd.mm.yyyy 00:00"
               />
             </FormControl>
           </Box>
