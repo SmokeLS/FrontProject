@@ -62,6 +62,7 @@ mock.onGet('/api/user/manage-users').reply(() => {
     company: mockData.company(index),
     isVerified: mockData.boolean(index),
     status: sample(['В архиве', 'Новый', 'В работе']) || 'В архиве',
+    employeeStatus: sample(['Активный', 'Заблокирован']) || 'Заблокирован',
     role: mockData.role(index)
   }));
 

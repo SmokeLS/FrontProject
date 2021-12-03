@@ -76,6 +76,7 @@ export const PATH_DASHBOARD = {
   employee: {
     root: path(ROOTS_DASHBOARD, '/employee'),
     list: path(ROOTS_DASHBOARD, '/employee/list'),
+    employeeId: path(ROOTS_DASHBOARD, '/employee/list/:id'),
     post: path(ROOTS_DASHBOARD, '/blog/post/:title'),
     postById: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
     newPost: path(ROOTS_DASHBOARD, '/blog/new-post')

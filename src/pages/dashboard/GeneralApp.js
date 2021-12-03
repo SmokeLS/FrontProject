@@ -27,19 +27,19 @@ export default function GeneralApp() {
             </Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} md={6} lg={3}>
             <AppWidgetsStats item xs={4} />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} md={6} lg={3}>
             <AppWidgetsStats item xs={4} />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} md={6} lg={3}>
             <AppWidgetsStats item xs={4} />
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid item xs={12} md={6} lg={3}>
             <AppWidgetsStats item xs={4} />
           </Grid>
           {/* <Grid item xs={12} md={6} lg={4}>

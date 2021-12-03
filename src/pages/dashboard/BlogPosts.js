@@ -188,7 +188,7 @@ export default function UserList() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, zipCode, status, individualNumber, email } = row;
+                    const { id, name, zipCode, employeeStatus, individualNumber, email } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -206,7 +206,7 @@ export default function UserList() {
                           scope="row"
                           sx={{ cursor: 'pointer' }}
                           onClick={() => {
-                            navigate(`/dashboard/user/list/${id}`);
+                            navigate(`/dashboard/employee/list/${id}`);
                           }}
                         >
                           <Stack direction="row" alignItems="center" spacing={2}>
@@ -221,9 +221,9 @@ export default function UserList() {
                         <TableCell ml={4}>
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'banned' && 'error') || 'success'}
+                            color={(employeeStatus === 'Заблокирован' && 'error') || 'success'}
                           >
-                            {sentenceCase(status)}
+                            {employeeStatus}
                           </Label>
                         </TableCell>
                       </TableRow>

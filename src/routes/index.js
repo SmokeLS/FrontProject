@@ -109,6 +109,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/employee/list" replace /> },
             { path: 'list', element: <BlogPosts /> },
+            { path: 'list/:id', element: <EmployeeId /> },
             { path: 'post/:title', element: <BlogPost /> },
             { path: 'new-post', element: <BlogNewPost /> }
           ]
@@ -235,6 +236,7 @@ const EcommerceProductCreate = Loadable(lazy(() => import('../pages/dashboard/Ec
 const EcommerceCheckout = Loadable(lazy(() => import('../pages/dashboard/EcommerceCheckout')));
 const EcommerceInvoice = Loadable(lazy(() => import('../pages/dashboard/EcommerceInvoice')));
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
+const EmployeeId = Loadable(lazy(() => import('../pages/dashboard/EmployeeId')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
 const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));
 const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));

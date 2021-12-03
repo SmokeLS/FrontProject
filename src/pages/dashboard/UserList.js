@@ -49,6 +49,17 @@ const TABLE_HEAD = [
   { id: 'Commentary', label: 'Комментарий', alignRight: false }
 ];
 
+// const TABLE_HEAD = [
+//   { id: 'name', label: 'Название', alignRight: false },
+//   { id: 'invidialNumber', label: 'ИНН', alignRight: false },
+//   { id: 'address', label: 'Адрес', alignRight: false },
+//   { id: 'telephone', label: 'Номер телефона', alignRight: false },
+//   { id: 'manager', label: 'Менеджер', alignRight: false },
+//   { id: 'status', label: 'Статус', alignRight: false },
+//   { id: 'currentDate', label: 'Текущая дата', alignRight: false },
+//   { id: 'region', label: 'Адрес', alignRight: false },
+//   { id: 'commentary', label: 'Комментарий', alignRight: false }
+// ];
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -92,6 +103,8 @@ export default function UserList() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  console.log(userList);
 
   useEffect(() => {
     dispatch(getUserList());
