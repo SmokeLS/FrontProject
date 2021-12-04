@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
@@ -47,7 +48,8 @@ export const SORT_BY_OPTIONS = [
 ];
 export const FILTER_GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
 export const FILTER_CATEGORY_OPTIONS = ['Все', 'В архиве', 'В работе', 'Новый'];
-export const FILTER_MANAGERS_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
+export const FILTER_MANAGERS_OPTIONS = ['Manager1', 'Manager2', 'Manager3', 'Manager'];
+export const FILTER_REGIONS_OPTIONS = ['region1', 'region2'];
 export const FILTER_PRICE_OPTIONS = [
   { value: 'below', label: 'Below $25' },
   { value: 'between', label: 'Between $25 - $75' },
@@ -125,9 +127,9 @@ function applyFilter(products, sortBy, filters) {
   if (filters.rating) {
     products = filter(products, (_product) => {
       const convertRating = (value) => {
-        if (value === 'up4Star') return 4;
-        if (value === 'up3Star') return 3;
-        if (value === 'up2Star') return 2;
+        if (value === 'Manager4') return 4;
+        if (value === 'Manager3') return 3;
+        if (value === 'Manager2') return 2;
         return 1;
       };
       return _product.totalRating > convertRating(filters.rating);
@@ -137,7 +139,7 @@ function applyFilter(products, sortBy, filters) {
 }
 
 export default function ShopFilterSidebar(props) {
-  const { isOpenFilter, onResetFilter, onOpenFilter, onCloseFilter, formik, filterName, onFilterName } = props;
+  const { isOpenFilter, onResetFilter, onOpenFilter, onCloseFilter, formik, filterName, handleFunctions } = props;
   const { values, getFieldProps, handleChange, resetForm, handleSubmit, isSubmitting, initialValues } = formik;
 
   const [age, setAge] = React.useState('');
@@ -182,10 +184,38 @@ export default function ShopFilterSidebar(props) {
     resetForm();
   };
 
-  const changeHandleSearch = (e) => {
-    onFilterName({
+  const changeNameHandleSearch = (e) => {
+    handleFunctions.handleFilterByName({
       ...filterName,
       name: e.target.value
+    });
+  };
+
+  const changeNumberHandleSearch = (e) => {
+    handleFunctions.handleFilterByNumber({
+      ...filterName,
+      individualNumber: e.target.value
+    });
+  };
+
+  const changeAddressHandleSearch = (e) => {
+    handleFunctions.handleFilterByAddress({
+      ...filterName,
+      address: e.target.value
+    });
+  };
+
+  const changeTelHandleSearch = (e) => {
+    handleFunctions.handleFilterByTel({
+      ...filterName,
+      tel: e.target.value
+    });
+  };
+
+  const changeCommentaryHandleSearch = (e) => {
+    handleFunctions.handleFilterByCommentary({
+      ...filterName,
+      commentary: e.target.value
     });
   };
 
@@ -224,7 +254,7 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <SearchStyle
                     value={filterName.name}
-                    onChange={changeHandleSearch}
+                    onChange={changeNameHandleSearch}
                     placeholder="Search product..."
                     startAdornment={
                       <InputAdornment position="start">
@@ -239,8 +269,8 @@ export default function ShopFilterSidebar(props) {
                     ИНН
                   </Typography>
                   <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
+                    value={filterName.individualNumber}
+                    onChange={changeNumberHandleSearch}
                     placeholder="Search product..."
                     startAdornment={
                       <InputAdornment position="start">
@@ -255,8 +285,8 @@ export default function ShopFilterSidebar(props) {
                     Адрес
                   </Typography>
                   <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
+                    value={filterName.address}
+                    onChange={changeAddressHandleSearch}
                     placeholder="Search product..."
                     startAdornment={
                       <InputAdornment position="start">
@@ -271,8 +301,8 @@ export default function ShopFilterSidebar(props) {
                     Номер телефона
                   </Typography>
                   <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
+                    value={filterName.tel}
+                    onChange={changeTelHandleSearch}
                     placeholder="Search product..."
                     startAdornment={
                       <InputAdornment position="start">
@@ -291,8 +321,8 @@ export default function ShopFilterSidebar(props) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={age}
-                        onChange={handleChangeSelect}
+                        value={filterName.manager}
+                        onChange={handleFunctions.handleFilterByManager}
                       >
                         {FILTER_MANAGERS_OPTIONS.map((item) => (
                           <MenuItem key={item} value={item}>
@@ -317,44 +347,32 @@ export default function ShopFilterSidebar(props) {
 
                 <div>
                   <Typography variant="subtitle1" gutterBottom>
-                    Номер телефона
-                  </Typography>
-                  <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="Search product..."
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                      </InputAdornment>
-                    }
-                  />
-                </div>
-
-                <div>
-                  <Typography variant="subtitle1" gutterBottom>
                     Текущая дата
                   </Typography>
-                  <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="От"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                      </InputAdornment>
-                    }
-                  />
-                  <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="До"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                      </InputAdornment>
-                    }
-                  />
+                  <Box mb={2}>
+                    <SearchStyle
+                      value={filterName.currentDate}
+                      onChange={handleFunctions.handleFilterByDate}
+                      placeholder="От"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                        </InputAdornment>
+                      }
+                    />
+                  </Box>
+                  <Box>
+                    <SearchStyle
+                      value={filterName.currentDate}
+                      onChange={handleFunctions.handleFilterByDate}
+                      placeholder="До"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                        </InputAdornment>
+                      }
+                    />
+                  </Box>
                 </div>
 
                 <div>
@@ -366,10 +384,10 @@ export default function ShopFilterSidebar(props) {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={age}
-                        onChange={handleChangeSelect}
+                        value={filterName.region}
+                        onChange={handleFunctions.handleFilterByRegion}
                       >
-                        {FILTER_MANAGERS_OPTIONS.map((item) => (
+                        {FILTER_REGIONS_OPTIONS.map((item) => (
                           <MenuItem key={item} value={item}>
                             {item}
                           </MenuItem>
@@ -384,8 +402,8 @@ export default function ShopFilterSidebar(props) {
                     Текст комментария
                   </Typography>
                   <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
+                    value={filterName.commentary}
+                    onChange={changeCommentaryHandleSearch}
                     placeholder="Search product..."
                     startAdornment={
                       <InputAdornment position="start">
@@ -399,26 +417,30 @@ export default function ShopFilterSidebar(props) {
                   <Typography variant="subtitle1" gutterBottom>
                     Дата комментария
                   </Typography>
-                  <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="От"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                      </InputAdornment>
-                    }
-                  />
-                  <SearchStyle
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="До"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                      </InputAdornment>
-                    }
-                  />
+                  <Box mb={2}>
+                    <SearchStyle
+                      value={filterName.commentaryDate}
+                      onChange={handleFunctions.handleFilterByCommentaryDate}
+                      placeholder="От"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                        </InputAdornment>
+                      }
+                    />
+                  </Box>
+                  <Box>
+                    <SearchStyle
+                      value={filterName.commentaryDate}
+                      onChange={handleFunctions.handleFilterByCommentaryDate}
+                      placeholder="До"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                        </InputAdornment>
+                      }
+                    />
+                  </Box>
                 </div>
               </Stack>
             </Scrollbar>

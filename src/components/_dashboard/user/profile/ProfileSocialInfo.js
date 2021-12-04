@@ -4,7 +4,7 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Link, Card, CardHeader, Stack, Button, Box, Typography, Divider } from '@mui/material';
@@ -28,6 +28,8 @@ ProfileSocialInfo.propTypes = {
 
 export default function ProfileSocialInfo({ profile }) {
   const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const CONTACTS = [
     {
@@ -80,6 +82,9 @@ export default function ProfileSocialInfo({ profile }) {
                 sx={{ ml: 5, textDecoration: 'none', fontSize: '0.875rem', textAlign: 'right' }}
                 component={RouterLink}
                 to={PATH_DASHBOARD.user.newUser}
+                // onClick={() => {
+                //   navigate(`${location.pathname}/contact/1`);
+                // }}
               >
                 Изменить
               </Typography>

@@ -6,21 +6,36 @@ import roundFilterList from '@iconify/icons-ic/round-filter-list';
 import { filter, includes, orderBy } from 'lodash';
 // material
 import { useTheme, styled } from '@mui/material/styles';
-import { Box, Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, Stack } from '@mui/material';
+import {
+  Box,
+  Toolbar,
+  Tooltip,
+  IconButton,
+  Typography,
+  OutlinedInput,
+  InputAdornment,
+  Stack,
+  RadioGroup,
+  FormControl,
+  Select,
+  MenuItem
+} from '@mui/material';
 // ----------------------------------------------------------------------
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import { useLocation } from 'react-router';
 import { getProducts, filterProducts } from '../../../../redux/slices/product';
 import useSettings from '../../../../hooks/useSettings';
 import fakeRequest from '../../../../utils/fakeRequest';
 import { ShopTagFiltered, ShopProductSort, ShopProductList, ShopFilterSidebar } from '../../e-commerce/shop';
+import { FILTER_MANAGERS_OPTIONS } from '../../e-commerce/shop/ShopFilterSidebar';
 
 UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.object,
-  onFilterName: PropTypes.func
+  handleFunctions: PropTypes.object
 };
 
 function applyFilter(products, sortBy, filters) {
@@ -61,9 +76,9 @@ function applyFilter(products, sortBy, filters) {
   if (filters.rating) {
     products = filter(products, (_product) => {
       const convertRating = (value) => {
-        if (value === 'up4Star') return 4;
-        if (value === 'up3Star') return 3;
-        if (value === 'up2Star') return 2;
+        if (value === 'Manager4') return 4;
+        if (value === 'Manager3') return 3;
+        if (value === 'Manager2') return 2;
         return 1;
       };
       return _product.totalRating > convertRating(filters.rating);
@@ -94,7 +109,8 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserListToolbar({ numSelected, filterName, handleFunctions }) {
+  const location = useLocation();
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
   const { themeStretch } = useSettings();
@@ -102,6 +118,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
   const [openFilter, setOpenFilter] = useState(false);
   const { products, sortBy, filters } = useSelector((state) => state.product);
   const filteredProducts = applyFilter(products, sortBy, filters);
+  const [selectValue, setSelectValue] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -122,7 +139,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
     }
   });
 
-  const { values, resetForm, handleSubmit, isSubmitting, initialValues } = formik;
+  const { values, resetForm, handleSubmit, getFieldProps, isSubmitting, initialValues } = formik;
 
   const isDefault =
     !values.priceRange &&
@@ -150,6 +167,10 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
   const handleResetFilter = () => {
     handleSubmit();
     resetForm();
+  };
+
+  const handleChange = (event) => {
+    setSelectValue(event.target.value);
   };
 
   return (
@@ -201,15 +222,36 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
           />
 
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ShopFilterSidebar
-              formik={formik}
-              isOpenFilter={openFilter}
-              filterName={filterName}
-              onFilterName={onFilterName}
-              onResetFilter={handleResetFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
+            {location.pathname === '/dashboard/user/list' ? (
+              <ShopFilterSidebar
+                formik={formik}
+                isOpenFilter={openFilter}
+                filterName={filterName}
+                handleFunctions={handleFunctions}
+                onResetFilter={handleResetFilter}
+                onOpenFilter={handleOpenFilter}
+                onCloseFilter={handleCloseFilter}
+              />
+            ) : (
+              <Box mt={1}>
+                <RadioGroup sx={{ minWidth: 160 }} {...getFieldProps('rating')}>
+                  <FormControl fullWidth>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={selectValue}
+                      onChange={handleChange}
+                    >
+                      {FILTER_MANAGERS_OPTIONS.map((item) => (
+                        <MenuItem key={item} value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </RadioGroup>
+              </Box>
+            )}
             <ShopProductSort />
           </Stack>
         </Stack>

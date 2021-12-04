@@ -109,7 +109,10 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/employee/list" replace /> },
             { path: 'list', element: <BlogPosts /> },
-            { path: 'list/:id', element: <EmployeeId /> },
+            {
+              path: 'list/:id',
+              element: <EmployeeId />
+            },
             { path: 'post/:title', element: <BlogPost /> },
             { path: 'new-post', element: <BlogNewPost /> }
           ]
@@ -245,6 +248,7 @@ const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
+const ContactCreate = Loadable(lazy(() => import('../pages/dashboard/ContactCreate')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));

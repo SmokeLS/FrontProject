@@ -1,5 +1,5 @@
 /* eslint-disable no-debugger */
-import { filter } from 'lodash';
+import _, { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
@@ -67,7 +67,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function applySortFilter(array, comparator, query) {
+function applySortFilter(array, comparator, query, property) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -75,7 +75,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user[`${property}`].toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -103,8 +103,6 @@ export default function UserList() {
     commentaryDate: ''
   });
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  console.log(userList);
 
   useEffect(() => {
     dispatch(getUserList());
@@ -149,8 +147,37 @@ export default function UserList() {
     setPage(0);
   };
 
-  const handleFilterByName = (search) => {
-    setFilterName({ ...search, name: search.name });
+  const handleFunctions = {
+    handleFilterByName: (search) => {
+      setFilterName({ ...search, name: search.name });
+    },
+    handleFilterByNumber: (search) => {
+      setFilterName({ ...search, individualNumber: search.individualNumber });
+    },
+    handleFilterByAddress: (search) => {
+      setFilterName({ ...search, address: search.address });
+    },
+    handleFilterByTel: (search) => {
+      setFilterName({ ...search, tel: search.tel });
+    },
+    handleFilterByManager: (search) => {
+      setFilterName({ ...search, manager: search.target.value });
+    },
+    handleFilterByStatus: (search) => {
+      setFilterName({ ...search, status: search.status });
+    },
+    handleFilterByCurrentDate: (search) => {
+      setFilterName({ ...search, currentDate: search.currentDate });
+    },
+    handleFilterByRegion: (search) => {
+      setFilterName({ ...search, region: search.target.value });
+    },
+    handleFilterByCommentary: (search) => {
+      setFilterName({ ...search, commentary: search.commentary });
+    },
+    handleFilterByCommentaryDate: (search) => {
+      setFilterName({ ...search, commentaryDate: search.commentaryDate });
+    }
   };
 
   const handleDeleteUser = (userId) => {
@@ -159,9 +186,33 @@ export default function UserList() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name);
+  let isUserNotFound = userList.length;
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const filteredNumbers = applySortFilter(
+    userList,
+    getComparator(order, orderBy),
+    filterName.individualNumber,
+    'individualNumber'
+  );
+  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+  const filteredAddresses = applySortFilter(userList, getComparator(order, orderBy), filterName.address, 'address');
+  const filteredTels = applySortFilter(userList, getComparator(order, orderBy), filterName.tel, 'tel');
+  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+  const filteredCommentaries = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
+
+  const concatedUsers = _.intersection(
+    filteredUsers,
+    filteredNumbers,
+    filteredAddresses,
+    filteredTels,
+    filteredCommentaries
+  );
+
+  if (concatedUsers.length) isUserNotFound = false;
 
   return (
     <Page title="User: List | Minimal-UI">
@@ -185,8 +236,7 @@ export default function UserList() {
         />
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
+          <UserListToolbar numSelected={selected.length} filterName={filterName} handleFunctions={handleFunctions} />
           <Scrollbar>
             <TableContainer sx={{ overflowX: 'auto' }}>
               <Table>
@@ -200,7 +250,7 @@ export default function UserList() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {concatedUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, role, status, individualNumber } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
