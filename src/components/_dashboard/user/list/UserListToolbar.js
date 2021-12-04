@@ -17,6 +17,12 @@ import useSettings from '../../../../hooks/useSettings';
 import fakeRequest from '../../../../utils/fakeRequest';
 import { ShopTagFiltered, ShopProductSort, ShopProductList, ShopFilterSidebar } from '../../e-commerce/shop';
 
+UserListToolbar.propTypes = {
+  numSelected: PropTypes.number,
+  filterName: PropTypes.object,
+  onFilterName: PropTypes.func
+};
+
 function applyFilter(products, sortBy, filters) {
   // SORT BY
   if (sortBy === 'featured') {
@@ -87,12 +93,6 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-UserListToolbar.propTypes = {
-  numSelected: PropTypes.number,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func
-};
 
 export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
   const theme = useTheme();
@@ -185,7 +185,13 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
           </IconButton>
         </Tooltip>
       ) : (
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
+        <Stack
+          direction="row"
+          flexWrap="wrap-reverse"
+          alignItems="center"
+          justifySelf="flex-end"
+          sx={{ mb: 5, width: '100%' }}
+        >
           <ShopTagFiltered
             filters={filters}
             formik={formik}

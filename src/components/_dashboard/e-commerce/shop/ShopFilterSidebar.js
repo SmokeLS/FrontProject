@@ -182,6 +182,13 @@ export default function ShopFilterSidebar(props) {
     resetForm();
   };
 
+  const changeHandleSearch = (e) => {
+    onFilterName({
+      ...filterName,
+      name: e.target.value
+    });
+  };
+
   return (
     <>
       <Button disableRipple color="inherit" endIcon={<Icon icon={roundFilterList} />} onClick={onOpenFilter}>
@@ -216,6 +223,22 @@ export default function ShopFilterSidebar(props) {
                     Название
                   </Typography>
                   <SearchStyle
+                    value={filterName.name}
+                    onChange={changeHandleSearch}
+                    placeholder="Search product..."
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    ИНН
+                  </Typography>
+                  <SearchStyle
                     value={filterName}
                     onChange={onFilterName}
                     placeholder="Search product..."
@@ -229,37 +252,34 @@ export default function ShopFilterSidebar(props) {
 
                 <div>
                   <Typography variant="subtitle1" gutterBottom>
-                    Статус
+                    Адрес
                   </Typography>
-                  <RadioGroup {...getFieldProps('category')}>
-                    {FILTER_CATEGORY_OPTIONS.map((item) => (
-                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Colour
-                  </Typography>
-                  <ColorManyPicker
-                    name="colors"
-                    colors={FILTER_COLOR_OPTIONS}
-                    onChange={handleChange}
-                    onChecked={(color) => values.colors.includes(color)}
-                    sx={{ maxWidth: 36 * 4 }}
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="Search product..."
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
                   />
                 </div>
 
                 <div>
                   <Typography variant="subtitle1" gutterBottom>
-                    Price
+                    Номер телефона
                   </Typography>
-                  <RadioGroup {...getFieldProps('priceRange')}>
-                    {FILTER_PRICE_OPTIONS.map((item) => (
-                      <FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />
-                    ))}
-                  </RadioGroup>
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="Search product..."
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
                 </div>
 
                 <div>
@@ -282,6 +302,123 @@ export default function ShopFilterSidebar(props) {
                       </Select>
                     </FormControl>
                   </RadioGroup>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Статус
+                  </Typography>
+                  <RadioGroup {...getFieldProps('category')}>
+                    {FILTER_CATEGORY_OPTIONS.map((item) => (
+                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Номер телефона
+                  </Typography>
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="Search product..."
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Текущая дата
+                  </Typography>
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="От"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="До"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Регион
+                  </Typography>
+                  <RadioGroup {...getFieldProps('rating')}>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={age}
+                        onChange={handleChangeSelect}
+                      >
+                        {FILTER_MANAGERS_OPTIONS.map((item) => (
+                          <MenuItem key={item} value={item}>
+                            {item}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </RadioGroup>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Текст комментария
+                  </Typography>
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="Search product..."
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Дата комментария
+                  </Typography>
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="От"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                  <SearchStyle
+                    value={filterName}
+                    onChange={onFilterName}
+                    placeholder="До"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
                 </div>
               </Stack>
             </Scrollbar>

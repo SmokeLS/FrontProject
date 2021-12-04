@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
@@ -89,7 +90,18 @@ export default function UserList() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
+  const [filterName, setFilterName] = useState({
+    name: '',
+    individualNumber: '',
+    address: '',
+    tel: '',
+    manager: '',
+    status: '',
+    currentDate: '',
+    region: '',
+    commentary: '',
+    commentaryDate: ''
+  });
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   console.log(userList);
@@ -137,8 +149,8 @@ export default function UserList() {
     setPage(0);
   };
 
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
+  const handleFilterByName = (search) => {
+    setFilterName({ ...search, name: search.name });
   };
 
   const handleDeleteUser = (userId) => {
@@ -147,7 +159,7 @@ export default function UserList() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name);
 
   const isUserNotFound = filteredUsers.length === 0;
 
