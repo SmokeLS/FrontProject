@@ -79,20 +79,35 @@ export default function ProfileSocialInfo({ profile }) {
               Контакт <Typography variant="caption">#2382</Typography>
               <Typography
                 variant="body1"
-                sx={{ ml: 5, textDecoration: 'none', fontSize: '0.875rem', textAlign: 'right' }}
-                component={RouterLink}
-                to={PATH_DASHBOARD.user.newUser}
-                // onClick={() => {
-                //   navigate(`${location.pathname}/contact/1`);
-                // }}
+                sx={{
+                  float: 'right',
+                  fontSize: '0.875rem',
+                  textAlign: 'right',
+                  width: 80,
+                  color: '#0045FF',
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  navigate(`/${location.pathname}/contact/1`);
+                }}
+                component="span"
               >
                 Изменить
               </Typography>
               <Typography
                 variant="body1"
-                sx={{ ml: 1, textDecoration: 'none', fontSize: '0.875rem', textAlign: 'right' }}
-                component={RouterLink}
-                to={PATH_DASHBOARD.user.newUser}
+                sx={{
+                  float: 'right',
+                  fontSize: '0.875rem',
+                  textAlign: 'right',
+                  width: 80,
+                  color: '#0045FF',
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  navigate(`/${location.pathname}/contact/1`);
+                }}
+                component="span"
               >
                 Удалить
               </Typography>

@@ -72,7 +72,7 @@ export default function AccountPopover() {
     <>
       <MIconButton
         ref={anchorRef}
-        onMouseEnter={handleOpen}
+        onClick={handleOpen}
         sx={{
           padding: 0,
           width: 44,

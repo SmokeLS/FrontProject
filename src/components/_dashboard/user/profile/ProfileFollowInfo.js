@@ -44,7 +44,7 @@ export default function ProfileFollowInfo({ profile }) {
           <Box mr={1} sx={{ width: 250 }}>
             <FormControl fullWidth>
               <Select
-                sx={{ textAlign: 'left', height: '56px', width: 250 }}
+                sx={{ textAlign: 'left', height: '40px', width: 250 }}
                 labelId="status-select-label"
                 id="status-select"
                 value={status}
@@ -67,6 +67,7 @@ export default function ProfileFollowInfo({ profile }) {
               <TextField
                 id="datetime-local"
                 type="datetime-local"
+                size="small"
                 sx={{ width: 250 }}
                 InputLabelProps={{
                   shrink: true

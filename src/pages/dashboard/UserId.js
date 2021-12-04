@@ -116,14 +116,14 @@ export default function UserId() {
         >
           <Box>
             <Box>
-              <Box sx={{ pl: 5, pt: 3, zIndex: 200, position: 'relative' }}>
+              <Box sx={{ pl: 3, pt: 3, zIndex: 200, position: 'relative' }}>
                 <Typography variant="h5">OOO "ГИМА"</Typography>
                 <Typography variant="caption" display="block">
                   Текущее время: 13:50:34, UTC+3
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ pl: 5, pt: 3, zIndex: 200, position: 'relative' }}>
+            <Box sx={{ pl: 3, pt: 3, zIndex: 200, position: 'relative' }}>
               <ProfileFollowInfo profile={myProfile} />
             </Box>
           </Box>
