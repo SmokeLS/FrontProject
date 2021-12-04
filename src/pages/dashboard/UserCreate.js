@@ -34,11 +34,11 @@ export default function UserCreate() {
     <Page title="User: Create a new user | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Create a new user' : 'Edit user'}
+          heading={!isEdit ? 'Создание карточки компании' : 'Редактирование карточки компании'}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: !isEdit ? 'New user' : name }
+            { name: 'Компании', href: PATH_DASHBOARD.root },
+            { name: 'Все компании', href: PATH_DASHBOARD.user.list },
+            { name: !isEdit ? 'Новая карточка' : name }
           ]}
         />
 

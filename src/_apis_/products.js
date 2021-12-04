@@ -89,7 +89,7 @@ const products = [...Array(24)].map((_, index) => ({
   description: PRODUCT_DESCRIPTION,
   sold: random(999),
   createdAt: mockData.time(index),
-  category: sample(['Shose', 'Apparel', 'Accessories']),
+  category: sample(['В архиве', 'В работе', 'Новый']),
   gender: sample(['Men', 'Women', 'Kids'])
 }));
 
