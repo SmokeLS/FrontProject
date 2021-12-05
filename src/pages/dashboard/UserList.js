@@ -235,7 +235,7 @@ export default function UserList() {
             </Button>
           }
         />
-        <Typography sx={{ textAlign: 'right', mr: 4 }}>Количество строк: {concatedUsers.length}</Typography>
+        <Typography sx={{ ml: 3 }}>Количество строк: {concatedUsers.length}</Typography>
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} handleFunctions={handleFunctions} />
           <Scrollbar>

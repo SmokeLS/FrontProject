@@ -8,7 +8,7 @@ import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
 import { styled } from '@mui/material/styles';
-import { Tab, Box, Card, Tabs, Container, Typography, Grid } from '@mui/material';
+import { Tab, Box, Card, Tabs, Container, Typography, Grid, Button } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getPosts, getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
@@ -86,19 +86,19 @@ export default function UserId() {
   const PROFILE_TABS = [
     {
       value: 'Комментарии',
-      icon: <Icon icon={roundAccountBox} width={24} height={24} />,
+      icon: <Icon icon={roundAccountBox} width={20} height={20} />,
       component: <Profile myProfile={myProfile} posts={posts} />
     },
     {
       value: 'Авто',
-      icon: <Icon icon={roundPermMedia} width={24} height={24} />,
+      icon: <Icon icon={roundPermMedia} width={20} height={20} />,
       component: <ProfileGallery gallery={gallery} />
     }
   ];
 
   return (
     <Page title="User: Profile | Minimal-UI">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading={`Карточка компании #${params.id}`}
           links={[
@@ -117,7 +117,29 @@ export default function UserId() {
           <Box>
             <Box>
               <Box sx={{ pl: 3, pt: 3, zIndex: 200, position: 'relative' }}>
-                <Typography variant="h5">OOO "ГИМА"</Typography>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="h5">OOO "ГИМА"</Typography>
+                  <Box mr={1}>
+                    <Button
+                      variant="body1"
+                      sx={{
+                        color: '#0045FF',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Изменить
+                    </Button>
+                    <Button
+                      variant="body1"
+                      sx={{
+                        color: '#0045FF',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Удалить
+                    </Button>
+                  </Box>
+                </Box>
                 <Typography variant="caption" display="block">
                   Текущее время: 13:50:34, UTC+3
                 </Typography>
@@ -136,7 +158,7 @@ export default function UserId() {
               onChange={handleChangeTab}
             >
               {PROFILE_TABS.map((tab) => (
-                <Tab disableRipple key={tab.value} value={tab.value} icon={tab.icon} label={capitalCase(tab.value)} />
+                <Tab disableRipple key={tab.value} value={tab.value} icon={tab.icon} label={tab.value} />
               ))}
             </Tabs>
           </TabsWrapperStyle>

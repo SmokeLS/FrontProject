@@ -75,7 +75,7 @@ export default function ProfileSocialInfo({ profile }) {
       <Divider />
       <Scrollbar
         sx={{
-          maxHeight: '285px',
+          maxHeight: '275px',
           borderRadius: '10px'
         }}
       >

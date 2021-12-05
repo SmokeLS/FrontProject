@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 // material
 import { Card, Container } from '@mui/material';
 // redux
+import { styled } from '@mui/material/styles';
 import { useDispatch } from '../../redux/store';
 import { getConversations, getContacts } from '../../redux/slices/chat';
 // routes
@@ -26,7 +27,7 @@ export default function Chat() {
 
   return (
     <Page title="Chat | Minimal-UI">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container disableGutters maxWidth={themeStretch ? false : 'xl'} pl={2}>
         <Card sx={{ minHeight: '620px', display: 'flex' }}>
           <ChatWindow />
         </Card>

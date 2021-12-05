@@ -26,7 +26,8 @@ import {
   Select,
   MenuItem,
   InputAdornment,
-  OutlinedInput
+  OutlinedInput,
+  Paper
 } from '@mui/material';
 //
 import { useTheme, styled } from '@mui/material/styles';
@@ -76,17 +77,37 @@ ShopFilterSidebar.propTypes = {
   formik: PropTypes.object
 };
 
-const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
+const SearchStyleDouble = styled(OutlinedInput)(({ theme }) => ({
   width: 240,
   transition: theme.transitions.create(['box-shadow', 'width'], {
     easing: theme.transitions.easing.easeInOut,
     duration: theme.transitions.duration.shorter
   }),
-  '&.Mui-focused': { width: 320, boxShadow: theme.customShadows.z8 },
+  '&.Mui-focused': { width: 240, boxShadow: theme.customShadows.z8 },
   '& fieldset': {
     borderWidth: `1px !important`,
     borderColor: `${theme.palette.grey[500_32]} !important`
   }
+}));
+
+const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
+  width: 510,
+  transition: theme.transitions.create(['box-shadow', 'width'], {
+    easing: theme.transitions.easing.easeInOut,
+    duration: theme.transitions.duration.shorter
+  }),
+  '&.Mui-focused': { width: 560, boxShadow: theme.customShadows.z8 },
+  '& fieldset': {
+    borderWidth: `1px !important`,
+    borderColor: `${theme.palette.grey[500_32]} !important`
+  }
+}));
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary
 }));
 
 function applyFilter(products, sortBy, filters) {
@@ -232,7 +253,7 @@ export default function ShopFilterSidebar(props) {
             open={isOpenFilter}
             onClose={onCloseFilter}
             PaperProps={{
-              sx: { width: 280, border: 'none', overflow: 'hidden' }
+              sx: { width: 560, border: 'none', overflow: 'hidden' }
             }}
           >
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 1, py: 2 }}>
@@ -254,8 +275,9 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <SearchStyle
                     value={filterName.name}
+                    size="small"
                     onChange={changeNameHandleSearch}
-                    placeholder="Search product..."
+                    placeholder="Поиск по имени"
                     startAdornment={
                       <InputAdornment position="start">
                         <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -270,8 +292,9 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <SearchStyle
                     value={filterName.individualNumber}
+                    size="small"
                     onChange={changeNumberHandleSearch}
-                    placeholder="Search product..."
+                    placeholder="Поиск по ИНН"
                     startAdornment={
                       <InputAdornment position="start">
                         <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -286,8 +309,9 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <SearchStyle
                     value={filterName.address}
+                    size="small"
                     onChange={changeAddressHandleSearch}
-                    placeholder="Search product..."
+                    placeholder="Поиск по адресу"
                     startAdornment={
                       <InputAdornment position="start">
                         <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -302,8 +326,9 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <SearchStyle
                     value={filterName.tel}
+                    size="small"
                     onChange={changeTelHandleSearch}
-                    placeholder="Search product..."
+                    placeholder="Поиск по номеру телефона"
                     startAdornment={
                       <InputAdornment position="start">
                         <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -320,6 +345,7 @@ export default function ShopFilterSidebar(props) {
                     <FormControl fullWidth>
                       <Select
                         labelId="demo-simple-select-label"
+                        size="small"
                         id="demo-simple-select"
                         value={filterName.manager}
                         onChange={handleFunctions.handleFilterByManager}
@@ -349,30 +375,36 @@ export default function ShopFilterSidebar(props) {
                   <Typography variant="subtitle1" gutterBottom>
                     Текущая дата
                   </Typography>
-                  <Box mb={2}>
-                    <SearchStyle
-                      value={filterName.currentDate}
-                      onChange={handleFunctions.handleFilterByDate}
-                      placeholder="От"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                        </InputAdornment>
-                      }
-                    />
-                  </Box>
-                  <Box>
-                    <SearchStyle
-                      value={filterName.currentDate}
-                      onChange={handleFunctions.handleFilterByDate}
-                      placeholder="До"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                        </InputAdornment>
-                      }
-                    />
-                  </Box>
+
+                  <Stack direction="row" ml={-1} spacing={2}>
+                    <Item>
+                      <SearchStyleDouble
+                        value={filterName.currentDate}
+                        size="small"
+                        onChange={handleFunctions.handleFilterByDate}
+                        placeholder="От"
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                          </InputAdornment>
+                        }
+                      />
+                    </Item>
+
+                    <Item>
+                      <SearchStyleDouble
+                        value={filterName.currentDate}
+                        size="small"
+                        onChange={handleFunctions.handleFilterByDate}
+                        placeholder="До"
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                          </InputAdornment>
+                        }
+                      />
+                    </Item>
+                  </Stack>
                 </div>
 
                 <div>
@@ -383,6 +415,7 @@ export default function ShopFilterSidebar(props) {
                     <FormControl fullWidth>
                       <Select
                         labelId="demo-simple-select-label"
+                        size="small"
                         id="demo-simple-select"
                         value={filterName.region}
                         onChange={handleFunctions.handleFilterByRegion}
@@ -403,6 +436,7 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <SearchStyle
                     value={filterName.commentary}
+                    size="small"
                     onChange={changeCommentaryHandleSearch}
                     placeholder="Search product..."
                     startAdornment={
@@ -417,30 +451,35 @@ export default function ShopFilterSidebar(props) {
                   <Typography variant="subtitle1" gutterBottom>
                     Дата комментария
                   </Typography>
-                  <Box mb={2}>
-                    <SearchStyle
-                      value={filterName.commentaryDate}
-                      onChange={handleFunctions.handleFilterByCommentaryDate}
-                      placeholder="От"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                        </InputAdornment>
-                      }
-                    />
-                  </Box>
-                  <Box>
-                    <SearchStyle
-                      value={filterName.commentaryDate}
-                      onChange={handleFunctions.handleFilterByCommentaryDate}
-                      placeholder="До"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                        </InputAdornment>
-                      }
-                    />
-                  </Box>
+
+                  <Stack direction="row" ml={-1} spacing={2}>
+                    <Item>
+                      <SearchStyleDouble
+                        value={filterName.commentaryDate}
+                        size="small"
+                        onChange={handleFunctions.handleFilterByCommentaryDate}
+                        placeholder="От"
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                          </InputAdornment>
+                        }
+                      />
+                    </Item>
+                    <Item>
+                      <SearchStyleDouble
+                        value={filterName.commentaryDate}
+                        size="small"
+                        onChange={handleFunctions.handleFilterByCommentaryDate}
+                        placeholder="До"
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                          </InputAdornment>
+                        }
+                      />
+                    </Item>
+                  </Stack>
                 </div>
               </Stack>
             </Scrollbar>

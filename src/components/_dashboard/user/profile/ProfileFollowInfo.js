@@ -36,9 +36,9 @@ export default function ProfileFollowInfo({ profile }) {
 
   return (
     <>
-      <Stack direction="row" divider={<Divider orientation="vertical" flexItem />}>
+      <Stack direction="row">
         <Stack textAlign="center">
-          <Typography variant="body2" pl={2} sx={{ color: '#00AB55', textAlign: 'left' }}>
+          <Typography variant="body2" sx={{ color: '#00AB55', textAlign: 'left' }}>
             Текущий статус
           </Typography>
           <Box mr={1} sx={{ width: 200 }}>
@@ -59,7 +59,7 @@ export default function ProfileFollowInfo({ profile }) {
         </Stack>
 
         <Stack textAlign="center">
-          <Typography variant="body2" pl={2} sx={{ color: '#3366FF', textAlign: 'left' }}>
+          <Typography variant="body2" pl={1} sx={{ color: '#3366FF', textAlign: 'left' }}>
             Дата контакта
           </Typography>
           <Box ml={1}>
