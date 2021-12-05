@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
@@ -10,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import { Link, Card, CardHeader, Stack, Box, Typography, Divider } from '@mui/material';
 import Scrollbar from '../../../Scrollbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
+import ContactDialog from '../../../../pages/dashboard/ContactDialog';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +33,26 @@ export default function ProfileSocialInfo({ profile }) {
   const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
   const navigate = useNavigate();
   const location = useLocation();
+  const scrollRef = useRef();
+  const [open, setOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('somethign@mail.ru');
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
+  useEffect(() => {
+    const scrollMessagesToBottom = () => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
+    };
+    scrollMessagesToBottom();
+  }, []);
 
   const CONTACTS = [
     {
@@ -63,14 +85,7 @@ export default function ProfileSocialInfo({ profile }) {
     <Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <CardHeader title="Контакты" sx={{ mt: -1, mb: 1 }} />
-        <Typography
-          variant="body1"
-          sx={{ mr: 2, mt: 2, textDecoration: 'none', fontSize: '1.125rem' }}
-          component={RouterLink}
-          to={PATH_DASHBOARD.user.newUser}
-        >
-          Новый контакт
-        </Typography>
+        <ContactDialog setOpen={setOpen} selectedValue={selectedValue} open={open} onClose={handleClose} />
       </Box>
       <Divider />
       <Scrollbar
@@ -78,13 +93,14 @@ export default function ProfileSocialInfo({ profile }) {
           maxHeight: '275px',
           borderRadius: '10px'
         }}
+        scrollableNodeProps={{ ref: scrollRef }}
       >
         <Stack spacing={2} sx={{ p: 3 }}>
           {CONTACTS.map((contact, index) => (
             <Box key={index}>
               <Typography mr={-2} variant="body2">
                 Контакт <Typography variant="caption">#2382</Typography>
-                <Typography
+                {/* <Typography
                   variant="body1"
                   sx={{
                     float: 'right',
@@ -117,7 +133,7 @@ export default function ProfileSocialInfo({ profile }) {
                   component="span"
                 >
                   Удалить
-                </Typography>
+                </Typography> */}
               </Typography>
               <Typography variant="body2" component="div">
                 {contact.name}, {contact.position}

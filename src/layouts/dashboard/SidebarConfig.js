@@ -66,7 +66,7 @@ const sidebarConfig = [
   // APP
   // ----------------------------------------------------------------------
   {
-    subheader: 'Система',
+    subheader: 'Сотрудники',
     items: [
       // MANAGEMENT : USER
       {

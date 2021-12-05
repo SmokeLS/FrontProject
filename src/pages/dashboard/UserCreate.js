@@ -41,7 +41,6 @@ export default function UserCreate() {
             { name: !isEdit ? 'Новая карточка' : name }
           ]}
         />
-
         <UserNewForm isEdit={isEdit} currentUser={currentUser} />
       </Container>
     </Page>

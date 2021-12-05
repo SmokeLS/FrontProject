@@ -29,16 +29,16 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().required('Avatar is required')
+    name: Yup.string().required('Обязательное поле'),
+    email: Yup.string().required('Обязательное поле'),
+    phoneNumber: Yup.string().required('Обязательное поле'),
+    address: Yup.string().required('Обязательное поле'),
+    country: Yup.string().required('Обязательное поле'),
+    company: Yup.string().required('Обязательное поле'),
+    state: Yup.string().required('Обязательное поле'),
+    city: Yup.string().required('Обязательное поле'),
+    role: Yup.string().required('Обязательное поле'),
+    avatarUrl: Yup.mixed().required('Обязательное поле')
   });
 
   const formik = useFormik({
