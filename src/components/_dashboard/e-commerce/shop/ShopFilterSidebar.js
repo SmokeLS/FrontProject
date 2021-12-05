@@ -222,7 +222,7 @@ export default function ShopFilterSidebar(props) {
   return (
     <>
       <Button disableRipple color="inherit" endIcon={<Icon icon={roundFilterList} />} onClick={onOpenFilter}>
-        Filters&nbsp;
+        Фильтры&nbsp;
       </Button>
 
       <FormikProvider value={formik}>
@@ -237,7 +237,7 @@ export default function ShopFilterSidebar(props) {
           >
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 1, py: 2 }}>
               <Typography variant="subtitle1" sx={{ ml: 1 }}>
-                Filters
+                Фильтры
               </Typography>
               <MIconButton onClick={onCloseFilter}>
                 <Icon icon={closeFill} width={20} height={20} />

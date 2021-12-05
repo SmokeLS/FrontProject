@@ -182,23 +182,6 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
         })
       }}
     >
-      {/* {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
-          placeholder="Search product..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          }
-        />
-      )} */}
-
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -221,17 +204,20 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
             isDefault={isDefault}
           />
 
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+          <Stack direction="row" spacing={1} flexShrink={0} sx={{ mt: 5 }}>
             {location.pathname === '/dashboard/user/list' ? (
-              <ShopFilterSidebar
-                formik={formik}
-                isOpenFilter={openFilter}
-                filterName={filterName}
-                handleFunctions={handleFunctions}
-                onResetFilter={handleResetFilter}
-                onOpenFilter={handleOpenFilter}
-                onCloseFilter={handleCloseFilter}
-              />
+              <>
+                <ShopFilterSidebar
+                  formik={formik}
+                  isOpenFilter={openFilter}
+                  filterName={filterName}
+                  handleFunctions={handleFunctions}
+                  onResetFilter={handleResetFilter}
+                  onOpenFilter={handleOpenFilter}
+                  onCloseFilter={handleCloseFilter}
+                />
+                <ShopProductSort />
+              </>
             ) : (
               <Box mt={1}>
                 <RadioGroup sx={{ minWidth: 160 }} {...getFieldProps('rating')}>
@@ -252,7 +238,6 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
                 </RadioGroup>
               </Box>
             )}
-            <ShopProductSort />
           </Stack>
         </Stack>
       )}

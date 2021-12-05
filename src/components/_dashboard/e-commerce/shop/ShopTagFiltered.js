@@ -90,7 +90,7 @@ export default function ShopTagFiltered({ formik, filters, isShowReset, isDefaul
   };
 
   return (
-    <RootStyle>
+    <RootStyle sx={{ mt: 5 }}>
       {gender.length > 0 && (
         <WrapperStyle>
           <LabelStyle>Gender:</LabelStyle>

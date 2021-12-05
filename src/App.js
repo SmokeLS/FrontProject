@@ -30,7 +30,6 @@ export default function App() {
               <GlobalStyles />
               <ProgressBarStyle />
               <BaseOptionChartStyle />
-              <Settings />
               <ScrollToTop />
               <GoogleAnalytics />
               {isInitialized ? <Router /> : <LoadingScreen />}

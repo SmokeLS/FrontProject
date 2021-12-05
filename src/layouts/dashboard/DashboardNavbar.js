@@ -94,7 +94,6 @@ export default function DashboardNavbar({ onOpenSidebar }) {
 
         <Switch name="themeMode" onChange={handleChangeMode} value={themeMode} />
 
-        {/* фы<Searchbar /> */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>

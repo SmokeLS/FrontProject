@@ -23,7 +23,8 @@ import {
   TableContainer,
   TablePagination,
   Link,
-  TextareaAutosize
+  TextareaAutosize,
+  Divider
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -234,7 +235,7 @@ export default function UserList() {
             </Button>
           }
         />
-
+        <Typography sx={{ textAlign: 'right', mr: 4 }}>Количество строк: {concatedUsers.length}</Typography>
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} handleFunctions={handleFunctions} />
           <Scrollbar>
@@ -264,16 +265,16 @@ export default function UserList() {
                         aria-checked={isItemSelected}
                         sx={{ verticalAlign: 'top' }}
                       >
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          sx={{ cursor: 'pointer' }}
-                          onClick={() => {
-                            navigate(`/dashboard/user/list/${id}`);
-                          }}
-                        >
+                        <TableCell component="th" scope="row">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{ cursor: 'pointer' }}
+                              noWrap
+                              onClick={() => {
+                                navigate(`/dashboard/user/list/${id}`);
+                              }}
+                            >
                               {name}
                             </Typography>
                           </Stack>
@@ -293,37 +294,42 @@ export default function UserList() {
                           </Label>
                         </TableCell>
                         <TableCell ml={4} sx={{ width: '40%', minWidth: '240px' }}>
-                          <Box
+                          <Scrollbar
                             sx={{
+                              border: '1px solid #ccc',
                               maxHeight: '200px',
-                              overflowY: 'scroll',
-                              outline: '1px solid #ccc',
-                              borderRadius: '10px'
+                              borderRadius: '10px',
+                              pl: 1,
+                              pr: 1
                             }}
                           >
-                            <Typography variant="caption" display="block" gutterBottom>
-                              11.03.2021 15:30, Иванов И.И.
-                            </Typography>
-                            <Typography mb={2} sx={{ fontSize: '14px' }}>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                            </Typography>
-                            <Typography variant="caption" display="block" gutterBottom>
-                              11.03.2021 16:30, Иванов И.И.
-                            </Typography>
-                            <Typography mb={2} sx={{ fontSize: '14px' }}>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                              ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-                            </Typography>
-                            <Typography variant="caption" display="block" gutterBottom>
-                              11.03.2021 16:30, Иванов И.И.
-                            </Typography>
-                            <Typography mb={2} sx={{ fontSize: '14px' }}>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                              ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-                            </Typography>
-                          </Box>
+                            <Box>
+                              <Typography mt={1} variant="caption" display="block" gutterBottom>
+                                11.03.2021 15:30, Иванов И.И.
+                              </Typography>
+                              <Typography mb={1} sx={{ fontSize: '14px' }}>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                              </Typography>
+                              <Divider />
+                              <Typography mt={1} variant="caption" display="block" gutterBottom>
+                                11.03.2021 16:30, Иванов И.И.
+                              </Typography>
+                              <Typography mb={1} sx={{ fontSize: '14px' }}>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+                              </Typography>
+                              <Divider />
+                              <Typography mt={1} variant="caption" display="block" gutterBottom>
+                                11.03.2021 16:30, Иванов И.И.
+                              </Typography>
+                              <Typography mb={2} sx={{ fontSize: '14px' }}>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+                              </Typography>
+                            </Box>
+                          </Scrollbar>
                         </TableCell>
                       </TableRow>
                     );

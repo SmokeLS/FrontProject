@@ -103,13 +103,13 @@ function SetColor(themeColor) {
 const initialState = {
   themeMode: 'light',
   themeDirection: 'ltr',
-  themeColor: 'default',
-  themeStretch: false,
+  themeColor: 'blue',
+  themeStretch: true,
   onChangeMode: () => {},
   onChangeDirection: () => {},
   onChangeColor: () => {},
   onToggleStretch: () => {},
-  setColor: PRIMARY_COLOR[0],
+  setColor: PRIMARY_COLOR[3],
   colorOption: []
 };
 
@@ -126,6 +126,8 @@ function SettingsProvider({ children }) {
     themeColor: initialState.themeColor,
     themeStretch: initialState.themeStretch
   });
+
+  console.log(settings);
 
   const onChangeMode = (event) => {
     setSettings({
