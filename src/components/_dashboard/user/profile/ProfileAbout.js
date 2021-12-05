@@ -34,19 +34,39 @@ export default function ProfileAbout({ profile }) {
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Stack direction="row">
-          <Typography variant="body2">ИНН: {follower}</Typography>
+          <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+            ИНН
+            <Typography variant="body1" component="span">
+              : {follower}
+            </Typography>
+          </Typography>
         </Stack>
 
         <Stack direction="row">
-          <Typography variant="body2">Регион: Самарская область</Typography>
+          <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+            Регион
+            <Typography variant="body1" component="span">
+              : Самарская область
+            </Typography>
+          </Typography>
         </Stack>
 
         <Stack direction="row">
-          <Typography variant="body2">Город: Самара</Typography>
+          <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+            Город
+            <Typography variant="body1" component="span">
+              : Самара
+            </Typography>
+          </Typography>
         </Stack>
 
         <Stack direction="row">
-          <Typography variant="body2">Адрес: Ставропольский район, Приморский поселок, ясная улица, дом 7</Typography>
+          <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+            Адрес
+            <Typography variant="body1" component="span">
+              : Ставропольский район, Приморский поселок, ясная улица, дом 7
+            </Typography>
+          </Typography>
         </Stack>
       </Stack>
     </Card>

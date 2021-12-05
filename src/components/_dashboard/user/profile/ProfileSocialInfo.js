@@ -61,11 +61,11 @@ export default function ProfileSocialInfo({ profile }) {
 
   return (
     <Card>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <CardHeader title="Контакты" sx={{ mr: 2 }} />
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <CardHeader title="Контакты" sx={{ mt: -1, mb: 1 }} />
         <Typography
           variant="body1"
-          sx={{ mr: 2, textDecoration: 'none', fontSize: '1.125rem' }}
+          sx={{ mr: 2, mt: 2, textDecoration: 'none', fontSize: '1.125rem' }}
           component={RouterLink}
           to={PATH_DASHBOARD.user.newUser}
         >
@@ -82,7 +82,7 @@ export default function ProfileSocialInfo({ profile }) {
         <Stack spacing={2} sx={{ p: 3 }}>
           {CONTACTS.map((contact, index) => (
             <Box key={index}>
-              <Typography variant="body2">
+              <Typography mr={-2} variant="body2">
                 Контакт <Typography variant="caption">#2382</Typography>
                 <Typography
                   variant="body1"
@@ -90,7 +90,7 @@ export default function ProfileSocialInfo({ profile }) {
                     float: 'right',
                     fontSize: '0.875rem',
                     textAlign: 'right',
-                    width: 80,
+                    width: 70,
                     color: '#0045FF',
                     cursor: 'pointer'
                   }}
@@ -107,7 +107,7 @@ export default function ProfileSocialInfo({ profile }) {
                     float: 'right',
                     fontSize: '0.875rem',
                     textAlign: 'right',
-                    width: 80,
+                    width: 70,
                     color: '#0045FF',
                     cursor: 'pointer'
                   }}

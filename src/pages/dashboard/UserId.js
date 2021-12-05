@@ -86,12 +86,12 @@ export default function UserId() {
   const PROFILE_TABS = [
     {
       value: 'Комментарии',
-      icon: <Icon icon={roundAccountBox} width={20} height={20} />,
+      icon: <Icon icon={roundAccountBox} width={24} height={24} />,
       component: <Profile myProfile={myProfile} posts={posts} />
     },
     {
       value: 'Авто',
-      icon: <Icon icon={roundPermMedia} width={20} height={20} />,
+      icon: <Icon icon={roundPermMedia} width={24} height={24} />,
       component: <ProfileGallery gallery={gallery} />
     }
   ];

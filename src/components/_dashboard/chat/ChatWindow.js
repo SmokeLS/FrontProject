@@ -89,7 +89,7 @@ export default function ChatWindow() {
   return (
     <Stack sx={{ flexGrow: 1, minWidth: '1px' }}>
       <Box pt={3} pl={3}>
-        <Typography variant="body2">Комментарии</Typography>
+        <Typography variant="body2">Информация</Typography>
       </Box>
 
       <Divider />

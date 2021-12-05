@@ -41,10 +41,10 @@ export default function ProfileFollowInfo({ profile }) {
           <Typography variant="body2" pl={2} sx={{ color: '#00AB55', textAlign: 'left' }}>
             Текущий статус
           </Typography>
-          <Box mr={1} sx={{ width: 250 }}>
+          <Box mr={1} sx={{ width: 200 }}>
             <FormControl fullWidth>
               <Select
-                sx={{ textAlign: 'left', height: '40px', width: 250 }}
+                sx={{ textAlign: 'left', height: '40px', width: 200 }}
                 labelId="status-select-label"
                 id="status-select"
                 value={status}
@@ -68,7 +68,7 @@ export default function ProfileFollowInfo({ profile }) {
                 id="datetime-local"
                 type="datetime-local"
                 size="small"
-                sx={{ width: 250 }}
+                sx={{ width: 200 }}
                 InputLabelProps={{
                   shrink: true
                 }}
