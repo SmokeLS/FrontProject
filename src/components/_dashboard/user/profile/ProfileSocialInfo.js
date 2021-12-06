@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import { Link, Card, CardHeader, Stack, Box, Typography, Divider } from '@mui/material';
 import Scrollbar from '../../../Scrollbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import ContactDialog from '../../../../pages/dashboard/ContactDialog';
+import ContactDialog, { SimpleDialog } from '../../../../pages/dashboard/ContactDialog';
 
 // ----------------------------------------------------------------------
 
@@ -85,6 +85,7 @@ export default function ProfileSocialInfo({ profile }) {
     <Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <CardHeader title="Контакты" sx={{ mt: -1, mb: 1 }} />
+
         <ContactDialog setOpen={setOpen} selectedValue={selectedValue} open={open} onClose={handleClose} />
       </Box>
       <Divider />
@@ -100,6 +101,7 @@ export default function ProfileSocialInfo({ profile }) {
             <Box key={index}>
               <Typography mr={-2} variant="body2">
                 Контакт <Typography variant="caption">#2382</Typography>
+                <ContactDialog isEdit selectedValue={selectedValue} open={open} onClose={handleClose} />
                 {/* <Typography
                   variant="body1"
                   sx={{

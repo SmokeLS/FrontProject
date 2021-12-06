@@ -33,6 +33,10 @@ export default function ProfileAbout({ profile }) {
       <CardHeader title="Информация" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
+        <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+          ID, manager
+        </Typography>
+
         <Stack direction="row">
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             ИНН

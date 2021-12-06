@@ -16,8 +16,8 @@ import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
+export function SimpleDialog(props) {
+  const { onClose, selectedValue, open, isEdit } = props;
   const currentUserContact = {
     name: 'Иванов Иван Иванович',
     position: 'Директор',
@@ -35,8 +35,9 @@ function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Создание нового контакта</DialogTitle>
-      <UserContactForm isEdit currentUser={currentUserContact} />
+      {isEdit && <DialogTitle>Редактирование контакта</DialogTitle>}
+      {!isEdit && <DialogTitle>Создание нового контакта</DialogTitle>}
+      <UserContactForm isEdit={isEdit} currentUser={currentUserContact} />
     </Dialog>
   );
 }
@@ -47,7 +48,7 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired
 };
 
-export default function SimpleDialogDemo() {
+export default function SimpleDialogDemo({ isEdit }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
@@ -76,7 +77,7 @@ export default function SimpleDialogDemo() {
       >
         Новый контакт
       </Typography>
-      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
+      <SimpleDialog isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
     </div>
   );
 }

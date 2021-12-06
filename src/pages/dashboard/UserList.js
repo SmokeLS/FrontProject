@@ -1,8 +1,8 @@
+import { useState, useEffect, useRef } from 'react';
 /* eslint-disable no-debugger */
 import _, { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
-import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material
@@ -40,6 +40,7 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
+import ScrollableCell from './ScrollableCell';
 
 // ----------------------------------------------------------------------
 
@@ -239,7 +240,7 @@ export default function UserList() {
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} handleFunctions={handleFunctions} />
           <Scrollbar>
-            <TableContainer sx={{ overflowX: 'auto' }}>
+            <TableContainer>
               <Table>
                 <UserListHead
                   order={order}
@@ -251,7 +252,7 @@ export default function UserList() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {concatedUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {concatedUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                     const { id, name, role, status, individualNumber } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -293,44 +294,7 @@ export default function UserList() {
                             {status}
                           </Label>
                         </TableCell>
-                        <TableCell ml={4} sx={{ width: '40%', minWidth: '240px' }}>
-                          <Scrollbar
-                            sx={{
-                              border: '1px solid #ccc',
-                              maxHeight: '200px',
-                              borderRadius: '10px',
-                              pl: 1,
-                              pr: 1
-                            }}
-                          >
-                            <Box>
-                              <Typography mt={1} variant="caption" display="block" gutterBottom>
-                                11.03.2021 15:30, Иванов И.И.
-                              </Typography>
-                              <Typography mb={1} sx={{ fontSize: '14px' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                              </Typography>
-                              <Divider />
-                              <Typography mt={1} variant="caption" display="block" gutterBottom>
-                                11.03.2021 16:30, Иванов И.И.
-                              </Typography>
-                              <Typography mb={1} sx={{ fontSize: '14px' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-                              </Typography>
-                              <Divider />
-                              <Typography mt={1} variant="caption" display="block" gutterBottom>
-                                11.03.2021 16:30, Иванов И.И.
-                              </Typography>
-                              <Typography mb={2} sx={{ fontSize: '14px' }}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-                              </Typography>
-                            </Box>
-                          </Scrollbar>
-                        </TableCell>
+                        <ScrollableCell />
                       </TableRow>
                     );
                   })}
