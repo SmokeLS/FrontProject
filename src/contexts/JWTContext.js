@@ -22,15 +22,10 @@ const handlers = {
       user
     };
   },
-  LOGIN: (state, action) => {
-    const { user } = action.payload;
-
-    return {
-      ...state,
-      isAuthenticated: true,
-      user
-    };
-  },
+  LOGIN: (state, action) => ({
+    ...state,
+    isAuthenticated: true
+  }),
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
@@ -70,7 +65,6 @@ function AuthProvider({ children }) {
         const accessToken = window.localStorage.getItem('accessToken');
 
         if (accessToken && isValidToken(accessToken)) {
-          setSession(accessToken);
           const response = await axios.get('/api/v1/users/me/');
           const { user } = response.data;
           console.log(response);
@@ -115,8 +109,6 @@ function AuthProvider({ children }) {
     if (response.status === 200) {
       const { access } = response.data;
       setSession(access);
-
-      axios.defaults.headers.common = { Authorization: `Bearer ${access}` };
 
       dispatch({
         type: 'LOGIN'
