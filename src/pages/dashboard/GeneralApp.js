@@ -12,6 +12,8 @@ import { AppWelcome, AppWidgetsStats } from '../../components/_dashboard/general
 export default function GeneralApp() {
   const { themeStretch } = useSettings();
   const { user } = useAuth();
+  console.log(user);
+  // const state = useSelector(state => state.state);
 
   return (
     <Page title="General: App | Minimal-UI">
@@ -21,27 +23,31 @@ export default function GeneralApp() {
             <AppWelcome displayName={user.displayName} />
           </Grid>
 
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom component="div">
-              Ваша статистика
-            </Typography>
-          </Grid>
+          {user && (
+            <>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom component="div">
+                  Ваша статистика
+                </Typography>
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={3}>
-            <AppWidgetsStats item xs={4} />
-          </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <AppWidgetsStats item xs={4} />
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={3}>
-            <AppWidgetsStats item xs={4} />
-          </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <AppWidgetsStats item xs={4} />
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={3}>
-            <AppWidgetsStats item xs={4} />
-          </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <AppWidgetsStats item xs={4} />
+              </Grid>
 
-          <Grid item xs={12} md={6} lg={3}>
-            <AppWidgetsStats item xs={4} />
-          </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <AppWidgetsStats item xs={4} />
+              </Grid>
+            </>
+          )}
         </Grid>
       </Container>
     </Page>

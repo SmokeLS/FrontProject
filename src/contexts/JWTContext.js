@@ -71,7 +71,6 @@ function AuthProvider({ children }) {
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-
           const response = await axios.get('/api/account/my-account');
           const { user } = response.data;
 
@@ -106,14 +105,14 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
-  const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', {
-      email,
+  const login = async (username, password) => {
+    const response = await axios.post('/auth/jwt/create/', {
+      username,
       password
     });
-    const { accessToken, user } = response.data;
-
-    setSession(accessToken);
+    console.log(response);
+    const { access, user } = response.data;
+    setSession(access);
     dispatch({
       type: 'LOGIN',
       payload: {

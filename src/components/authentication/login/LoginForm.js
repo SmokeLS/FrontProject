@@ -27,20 +27,20 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    login: Yup.string().required('login is required'),
     password: Yup.string().required('Password is required')
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      login: '',
       password: '',
       remember: true
     },
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
-        await login(values.email, values.password);
+        await login(values.login, values.password);
         enqueueSnackbar('Login success', {
           variant: 'success',
           action: (key) => (
@@ -78,11 +78,11 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            type="Login"
+            label="login"
+            {...getFieldProps('login')}
+            error={Boolean(touched.login && errors.login)}
+            helperText={touched.login && errors.login}
           />
 
           <TextField
