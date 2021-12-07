@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import { Link, Card, CardHeader, Stack, Box, Typography, Divider } from '@mui/material';
 import Scrollbar from '../../../Scrollbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-import ContactDialog, { SimpleDialog } from '../../../../pages/dashboard/ContactDialog';
+import { EditDialog, CreateDialog } from '../../../../pages/dashboard/ContactDialog';
 
 // ----------------------------------------------------------------------
 
@@ -59,25 +59,25 @@ export default function ProfileSocialInfo({ profile }) {
       name: 'Иванов Иван Иванович',
       position: 'Директор',
       email: 'example@domain.com',
-      tel: '+79854327365'
+      phoneNumber: '+79854327365'
     },
     {
       name: 'Иванов Иван Иванович',
       position: 'Директор',
       email: 'example@domain.com',
-      tel: '+79854327365'
+      phoneNumber: '+79854327365'
     },
     {
       name: 'Иванов Иван Иванович',
       position: 'Директор',
       email: 'example@domain.com',
-      tel: '+79854327365'
+      phoneNumber: '+79854327365'
     },
     {
       name: 'Иванов Иван Иванович',
       position: 'Директор',
       email: 'example@domain.com',
-      tel: '+79854327365'
+      phoneNumber: '+79854327365'
     }
   ];
 
@@ -86,13 +86,14 @@ export default function ProfileSocialInfo({ profile }) {
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <CardHeader title="Контакты" sx={{ mt: -1, mb: 1 }} />
 
-        <ContactDialog setOpen={setOpen} selectedValue={selectedValue} open={open} onClose={handleClose} />
+        <CreateDialog setOpen={setOpen} selectedValue={selectedValue} open={open} onClose={handleClose} />
       </Box>
       <Divider />
       <Scrollbar
         sx={{
           maxHeight: '275px',
-          borderRadius: '10px'
+          borderRadius: '10px',
+          overflowX: 'hidden'
         }}
         scrollableNodeProps={{ ref: scrollRef }}
       >
@@ -100,42 +101,7 @@ export default function ProfileSocialInfo({ profile }) {
           {CONTACTS.map((contact, index) => (
             <Box key={index}>
               <Typography mr={-2} variant="body2">
-                Контакт <Typography variant="caption">#2382</Typography>
-                <ContactDialog isEdit selectedValue={selectedValue} open={open} onClose={handleClose} />
-                {/* <Typography
-                  variant="body1"
-                  sx={{
-                    float: 'right',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    width: 70,
-                    color: '#0045FF',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => {
-                    navigate(`/${location.pathname}/contact/1`);
-                  }}
-                  component="span"
-                >
-                  Изменить
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    float: 'right',
-                    fontSize: '0.875rem',
-                    textAlign: 'right',
-                    width: 70,
-                    color: '#0045FF',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => {
-                    navigate(`/${location.pathname}/contact/1`);
-                  }}
-                  component="span"
-                >
-                  Удалить
-                </Typography> */}
+                <EditDialog isEdit selectedValue={selectedValue} open={open} onClose={handleClose} />
               </Typography>
               <Typography variant="body2" component="div">
                 {contact.name}, {contact.position}
@@ -144,7 +110,7 @@ export default function ProfileSocialInfo({ profile }) {
                 Email: {contact.email}
               </Typography>
               <Typography variant="body2" component="div">
-                Телефон: {contact.tel}
+                Телефон: {contact.phoneNumber}
               </Typography>
             </Box>
           ))}

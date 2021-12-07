@@ -15,15 +15,15 @@ import { blue } from '@mui/material/colors';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
+const currentUserContact = {
+  name: 'Иванов Иван Иванович',
+  position: 'Директор',
+  email: 'something@mail.ru',
+  phoneNumber: '88005553535'
+};
 
 export function SimpleDialog(props) {
   const { onClose, selectedValue, open, isEdit } = props;
-  const currentUserContact = {
-    name: 'Иванов Иван Иванович',
-    position: 'Директор',
-    email: 'something@mail.ru',
-    phoneNumber: '88005553535'
-  };
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -48,7 +48,7 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired
 };
 
-export default function SimpleDialogDemo({ isEdit }) {
+export function CreateDialog({ isEdit }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
@@ -63,55 +63,46 @@ export default function SimpleDialogDemo({ isEdit }) {
 
   return (
     <div>
-      <Typography
+      <Button
         variant="body1"
         sx={{
           mr: 2,
+          mb: 1,
           marginTop: '17px',
           textDecoration: 'none',
           fontSize: '1.125rem',
           cursor: 'pointer',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          color: '#3366FF'
         }}
         onClick={handleClickOpen}
       >
         Новый контакт
-      </Typography>
+      </Button>
       <SimpleDialog isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
     </div>
   );
 }
 
-// import React from 'react';
-// import { useDispatch } from 'react-redux';
-// import { useLocation, useParams } from 'react-router';
-// import PropTypes from 'prop-types';
-// import Button from '@mui/material/Button';
-// import Avatar from '@mui/material/Avatar';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import ListItemText from '@mui/material/ListItemText';
-// import DialogTitle from '@mui/material/DialogTitle';
-// import Dialog from '@mui/material/Dialog';
-// import PersonIcon from '@mui/icons-material/Person';
-// import AddIcon from '@mui/icons-material/Add';
-// import Typography from '@mui/material/Typography';
-// import { blue } from '@mui/material/colors';
-// import UserContactForm from '../../components/_dashboard/user/UserContactForm';
+export function EditDialog({ isEdit }) {
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-// export default function ContactDialog(props) {
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-//   const handleClose = () => {
-//     onClose(selectedValue);
-//   };
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
 
-//   return (
-//     <Dialog onClose={handleClose} open={open}>
-//       <UserContactForm isEdit={isEdit} currentUser={currentUserContact} />
-//     </Dialog>
-//     // <Dialog onClose={handleClose} open={open}>
-//     //   <UserContactForm isEdit={isEdit} currentUser={currentUserContact} />
-//     // </Dialog>
-//   );
-// }
+  return (
+    <div>
+      <Typography mr={-2} variant="body2" onClick={handleClickOpen} sx={{ cursor: 'pointer', color: '#3366FF' }}>
+        Контакт <Typography variant="caption">#2382</Typography>
+      </Typography>
+      <SimpleDialog isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
+    </div>
+  );
+}

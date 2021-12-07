@@ -27,6 +27,7 @@ import {
   MenuItem,
   InputAdornment,
   OutlinedInput,
+  TextField,
   Paper
 } from '@mui/material';
 //
@@ -229,7 +230,7 @@ export default function ShopFilterSidebar(props) {
   const changeTelHandleSearch = (e) => {
     handleFunctions.handleFilterByTel({
       ...filterName,
-      tel: e.target.value
+      phoneNumber: e.target.value
     });
   };
 
@@ -325,7 +326,7 @@ export default function ShopFilterSidebar(props) {
                     Номер телефона
                   </Typography>
                   <SearchStyle
-                    value={filterName.tel}
+                    value={filterName.phoneNumber}
                     size="small"
                     onChange={changeTelHandleSearch}
                     placeholder="Поиск по номеру телефона"
@@ -378,31 +379,37 @@ export default function ShopFilterSidebar(props) {
 
                   <Stack direction="row" ml={-1} spacing={2}>
                     <Item>
-                      <SearchStyleDouble
-                        value={filterName.currentDate}
-                        size="small"
-                        onChange={handleFunctions.handleFilterByDate}
-                        placeholder="От"
-                        startAdornment={
-                          <InputAdornment position="start">
-                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                          </InputAdornment>
-                        }
-                      />
+                      <FormControl fullWidth>
+                        <TextField
+                          id="datetime-local"
+                          type="datetime-local"
+                          size="small"
+                          // value={filterName.currentDate}
+                          // onChange={handleFunctions.handleFilterByDate}
+                          placeholder="От"
+                          sx={{ width: 240 }}
+                          InputLabelProps={{
+                            shrink: true
+                          }}
+                        />
+                      </FormControl>
                     </Item>
 
                     <Item>
-                      <SearchStyleDouble
-                        value={filterName.currentDate}
-                        size="small"
-                        onChange={handleFunctions.handleFilterByDate}
-                        placeholder="До"
-                        startAdornment={
-                          <InputAdornment position="start">
-                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                          </InputAdornment>
-                        }
-                      />
+                      <FormControl fullWidth>
+                        <TextField
+                          id="datetime-local"
+                          type="datetime-local"
+                          size="small"
+                          // value={filterName.currentDate}
+                          // onChange={handleFunctions.handleFilterByDate}
+                          placeholder="До"
+                          sx={{ width: 240 }}
+                          InputLabelProps={{
+                            shrink: true
+                          }}
+                        />
+                      </FormControl>
                     </Item>
                   </Stack>
                 </div>
@@ -454,30 +461,36 @@ export default function ShopFilterSidebar(props) {
 
                   <Stack direction="row" ml={-1} spacing={2}>
                     <Item>
-                      <SearchStyleDouble
-                        value={filterName.commentaryDate}
-                        size="small"
-                        onChange={handleFunctions.handleFilterByCommentaryDate}
-                        placeholder="От"
-                        startAdornment={
-                          <InputAdornment position="start">
-                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                          </InputAdornment>
-                        }
-                      />
+                      <FormControl fullWidth>
+                        <TextField
+                          id="datetime-local"
+                          type="datetime-local"
+                          size="small"
+                          // value={filterName.currentDate}
+                          // onChange={handleFunctions.handleFilterByDate}
+                          placeholder="От"
+                          sx={{ width: 240 }}
+                          InputLabelProps={{
+                            shrink: true
+                          }}
+                        />
+                      </FormControl>
                     </Item>
                     <Item>
-                      <SearchStyleDouble
-                        value={filterName.commentaryDate}
-                        size="small"
-                        onChange={handleFunctions.handleFilterByCommentaryDate}
-                        placeholder="До"
-                        startAdornment={
-                          <InputAdornment position="start">
-                            <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-                          </InputAdornment>
-                        }
-                      />
+                      <FormControl fullWidth>
+                        <TextField
+                          id="datetime-local"
+                          type="datetime-local"
+                          size="small"
+                          // value={filterName.currentDate}
+                          // onChange={handleFunctions.handleFilterByDate}
+                          placeholder="От"
+                          sx={{ width: 240 }}
+                          InputLabelProps={{
+                            shrink: true
+                          }}
+                        />
+                      </FormControl>
                     </Item>
                   </Stack>
                 </div>

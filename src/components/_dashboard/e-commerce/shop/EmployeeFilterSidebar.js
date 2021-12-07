@@ -207,7 +207,7 @@ export default function EmployeeFilterSidebar(props) {
   const changeTelHandleSearch = (e) => {
     handleFunctions.handleFilterByTel({
       ...filterName,
-      tel: e.target.value
+      phoneNumber: e.target.value
     });
   };
 

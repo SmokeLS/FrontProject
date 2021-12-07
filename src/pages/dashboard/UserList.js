@@ -96,7 +96,7 @@ export default function UserList() {
     name: '',
     individualNumber: '',
     address: '',
-    tel: '',
+    phoneNumber: '',
     manager: '',
     status: '',
     currentDate: '',
@@ -160,7 +160,7 @@ export default function UserList() {
       setFilterName({ ...search, address: search.address });
     },
     handleFilterByTel: (search) => {
-      setFilterName({ ...search, tel: search.tel });
+      setFilterName({ ...search, phoneNumber: search.phoneNumber });
     },
     handleFilterByManager: (search) => {
       setFilterName({ ...search, manager: search.target.value });
@@ -198,7 +198,7 @@ export default function UserList() {
   );
   const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
   const filteredAddresses = applySortFilter(userList, getComparator(order, orderBy), filterName.address, 'address');
-  const filteredTels = applySortFilter(userList, getComparator(order, orderBy), filterName.tel, 'tel');
+  const filteredTels = applySortFilter(userList, getComparator(order, orderBy), filterName.phoneNumber, 'phoneNumber');
   // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
   // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
   // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');

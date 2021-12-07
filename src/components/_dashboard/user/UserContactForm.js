@@ -79,7 +79,6 @@ export default function UserContactForm({ isEdit, currentUser }) {
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
         {isEdit && (
           <Box sx={{ float: 'right', mt: -4, mr: 2 }}>
-            <Button>Изменить</Button>
             <Button>Удалить</Button>
           </Box>
         )}
