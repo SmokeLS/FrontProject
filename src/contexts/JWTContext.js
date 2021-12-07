@@ -71,8 +71,9 @@ function AuthProvider({ children }) {
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-          const response = await axios.get('/api/account/my-account');
+          const response = await axios.get('/api/v1/users/me/');
           const { user } = response.data;
+          console.log(response);
 
           dispatch({
             type: 'INITIALIZE',
@@ -110,15 +111,17 @@ function AuthProvider({ children }) {
       username,
       password
     });
-    console.log(response);
-    const { access, user } = response.data;
-    setSession(access);
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user
-      }
-    });
+
+    if (response.status === 200) {
+      const { access } = response.data;
+      setSession(access);
+
+      axios.defaults.headers.common = { Authorization: `Bearer ${access}` };
+
+      dispatch({
+        type: 'LOGIN'
+      });
+    }
   };
 
   const register = async (email, password, firstName, lastName) => {

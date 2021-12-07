@@ -21,6 +21,7 @@ const handlers = {
   },
   LOGIN: (state, action) => {
     const { user } = action.payload;
+
     return { ...state, isAuthenticated: true, user };
   },
   LOGOUT: (state) => ({
@@ -85,12 +86,10 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async () => {
-    await auth0Client.loginWithPopup();
     const isAuthenticated = await auth0Client.isAuthenticated();
 
     if (isAuthenticated) {
-      const user = await auth0Client.getUser();
-      dispatch({ type: 'LOGIN', payload: { user } });
+      dispatch({ type: 'LOGIN' });
     }
   };
 
