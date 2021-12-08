@@ -97,17 +97,17 @@ export default function AccountPopover() {
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
             <div />
-            {/* {user.displayName} */}
+            {user.full_name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             <div />
-            {/* {user.email} */}
+            {user.email}
           </Typography>
         </Box>
 
         <Divider sx={{ my: 1 }} />
-
-        {/* {MENU_OPTIONS.map((option) => (
+        {/* 
+        {MENU_OPTIONS.map((option) => (
           <MenuItem
             key={option.label}
             to={option.linkTo}

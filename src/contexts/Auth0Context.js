@@ -89,7 +89,7 @@ function AuthProvider({ children }) {
     const isAuthenticated = await auth0Client.isAuthenticated();
 
     if (isAuthenticated) {
-      dispatch({ type: 'LOGIN' });
+      dispatch({ type: 'LOGIN', payload: {}});
     }
   };
 

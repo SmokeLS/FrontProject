@@ -19,9 +19,9 @@ export default function GeneralApp() {
     <Page title="General: App | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
-          {/* <Grid item xs={12}>
-            <AppWelcome displayName={user.displayName} />
-          </Grid> */}
+          <Grid item xs={12}>
+            <AppWelcome displayName={user.full_name} />
+          </Grid>
 
           {user && (
             <>

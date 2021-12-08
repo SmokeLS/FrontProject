@@ -3,7 +3,6 @@ import axios from 'axios';
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  // withCredentials: true,
   baseURL: 'http://51.250.7.40/'
 });
 

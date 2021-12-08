@@ -95,6 +95,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const { user } = useAuth();
 
+  console.log(user);
+
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
@@ -145,10 +147,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                  {user?.displayName}
+                  {user?.full_name}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {user?.role}
+                  {user?.position.name}
                 </Typography>
               </Box>
             </AccountStyle>

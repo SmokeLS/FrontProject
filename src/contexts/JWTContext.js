@@ -22,10 +22,15 @@ const handlers = {
       user
     };
   },
-  LOGIN: (state, action) => ({
-    ...state,
-    isAuthenticated: true
-  }),
+  LOGIN: (state, action) => {
+    const { user } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      user
+    };
+  },
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
@@ -65,9 +70,10 @@ function AuthProvider({ children }) {
         const accessToken = window.localStorage.getItem('accessToken');
 
         if (accessToken && isValidToken(accessToken)) {
-          const response = await axios.get('/api/v1/users/me/');
-          const { user } = response.data;
-          console.log(response);
+          setSession(accessToken);
+          const response = await axios.get('api/v1/users/me/');
+
+          const user = { ...response.data };
 
           dispatch({
             type: 'INITIALIZE',
@@ -101,19 +107,22 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async (username, password) => {
-    const response = await axios.post('/auth/jwt/create/', {
+    const response = await axios.post('auth/jwt/create/', {
       username,
       password
     });
 
-    if (response.status === 200) {
-      const { access } = response.data;
-      setSession(access);
+    const { access } = response.data;
+    setSession(access);
 
-      dispatch({
-        type: 'LOGIN'
-      });
-    }
+    const responseUser = await axios.get('api/v1/users/me/');
+
+    const user = { ...responseUser.data };
+
+    dispatch({
+      type: 'LOGIN',
+      payload: { user }
+    });
   };
 
   const register = async (email, password, firstName, lastName) => {
