@@ -35,7 +35,22 @@ const IconStyle = styled(Icon)(({ theme }) => ({
 const TOTAL = 38566;
 const CHART_DATA = [44];
 
-export default function AppWidgets1() {
+const switchNames = (name) => {
+  switch (name) {
+    case 'new_cards_count':
+      return 'Новых карточек';
+    case 'in_work_cards_count':
+      return 'В работе';
+    case 'today_date_cards_count':
+      return 'Дата контакта - сегодня';
+    case 'in_archive_cards_count':
+      return 'В архиве';
+    default:
+      return '';
+  }
+};
+
+export default function AppWidgetsStats({ userStat }) {
   const theme = useTheme();
 
   const chartOptions = merge(BaseOptionChart(), {
@@ -59,10 +74,10 @@ export default function AppWidgets1() {
 
   return (
     <RootStyle>
-      <Box sx={{ color: 'common.white' }}>
-        <Typography variant="h4"> {fNumber(TOTAL)}</Typography>
+      <Box sx={{ color: 'common.white', textAlign: 'center' }}>
+        <Typography variant="h4"> {userStat[1]}</Typography>
         <Typography variant="body2" sx={{ opacity: 0.72 }}>
-          Новых карточек
+          {switchNames(userStat[0])}
         </Typography>
       </Box>
     </RootStyle>

@@ -9,26 +9,29 @@ import { isValidToken, setSession } from '../utils/jwt';
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null
+  user: null,
+  userStatistics: null
 };
 
 const handlers = {
   INITIALIZE: (state, action) => {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, userStatistics } = action.payload;
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
-      user
+      user,
+      userStatistics
     };
   },
   LOGIN: (state, action) => {
-    const { user } = action.payload;
+    const { user, userStatistics } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
-      user
+      user,
+      userStatistics
     };
   },
   LOGOUT: (state) => ({
@@ -75,11 +78,15 @@ function AuthProvider({ children }) {
 
           const user = { ...response.data };
 
+          const responseStatistics = await axios.get('api/v1/users/my_sd_statistics/');
+          const userStatistics = { ...responseStatistics.data };
+
           dispatch({
             type: 'INITIALIZE',
             payload: {
               isAuthenticated: true,
-              user
+              user,
+              userStatistics
             }
           });
         } else {
@@ -115,13 +122,18 @@ function AuthProvider({ children }) {
     const { access } = response.data;
     setSession(access);
 
+    // login
     const responseUser = await axios.get('api/v1/users/me/');
-
     const user = { ...responseUser.data };
+
+    // statistics
+
+    const responseStatistics = await axios.get('api/v1/users/my_sd_statistics/');
+    const userStatistics = { ...responseStatistics.data };
 
     dispatch({
       type: 'LOGIN',
-      payload: { user }
+      payload: { user, userStatistics }
     });
   };
 

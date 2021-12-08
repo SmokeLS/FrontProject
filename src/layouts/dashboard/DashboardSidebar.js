@@ -147,7 +147,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               <MyAvatar />
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                  {user?.full_name}
+                  {`${user?.name} ${user?.surname}`}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {user?.position.name}

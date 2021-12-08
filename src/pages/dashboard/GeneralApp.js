@@ -11,8 +11,8 @@ import { AppWelcome, AppWidgetsStats } from '../../components/_dashboard/general
 
 export default function GeneralApp() {
   const { themeStretch } = useSettings();
-  const { user } = useAuth();
-  console.log(user);
+  const { user, userStatistics } = useAuth();
+  console.log(userStatistics);
   // const state = useSelector(state => state.state);
 
   return (
@@ -23,7 +23,7 @@ export default function GeneralApp() {
             <AppWelcome displayName={user.full_name} />
           </Grid>
 
-          {user && (
+          {user.sd_access && (
             <>
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom component="div">
@@ -31,21 +31,11 @@ export default function GeneralApp() {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3}>
-                <AppWidgetsStats item xs={4} />
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <AppWidgetsStats item xs={4} />
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <AppWidgetsStats item xs={4} />
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <AppWidgetsStats item xs={4} />
-              </Grid>
+              {Object.entries(userStatistics).map((userStat, index) => (
+                <Grid key={index} item xs={12} md={6} lg={3}>
+                  <AppWidgetsStats userStat={userStat} item xs={4} />
+                </Grid>
+              ))}
             </>
           )}
         </Grid>
