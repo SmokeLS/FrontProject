@@ -94,7 +94,8 @@ function AuthProvider({ children }) {
             type: 'INITIALIZE',
             payload: {
               isAuthenticated: false,
-              user: null
+              user: null,
+              userStatistics: null
             }
           });
         }
@@ -104,7 +105,8 @@ function AuthProvider({ children }) {
           type: 'INITIALIZE',
           payload: {
             isAuthenticated: false,
-            user: null
+            user: null,
+            userStatistics: null
           }
         });
       }
