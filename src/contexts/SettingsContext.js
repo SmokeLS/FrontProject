@@ -127,8 +127,6 @@ function SettingsProvider({ children }) {
     themeStretch: initialState.themeStretch
   });
 
-  console.log(settings);
-
   const onChangeMode = (event) => {
     setSettings({
       ...settings,

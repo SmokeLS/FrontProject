@@ -41,11 +41,13 @@ import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_dashboard/user/list';
 import ScrollableCell from './ScrollableCell';
+import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Название', alignRight: false },
+  { id: 'user', label: 'Имя', alignRight: false },
   { id: 'InvidialNumber', label: 'ИНН', alignRight: false },
   { id: 'contactdate', label: 'Дата контакта', alignRight: false },
   { id: 'status', label: 'Статус', alignRight: false },
@@ -87,14 +89,15 @@ export default function UserList() {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  const { userList, count } = useSelector((state) => state.user);
+  const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState({
     name: '',
-    individualNumber: '',
+    taxpayer_id: '',
     address: '',
     phoneNumber: '',
     manager: '',
@@ -104,11 +107,11 @@ export default function UserList() {
     commentary: '',
     commentaryDate: ''
   });
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getUserList());
-  }, [dispatch]);
+    dispatch(getUserList(rowsPerPage, page));
+  }, [dispatch, rowsPerPage, page]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -145,6 +148,7 @@ export default function UserList() {
   };
 
   const handleChangeRowsPerPage = (event) => {
+    console.log(parseInt(event.target.value, 10));
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -154,7 +158,7 @@ export default function UserList() {
       setFilterName({ ...search, name: search.name });
     },
     handleFilterByNumber: (search) => {
-      setFilterName({ ...search, individualNumber: search.individualNumber });
+      setFilterName({ ...search, taxpayer_id: search.taxpayer_id });
     },
     handleFilterByAddress: (search) => {
       setFilterName({ ...search, address: search.address });
@@ -186,16 +190,17 @@ export default function UserList() {
     dispatch(deleteUser(userId));
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+  const emptyRows = page > count / rowsPerPage ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
   let isUserNotFound = userList.length;
 
   const filteredNumbers = applySortFilter(
     userList,
     getComparator(order, orderBy),
-    filterName.individualNumber,
-    'individualNumber'
+    filterName.taxpayer_id,
+    'taxpayer_id'
   );
+
   const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
   const filteredAddresses = applySortFilter(userList, getComparator(order, orderBy), filterName.address, 'address');
   const filteredTels = applySortFilter(userList, getComparator(order, orderBy), filterName.phoneNumber, 'phoneNumber');
@@ -219,24 +224,35 @@ export default function UserList() {
   return (
     <Page title="User: List | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Все компании"
-          links={[
-            { name: 'Компании', href: PATH_DASHBOARD.root },
-            { name: 'Все компании', href: PATH_DASHBOARD.user.root }
-          ]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
-              startIcon={<Icon icon={plusFill} />}
-            >
-              Новая карточка
-            </Button>
-          }
-        />
-        <Typography sx={{ ml: 3 }}>Количество строк: {concatedUsers.length}</Typography>
+        {user.sd_can_create_companies ? (
+          <HeaderBreadcrumbs
+            heading="Все компании"
+            links={[
+              { name: 'Компании', href: PATH_DASHBOARD.root },
+              { name: 'Все компании', href: PATH_DASHBOARD.user.root }
+            ]}
+            action={
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={PATH_DASHBOARD.user.newUser}
+                startIcon={<Icon icon={plusFill} />}
+              >
+                Новая карточка
+              </Button>
+            }
+          />
+        ) : (
+          <HeaderBreadcrumbs
+            heading="Все компании"
+            links={[
+              { name: 'Компании', href: PATH_DASHBOARD.root },
+              { name: 'Все компании', href: PATH_DASHBOARD.user.root }
+            ]}
+          />
+        )}
+
+        {/* <Typography sx={{ ml: 3 }}>Количество строк: {concatedUsers.length}</Typography> */}
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} handleFunctions={handleFunctions} />
           <Scrollbar>
@@ -252,8 +268,8 @@ export default function UserList() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {concatedUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                    const { id, name, role, status, individualNumber } = row;
+                  {concatedUsers.map((row, index) => {
+                    const { id, user, name, date, status, taxpayer_id, comments } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -280,21 +296,20 @@ export default function UserList() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{individualNumber}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{user}</TableCell>
+                        <TableCell align="left">{taxpayer_id}</TableCell>
+                        <TableCell align="left">{date}</TableCell>
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={
-                              (status === 'В архиве' && 'error') ||
-                              (status === 'В работе' && 'info') ||
-                              (status === 'Новый' && 'success')
-                            }
+                            color={(status === 0 && 'error') || (status === 1 && 'info') || (status === 2 && 'success')}
                           >
-                            {status}
+                            {status === 0 && 'В архиве'}
+                            {status === 1 && 'В работе'}
+                            {status === 2 && 'Новый'}
                           </Label>
                         </TableCell>
-                        <ScrollableCell />
+                        <ScrollableCell comments={comments} />
                       </TableRow>
                     );
                   })}
@@ -304,7 +319,7 @@ export default function UserList() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isUserNotFound && (
+                {isUserNotFound ? (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -312,15 +327,17 @@ export default function UserList() {
                       </TableCell>
                     </TableRow>
                   </TableBody>
+                ) : (
+                  <TableBody />
                 )}
               </Table>
             </TableContainer>
           </Scrollbar>
 
           <TablePagination
-            rowsPerPageOptions={[10, 25, 50, 100]}
+            rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
             component="div"
-            count={userList.length}
+            count={count}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

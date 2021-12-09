@@ -34,6 +34,7 @@ export default function ShopProductSort() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(null);
   const { sortBy } = useSelector((state) => state.product);
+  const { count } = useSelector((state) => state.user);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -50,17 +51,9 @@ export default function ShopProductSort() {
 
   return (
     <>
-      <Button
-        color="inherit"
-        disableRipple
-        onClick={handleOpen}
-        endIcon={<Icon icon={open ? chevronUpFill : chevronDownFill} />}
-      >
-        Sort By:&nbsp;
-        <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          {renderLabel(sortBy)}
-        </Typography>
-      </Button>
+      <Typography component="div" variant="body1" sx={{ color: 'text.primary', display: 'flex', alignItems: 'center' }}>
+        Количество: {count}
+      </Typography>
       <Menu
         keepMounted
         anchorEl={open}

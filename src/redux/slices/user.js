@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
@@ -12,6 +13,7 @@ const initialState = {
   posts: [],
   users: [],
   userList: [],
+  count: 0,
   followers: [],
   friends: [],
   gallery: [],
@@ -51,7 +53,7 @@ const slice = createSlice({
     // GET USERS
     getUsersSuccess(state, action) {
       state.isLoading = false;
-      state.users = action.payload;
+      state.users = action.payload.results;
     },
 
     // DELETE USERS
@@ -81,6 +83,11 @@ const slice = createSlice({
       });
 
       state.followers = handleToggle;
+    },
+    // GET COUNT
+    getCountSuccess(state, action) {
+      state.isLoading = false;
+      state.count = action.payload;
     },
 
     // GET FRIENDS
@@ -205,12 +212,13 @@ export function getGallery() {
 
 // ----------------------------------------------------------------------
 
-export function getUserList() {
+export function getUserList(pageSize = 5, page = 0) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/manage-users');
-      dispatch(slice.actions.getUserListSuccess(response.data.users));
+      const response = await axios.get(`/api/v1/sd/companies/?page=${page + 1}&page_size=${pageSize}`);
+      dispatch(slice.actions.getCountSuccess(response.data.count));
+      dispatch(slice.actions.getUserListSuccess(response.data.results));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

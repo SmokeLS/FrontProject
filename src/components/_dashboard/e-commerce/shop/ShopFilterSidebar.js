@@ -216,7 +216,7 @@ export default function ShopFilterSidebar(props) {
   const changeNumberHandleSearch = (e) => {
     handleFunctions.handleFilterByNumber({
       ...filterName,
-      individualNumber: e.target.value
+      taxpayer_id: e.target.value
     });
   };
 
@@ -292,7 +292,7 @@ export default function ShopFilterSidebar(props) {
                     ИНН
                   </Typography>
                   <SearchStyle
-                    value={filterName.individualNumber}
+                    value={filterName.taxpayer_id}
                     size="small"
                     onChange={changeNumberHandleSearch}
                     placeholder="Поиск по ИНН"

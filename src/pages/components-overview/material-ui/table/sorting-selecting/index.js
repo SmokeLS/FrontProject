@@ -220,7 +220,7 @@ export default function SortingSelecting() {
 
       <Box sx={{ position: 'relative' }}>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
           component="div"
           count={SORTING_SELECTING_TABLE.length}
           rowsPerPage={rowsPerPage}

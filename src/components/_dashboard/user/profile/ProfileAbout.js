@@ -26,8 +26,6 @@ ProfileAbout.propTypes = {
 export default function ProfileAbout({ profile }) {
   const { follower } = profile;
 
-  console.log(profile);
-
   return (
     <Card>
       <CardHeader title="Информация" />

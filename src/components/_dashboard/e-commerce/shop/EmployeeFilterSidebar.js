@@ -193,7 +193,7 @@ export default function EmployeeFilterSidebar(props) {
   const changeNumberHandleSearch = (e) => {
     handleFunctions.handleFilterByNumber({
       ...filterName,
-      individualNumber: e.target.value
+      taxpayer_id: e.target.value
     });
   };
 

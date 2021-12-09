@@ -115,8 +115,6 @@ export default function UserId() {
     return null;
   }
 
-  console.log(filteredUser[0]);
-
   const PROFILE_TABS = [
     {
       value: 'Комментарии',

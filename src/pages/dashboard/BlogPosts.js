@@ -188,7 +188,7 @@ export default function UserList() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, zipCode, employeeStatus, individualNumber, email } = row;
+                    const { id, name, zipCode, employeeStatus, taxpayer_id, email } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -249,7 +249,7 @@ export default function UserList() {
           </Scrollbar>
 
           <TablePagination
-            rowsPerPageOptions={[10, 25, 50, 100]}
+            rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
             component="div"
             count={userList.length}
             rowsPerPage={rowsPerPage}

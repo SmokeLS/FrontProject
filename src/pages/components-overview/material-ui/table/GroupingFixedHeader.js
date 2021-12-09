@@ -123,7 +123,7 @@ export default function GroupingFixedHeader() {
         count={GROUPING_TABLE.length}
         rowsPerPage={rowsPerPage}
         onPageChange={handleChangePage}
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </>

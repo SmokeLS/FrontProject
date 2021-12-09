@@ -9,8 +9,6 @@ import createAvatar from '../utils/createAvatar';
 export default function MyAvatar({ ...other }) {
   const { user } = useAuth();
 
-  console.log(user);
-
   return (
     <MAvatar
       // src={user.photoURL}

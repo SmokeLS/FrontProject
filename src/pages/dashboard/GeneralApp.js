@@ -12,7 +12,6 @@ import { AppWelcome, AppWidgetsStats } from '../../components/_dashboard/general
 export default function GeneralApp() {
   const { themeStretch } = useSettings();
   const { user, userStatistics } = useAuth();
-  console.log(userStatistics);
   // const state = useSelector(state => state.state);
 
   return (
