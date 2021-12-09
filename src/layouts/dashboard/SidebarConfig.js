@@ -3,6 +3,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import Label from '../../components/Label';
 import SvgIconStyle from '../../components/SvgIconStyle';
+import useAuth from '../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -53,11 +54,12 @@ const sidebarConfig = [
           {
             title: 'Все компании',
             path: PATH_DASHBOARD.user.list,
-            children: [{ title: 'Все компании', path: PATH_DASHBOARD.user.id }]
+            permission: false,
+            children: [{ title: 'Все sd_page_all_companies', path: PATH_DASHBOARD.user.id }]
           },
-          { title: 'Мои компании', path: PATH_DASHBOARD.user.cards },
-          { title: 'Новые компании', path: PATH_DASHBOARD.user.profile },
-          { title: 'Архив', path: PATH_DASHBOARD.user.newUser }
+          { title: 'Мои компании', permission: false, path: PATH_DASHBOARD.user.cards },
+          { title: 'Новые компании', permission: false, path: PATH_DASHBOARD.user.profile },
+          { title: 'Архив', permission: false, path: PATH_DASHBOARD.user.newUser }
         ]
       }
     ]
@@ -73,7 +75,7 @@ const sidebarConfig = [
         title: 'Сотрудники',
         path: PATH_DASHBOARD.employee.root,
         icon: ICONS.user,
-        children: [{ title: 'Все сотрудники', path: PATH_DASHBOARD.employee.list }]
+        children: [{ title: 'Все сотрудники', permission: true, path: PATH_DASHBOARD.employee.list }]
       }
     ]
   }

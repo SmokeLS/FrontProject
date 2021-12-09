@@ -95,7 +95,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const { user } = useAuth();
 
-  console.log(user);
+  const salesDepartament = sidebarConfig.filter((item) => item.subheader === 'Отдел продаж');
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();

@@ -58,7 +58,7 @@ NavItem.propTypes = {
   item: PropTypes.object
 };
 
-function NavItem({ item, isShow }) {
+function NavItem({ item, isShow, user }) {
   const theme = useTheme();
   const { pathname } = useLocation();
   const { title, path, icon, info, children } = item;
@@ -110,8 +110,10 @@ function NavItem({ item, isShow }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {children.map((item) => {
-                const { title, path } = item;
+                const { title, path, permission } = item;
                 const isActiveSub = path ? !!matchPath({ path, end: false }, pathname) : false;
+
+                if (!permission) return <span />;
 
                 return (
                   <ListItemStyle
@@ -179,24 +181,44 @@ NavSection.propTypes = {
 export default function NavSection({ navConfig, isShow = true, ...other }) {
   const { user } = useAuth();
 
+  const permissionsSalesDepartament = [
+    // строгий порядок
+    user.sd_page_all_companies,
+    user.sd_page_my_companies,
+    user.sd_page_new_companies,
+    user.sd_page_archive_companies
+  ];
+
+  const permissionsEmployeeDepartament = [user.user_access];
+
+  const salesDepartament = navConfig.filter((item) => item.subheader === 'Отдел продаж');
+  const employeeDepartament = navConfig.filter((item) => item.subheader === 'Сотрудники');
+
+  salesDepartament[0].items[0].children.forEach((item, index) => {
+    item.permission = permissionsSalesDepartament[index];
+  });
+
+  employeeDepartament[0].items[0].children.forEach((item, index) => {
+    item.permission = permissionsEmployeeDepartament[index];
+  });
+
   return (
     <Box {...other}>
-      {navConfig.map((list) => {
+      {navConfig.map((list, index, arr) => {
         const { subheader, items } = list;
 
-        const isShow = user.sd_access || subheader !== 'Отдел продаж';
-
-        const isShowAllCompanies = user.sd_page_all_companies;
-        const isShowArchieveCompanies = user.sd_page_archive_companies;
-        const isShowMyCompanies = user.sd_page_my_companies;
-        const isShowNewCompanies = user.sd_page_new_companies;
+        const showPermissions = [
+          true,
+          user.sd_access || subheader !== 'Отдел продаж',
+          user.user_access || subheader !== 'Сотрудники'
+        ];
 
         return (
-          isShow && (
+          showPermissions[index] && (
             <List key={subheader} disablePadding>
               {isShow && <ListSubheaderStyle>{subheader}</ListSubheaderStyle>}
               {items.map((item) => (
-                <NavItem key={item.title} item={item} isShow={isShow} />
+                <NavItem user={user} key={item.title} item={item} isShow={isShow} />
               ))}
             </List>
           )
