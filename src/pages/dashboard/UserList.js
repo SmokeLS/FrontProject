@@ -97,18 +97,32 @@ export default function UserList() {
   const [orderBy, setOrderBy] = useState('name');
 
   const [filterName, setFilterName] = useState({
+    user: '',
     name: '',
-    taxpayer_id: '',
-    address: '',
-    phoneNumber: '',
-    manager: '',
+    taxpayerId: '',
     status: '',
-    currentDate: '',
+    dateBefore: '',
+    dateAfter: '',
     region: '',
-    commentary: '',
-    commentaryDate: ''
+    comments: '',
+    commentsDateFrom: '',
+    commentsDateTo: ''
   });
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [newFilters, setNewFilters] = useState({
+    user: '&user=',
+    name: '&name=',
+    taxpayerId: '&taxpayer_id=',
+    status: '&status=',
+    dateBefore: '&date_before=',
+    dateAfter: '&date_after=',
+    region: '&region=',
+    comments: '&text=',
+    commentsDateFrom: '&comments_date_from=',
+    commentsDateTo: '&comments_date_to='
+  });
 
   useEffect(() => {
     dispatch(getUserList(rowsPerPage, page, filters));
@@ -156,9 +170,10 @@ export default function UserList() {
   const handleFunctions = {
     handleFilterByName: (search) => {
       setFilterName({ ...search, name: search.name });
+      setNewFilters({ ...search, name: `&name=${search.name}` });
     },
-    handleFilterByNumber: (search) => {
-      setFilterName({ ...search, taxpayer_id: search.taxpayer_id });
+    handleFilterByTaxpayerId: (search) => {
+      setFilterName({ ...search, taxpayerId: search.taxpayerId });
     },
     handleFilterByAddress: (search) => {
       setFilterName({ ...search, address: search.address });
@@ -166,23 +181,29 @@ export default function UserList() {
     handleFilterByTel: (search) => {
       setFilterName({ ...search, phoneNumber: search.phoneNumber });
     },
-    handleFilterByManager: (search) => {
-      setFilterName({ ...search, manager: search.target.value });
-    },
     handleFilterByStatus: (search) => {
       setFilterName({ ...search, status: search.status });
     },
-    handleFilterByCurrentDate: (search) => {
-      setFilterName({ ...search, currentDate: search.currentDate });
+    handleFilterByManager: (search) => {
+      setFilterName({ ...search, manager: search.target.value });
+    },
+    handleFilterByDateBefore: (search) => {
+      setFilterName({ ...search, dateBefore: search.dateBefore });
+    },
+    handleFilterByDateAfter: (search) => {
+      setFilterName({ ...search, dateAfter: search.dateAfter });
     },
     handleFilterByRegion: (search) => {
       setFilterName({ ...search, region: search.target.value });
     },
     handleFilterByCommentary: (search) => {
-      setFilterName({ ...search, commentary: search.commentary });
+      setFilterName({ ...search, commentary: search.commentary.value });
     },
-    handleFilterByCommentaryDate: (search) => {
-      setFilterName({ ...search, commentaryDate: search.commentaryDate });
+    handleFilterByCommentaryDateFrom: (search) => {
+      setFilterName({ ...search, commentaryDateFrom: search.commentaryDateFrom.value });
+    },
+    handleFilterByCommentaryDateTo: (search) => {
+      setFilterName({ ...search, commentaryDateTo: search.commentaryDateTo.value });
     }
   };
 
@@ -254,7 +275,12 @@ export default function UserList() {
 
         {/* <Typography sx={{ ml: 3 }}>Количество строк: {concatedUsers.length}</Typography> */}
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} handleFunctions={handleFunctions} />
+          <UserListToolbar
+            numSelected={selected.length}
+            newFilters={newFilters}
+            filterName={filterName}
+            handleFunctions={handleFunctions}
+          />
           <Scrollbar>
             <TableContainer>
               <Table>

@@ -50,7 +50,7 @@ export const SORT_BY_OPTIONS = [
   { value: 'priceAsc', label: 'Price: Low-High' }
 ];
 export const FILTER_GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
-export const FILTER_CATEGORY_OPTIONS = ['Все', 'В архиве', 'В работе', 'Новый'];
+export const FILTER_CATEGORY_OPTIONS = ['В архиве', 'В работе', 'Новый'];
 export const FILTER_MANAGERS_OPTIONS = ['Manager1', 'Manager2', 'Manager3', 'Manager'];
 export const FILTER_REGIONS_OPTIONS = ['region1', 'region2'];
 export const FILTER_PRICE_OPTIONS = [
@@ -178,11 +178,11 @@ export default function ShopFilterSidebar(props) {
   const [openFilter, setOpenFilter] = useState(false);
   const { products, sortBy, filters } = useSelector((state) => state.product);
   const filteredProducts = applyFilter(products, sortBy, filters);
-  const [newFilters, setNewFilters] = useState({});
 
+  const newFilters = {};
   newFilters.user = '&user=';
   newFilters.name = '&name=';
-  newFilters.taxpayer_id = '&taxpayer_id=';
+  newFilters.taxpayerId = '&taxpayer_id=';
   newFilters.status = '&status=';
   newFilters.dateBefore = '&date_before=';
   newFilters.dateAfter = '&date_after=';
@@ -217,14 +217,12 @@ export default function ShopFilterSidebar(props) {
       .map((item) => item)
       .join('');
 
-    console.log(newFilter);
+    console.log(newFilters);
 
     dispatch(getUserList(5, 0, newFilter));
   };
 
   const changeNameHandleSearch = (e) => {
-    newFilters.name = `&name=${e.target.value}`;
-
     refreshFilter(newFilters);
 
     handleFunctions.handleFilterByName({
@@ -234,14 +232,14 @@ export default function ShopFilterSidebar(props) {
   };
 
   const changeNumberHandleSearch = (e) => {
-    newFilters.name = `&taxpayer_id=${e.target.value}`;
+    newFilters.taxpayerId = `&taxpayer_id=${e.target.value}`;
 
     refreshFilter(newFilters);
 
-    handleFunctions.handleFilterByNumber({
-      ...filterName,
-      taxpayer_id: e.target.value
-    });
+    // handleFunctions.handleFilterByTaxpayerId({
+    //   ...filterName,
+    //   taxpayer_id: e.target.value
+    // });
   };
 
   // const changeAddressHandleSearch = (e) => {
@@ -266,6 +264,61 @@ export default function ShopFilterSidebar(props) {
   //   });
   // };
 
+  const changeManagerHandleSearch = (e) => {
+    newFilters.user = `&user=${e.target.value}`;
+
+    refreshFilter(newFilters);
+
+    handleFunctions.handleFilterByManager({
+      ...filterName,
+      manager: e.target.value
+    });
+  };
+
+  const changeStatusHandleSearch = (index) => {
+    newFilters.status = `&status=${index}`;
+
+    refreshFilter(newFilters);
+
+    handleFunctions.handleFilterByStatus({
+      ...filterName,
+      status: index
+    });
+  };
+
+  const changeDateBeforeHandleSearch = (e) => {
+    newFilters.dateBefore = `&date_before=${e.target.value}`;
+
+    refreshFilter(newFilters);
+
+    handleFunctions.handleFilterByDateBefore({
+      ...filterName,
+      dateBefore: e.target.value
+    });
+  };
+
+  const changeDateAfterHandleSearch = (e) => {
+    newFilters.dateAfter = `&date_after=${e.target.value}`;
+
+    refreshFilter(newFilters);
+
+    handleFunctions.handleFilterByDateAfter({
+      ...filterName,
+      dateAfter: e.target.value
+    });
+  };
+
+  const changeRegionHandleSearch = (e) => {
+    newFilters.region = `&region=${e.target.value}`;
+
+    refreshFilter(newFilters);
+
+    handleFunctions.handleFilterByRegion({
+      ...filterName,
+      region: e.target.value
+    });
+  };
+
   const changeCommentaryHandleSearch = (e) => {
     newFilters.comments = `&comments=${e.target.value}`;
 
@@ -278,25 +331,25 @@ export default function ShopFilterSidebar(props) {
   };
 
   const changeDateBeforeCommentaryHandleSearch = (e) => {
-    newFilters.dateBefore = `&date_before=${e.target.value}`;
+    newFilters.commentsDateFrom = `&comments_date_to=${e.target.value}`;
 
     refreshFilter(newFilters);
 
-    // handleFunctions.handleFilterByCommentary({
-    //   ...filterName,
-    //   commentary: e.target.value
-    // });
+    handleFunctions.handleFilterByCommentaryDateFrom({
+      ...filterName,
+      commentary: e.target.value
+    });
   };
 
   const changeDateAfterCommentaryHandleSearch = (e) => {
-    newFilters.dateAfter = `&date_after=${e.target.value}`;
+    newFilters.commentsDateTo = `&comments_date_to=${e.target.value}`;
 
     refreshFilter(newFilters);
 
-    // handleFunctions.handleFilterByCommentary({
-    //   ...filterName,
-    //   commentary: e.target.value
-    // });
+    handleFunctions.handleFilterByCommentaryDateTo({
+      ...filterName,
+      commentary: e.target.value
+    });
   };
 
   return (
@@ -407,7 +460,7 @@ export default function ShopFilterSidebar(props) {
                         size="small"
                         id="demo-simple-select"
                         value={filterName.manager}
-                        onChange={handleFunctions.handleFilterByManager}
+                        onChange={changeManagerHandleSearch}
                       >
                         {FILTER_MANAGERS_OPTIONS.map((item) => (
                           <MenuItem key={item} value={item}>
@@ -424,8 +477,14 @@ export default function ShopFilterSidebar(props) {
                     Статус
                   </Typography>
                   <RadioGroup {...getFieldProps('category')}>
-                    {FILTER_CATEGORY_OPTIONS.map((item) => (
-                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
+                    {FILTER_CATEGORY_OPTIONS.map((item, index) => (
+                      <FormControlLabel
+                        onClick={() => changeStatusHandleSearch(index)}
+                        key={item}
+                        value={item}
+                        control={<Radio />}
+                        label={item}
+                      />
                     ))}
                   </RadioGroup>
                 </div>
@@ -443,7 +502,7 @@ export default function ShopFilterSidebar(props) {
                           type="datetime-local"
                           size="small"
                           // value={filterName.currentDate}
-                          onChange={handleFunctions.handleFilterByDate}
+                          onChange={changeDateAfterHandleSearch}
                           placeholder="От"
                           sx={{ width: 240 }}
                           InputLabelProps={{
@@ -460,7 +519,7 @@ export default function ShopFilterSidebar(props) {
                           type="datetime-local"
                           size="small"
                           // value={filterName.currentDate}
-                          onChange={handleFunctions.handleFilterByDate}
+                          onChange={changeDateBeforeHandleSearch}
                           placeholder="До"
                           sx={{ width: 240 }}
                           InputLabelProps={{
@@ -482,8 +541,8 @@ export default function ShopFilterSidebar(props) {
                         labelId="demo-simple-select-label"
                         size="small"
                         id="demo-simple-select"
-                        value={filterName.region}
-                        onChange={handleFunctions.handleFilterByRegion}
+                        // value={filterName.region}
+                        onChange={changeRegionHandleSearch}
                       >
                         {FILTER_REGIONS_OPTIONS.map((item) => (
                           <MenuItem key={item} value={item}>

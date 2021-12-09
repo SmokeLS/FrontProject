@@ -132,8 +132,7 @@ const slice = createSlice({
       state.notifications = action.payload;
     },
 
-    getFiltersSuccess(state, action) {
-      state.isLoading = true;
+    filterUsers(state, action) {
       state.filters = action.payload;
     }
   }
@@ -143,7 +142,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { onToggleFollow, deleteUser } = slice.actions;
+export const { onToggleFollow, deleteUser, filterUsers } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -217,7 +216,7 @@ export function getGallery() {
 
 // ----------------------------------------------------------------------
 
-export function getUserList(pageSize = 5, page = 0, filters) {
+export function getUserList(pageSize = 5, page = 0, filters = '') {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
