@@ -20,7 +20,8 @@ const initialState = {
   cards: null,
   addressBook: [],
   invoices: [],
-  notifications: null
+  notifications: null,
+  filters: null
 };
 
 const slice = createSlice({
@@ -86,7 +87,6 @@ const slice = createSlice({
     },
     // GET COUNT
     getCountSuccess(state, action) {
-      state.isLoading = false;
       state.count = action.payload;
     },
 
@@ -130,6 +130,11 @@ const slice = createSlice({
     getNotificationsSuccess(state, action) {
       state.isLoading = false;
       state.notifications = action.payload;
+    },
+
+    getFiltersSuccess(state, action) {
+      state.isLoading = true;
+      state.filters = action.payload;
     }
   }
 });
@@ -212,11 +217,11 @@ export function getGallery() {
 
 // ----------------------------------------------------------------------
 
-export function getUserList(pageSize = 5, page = 0) {
+export function getUserList(pageSize = 5, page = 0, filters) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/sd/companies/?page=${page + 1}&page_size=${pageSize}`);
+      const response = await axios.get(`/api/v1/sd/companies/?page=${page + 1}&page_size=${pageSize}${filters}`);
       dispatch(slice.actions.getCountSuccess(response.data.count));
       dispatch(slice.actions.getUserListSuccess(response.data.results));
     } catch (error) {

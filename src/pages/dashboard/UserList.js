@@ -89,12 +89,13 @@ export default function UserList() {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userList, count } = useSelector((state) => state.user);
+  const { userList, count, filters } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
+
   const [filterName, setFilterName] = useState({
     name: '',
     taxpayer_id: '',
@@ -110,8 +111,8 @@ export default function UserList() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getUserList(rowsPerPage, page));
-  }, [dispatch, rowsPerPage, page]);
+    dispatch(getUserList(rowsPerPage, page, filters));
+  }, [dispatch, rowsPerPage, page, filters]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -148,7 +149,6 @@ export default function UserList() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    console.log(parseInt(event.target.value, 10));
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
