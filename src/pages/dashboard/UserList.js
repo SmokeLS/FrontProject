@@ -187,6 +187,20 @@ export default function UserList() {
     },
     handleFilterByCommentaryDateTo: (search) => {
       setFilterName({ ...search, commentaryDateTo: search.commentsDateTo });
+    },
+    handleResetFilter: () => {
+      setFilterName({
+        user: '',
+        name: '',
+        taxpayerId: '',
+        status: '',
+        dateBefore: '',
+        dateAfter: '',
+        region: '',
+        comments: '',
+        commentsDateFrom: '',
+        commentsDateTo: ''
+      });
     }
   };
 
@@ -232,6 +246,7 @@ export default function UserList() {
           <HeaderBreadcrumbs
             heading="Все компании"
             links={[
+              { name: 'Отдел продаж', href: PATH_DASHBOARD.root },
               { name: 'Компании', href: PATH_DASHBOARD.root },
               { name: 'Все компании', href: PATH_DASHBOARD.user.root }
             ]}
@@ -262,20 +277,14 @@ export default function UserList() {
             numSelected={selected.length}
             newFilters={newFilters}
             filterName={filterName}
+            rowsPerPage={rowsPerPage}
+            page={page}
             handleFunctions={handleFunctions}
           />
           <Scrollbar>
             <TableContainer>
               <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={userList.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
+                <UserListHead headLabel={TABLE_HEAD} rowCount={userList.length} numSelected={selected.length} />
                 <TableBody>
                   {concatedUsers.map((row, index) => {
                     const { id, user, name, date, status, taxpayer_id, comments } = row;
@@ -291,7 +300,7 @@ export default function UserList() {
                         aria-checked={isItemSelected}
                         sx={{ verticalAlign: 'top' }}
                       >
-                        <TableCell component="th" scope="row">
+                        <TableCell>
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography
                               variant="subtitle2"

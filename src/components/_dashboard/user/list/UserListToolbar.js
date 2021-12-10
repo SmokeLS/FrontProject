@@ -109,7 +109,7 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserListToolbar({ numSelected, filterName, handleFunctions, newFilters }) {
+export default function UserListToolbar({ numSelected, filterName, handleFunctions, newFilters, rowsPerPage, page }) {
   const location = useLocation();
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
@@ -165,7 +165,6 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
   };
 
   const handleResetFilter = () => {
-    handleSubmit();
     resetForm();
   };
 
@@ -196,15 +195,7 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
           justifySelf="flex-end"
           sx={{ mb: 5, width: '100%' }}
         >
-          <ShopTagFiltered
-            filters={filters}
-            formik={formik}
-            isShowReset={openFilter}
-            onResetFilter={handleResetFilter}
-            isDefault={isDefault}
-          />
-
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ mt: 5 }}>
+          <Stack direction="row" sx={{ width: '100%', mt: 5 }} justifyContent="flex-end" spacing={1} flexShrink={0}>
             {location.pathname === '/dashboard/user/list' ? (
               <>
                 <ShopFilterSidebar
@@ -216,6 +207,8 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
                   onResetFilter={handleResetFilter}
                   onOpenFilter={handleOpenFilter}
                   onCloseFilter={handleCloseFilter}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
                 />
                 <ShopProductSort />
               </>

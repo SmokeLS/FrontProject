@@ -28,9 +28,10 @@ import {
   InputAdornment,
   OutlinedInput,
   TextField,
-  Paper
+  Paper,
+  Autocomplete
 } from '@mui/material';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+
 //
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
 import { useTheme, styled } from '@mui/material/styles';
@@ -44,7 +45,6 @@ import { filterProducts, getProducts } from '../../../../redux/slices/product';
 import { getUserList, getManagers, getRegions } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
-
 export const SORT_BY_OPTIONS = [
   { value: 'featured', label: 'Featured' },
   { value: 'newest', label: 'Newest' },
@@ -116,10 +116,23 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ShopFilterSidebar(props) {
-  const { isOpenFilter, onResetFilter, onOpenFilter, onCloseFilter, formik, filterName, handleFunctions, newFilters } =
-    props;
-  const { values, getFieldProps } = formik;
+  const {
+    isOpenFilter,
+    onResetFilter,
+    onOpenFilter,
+    onCloseFilter,
+    formik,
+    filterName,
+    handleFunctions,
+    newFilters,
+    rowsPerPage,
+    page
+  } = props;
+  const { values, getFieldProps, resetForm } = formik;
   const { managers, regions } = useSelector((state) => state.user);
+
+  const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
+  const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
 
   const dispatch = useDispatch();
 
@@ -136,6 +149,13 @@ export default function ShopFilterSidebar(props) {
     return id;
   };
 
+  const setAllFilters = (allFilters) => {
+    const newFilter = Object.values(allFilters)
+      .map((item) => item)
+      .join('');
+
+    dispatch(getUserList(rowsPerPage, page, newFilter));
+  };
   const changeNameHandleSearch = (e) => {
     const allFilters = {
       user: `&user=${isValidId(filterName.user.id)}`,
@@ -145,16 +165,12 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
-
-    dispatch(getUserList(5, 0, newFilter));
+    setAllFilters(allFilters);
 
     handleFunctions.handleFilterByName({
       ...filterName,
@@ -171,16 +187,12 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
-
-    dispatch(getUserList(5, 0, newFilter));
+    setAllFilters(allFilters);
 
     handleFunctions.handleFilterByTaxpayerId({
       ...filterName,
@@ -190,34 +202,32 @@ export default function ShopFilterSidebar(props) {
 
   //
 
-  const changeManagerHandleSearch = (e) => {
+  const changeManagerHandleSearch = (newValue) => {
+    if (!newValue) newValue = '';
     const allFilters = {
-      user: `&user=${isValidId(e.target.value.id)}`,
+      user: `&user=${isValidId(newValue.id)}`,
       name: `&name=${filterName.name}`,
       taxpayerId: `&taxpayer_id=${filterName.taxpayerId}`,
       status: `&status=${filterName.status}`,
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
-
-    dispatch(getUserList(5, 0, newFilter));
+    setAllFilters(allFilters);
 
     handleFunctions.handleFilterByManager({
       ...filterName,
-      user: e.target.value
+      user: newValue
     });
   };
 
-  const changeStatusHandleSearch = (index) => {
+  const changeStatusHandleSearch = (e, index) => {
     if (index === -1) index = '';
+    console.log(e.target);
 
     const allFilters = {
       user: `&user=${isValidId(filterName.user.id)}`,
@@ -227,20 +237,16 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
-
-    dispatch(getUserList(5, 0, newFilter));
+    setAllFilters(allFilters);
 
     handleFunctions.handleFilterByStatus({
       ...filterName,
-      status: index
+      status: e.target.value
     });
   };
 
@@ -253,16 +259,13 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${e.target.value}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
+    setAllFilters(allFilters);
 
-    dispatch(getUserList(5, 0, newFilter));
     handleFunctions.handleFilterByDateBefore({
       ...filterName,
       dateBefore: e.target.value
@@ -278,16 +281,12 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${e.target.value}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
-
-    dispatch(getUserList(5, 0, newFilter));
+    setAllFilters(allFilters);
 
     handleFunctions.handleFilterByDateAfter({
       ...filterName,
@@ -295,7 +294,8 @@ export default function ShopFilterSidebar(props) {
     });
   };
 
-  const changeRegionHandleSearch = (e) => {
+  const changeRegionHandleSearch = (newValue) => {
+    if (!newValue) newValue = '';
     const allFilters = {
       user: `&user=${isValidId(filterName.user.id)}`,
       name: `&name=${filterName.name}`,
@@ -303,21 +303,17 @@ export default function ShopFilterSidebar(props) {
       status: `&status=${filterName.status}`,
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
-      region: `&region=${isValidId(e.target.value.id)}`,
-      comments: `&text=${filterName.comments}`,
+      region: `&region=${isValidId(newValue.id)}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
-
-    dispatch(getUserList(5, 0, newFilter));
+    setAllFilters(allFilters);
 
     handleFunctions.handleFilterByRegion({
       ...filterName,
-      region: e.target.value
+      region: newValue
     });
   };
 
@@ -335,11 +331,8 @@ export default function ShopFilterSidebar(props) {
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
+    setAllFilters(allFilters);
 
-    dispatch(getUserList(5, 0, newFilter));
     handleFunctions.handleFilterByCommentary({
       ...filterName,
       comments: e.target.value
@@ -355,17 +348,13 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${e.target.value}`,
       commentsDateTo: `&comments_date_to=${filterName.commentsDateTo}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
+    setAllFilters(allFilters);
 
-    console.log(allFilters);
-    dispatch(getUserList(5, 0, newFilter));
     handleFunctions.handleFilterByCommentaryDateFrom({
       ...filterName,
       commentsDateFrom: e.target.value
@@ -381,20 +370,37 @@ export default function ShopFilterSidebar(props) {
       dateBefore: `&date_before=${filterName.dateBefore}`,
       dateAfter: `&date_after=${filterName.dateAfter}`,
       region: `&region=${isValidId(filterName.region.id)}`,
-      comments: `&text=${filterName.comments}`,
+      comments: `&comments=${filterName.comments}`,
       commentsDateFrom: `&comments_date_from=${filterName.commentsDateFrom}`,
       commentsDateTo: `&comments_date_to=${e.target.value}`
     };
 
-    const newFilter = Object.values(allFilters)
-      .map((item) => item)
-      .join('');
+    setAllFilters(allFilters);
 
-    dispatch(getUserList(5, 0, newFilter));
     handleFunctions.handleFilterByCommentaryDateTo({
       ...filterName,
       commentsDateTo: e.target.value
     });
+  };
+
+  const resetHandleSearch = (e) => {
+    const allFilters = {
+      user: `&user=`,
+      name: `&name=`,
+      taxpayerId: `&taxpayer_id=`,
+      status: `&status=`,
+      dateBefore: `&date_before=`,
+      dateAfter: `&date_after=`,
+      region: `&region=`,
+      comments: `&comments=`,
+      commentsDateFrom: `&comments_date_from=`,
+      commentsDateTo: `&comments_date_to=`
+    };
+
+    setAllFilters(allFilters);
+
+    resetForm();
+    handleFunctions.handleResetFilter();
   };
 
   return (
@@ -500,7 +506,16 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <RadioGroup {...getFieldProps('rating')}>
                     <FormControl fullWidth>
-                      <Select
+                      <Autocomplete
+                        disablePortal
+                        size="small"
+                        id="user-select"
+                        value={filterName.user}
+                        onChange={(event, newValue) => changeManagerHandleSearch(newValue)}
+                        options={optionsManagers}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                      {/* <Select
                         labelId="user-select-label"
                         size="small"
                         id="user-select"
@@ -513,7 +528,7 @@ export default function ShopFilterSidebar(props) {
                             {item.full_name}
                           </MenuItem>
                         ))}
-                      </Select>
+                      </Select> */}
                     </FormControl>
                   </RadioGroup>
                 </div>
@@ -525,7 +540,7 @@ export default function ShopFilterSidebar(props) {
                   <RadioGroup {...getFieldProps('category')}>
                     {FILTER_CATEGORY_OPTIONS.map((item, index) => (
                       <FormControlLabel
-                        onClick={() => changeStatusHandleSearch(index - 1)}
+                        onClick={(e) => changeStatusHandleSearch(e, index - 1)}
                         key={item}
                         value={item}
                         control={<Radio />}
@@ -547,7 +562,7 @@ export default function ShopFilterSidebar(props) {
                           id="datetime-local"
                           type="datetime-local"
                           size="small"
-                          defaultValue={filterName.dateAfter}
+                          value={filterName.dateAfter}
                           onChange={changeDateAfterHandleSearch}
                           placeholder="От"
                           sx={{ width: 240 }}
@@ -563,7 +578,7 @@ export default function ShopFilterSidebar(props) {
                           id="datetime-local"
                           type="datetime-local"
                           size="small"
-                          defaultValue={filterName.dateBefore}
+                          value={filterName.dateBefore}
                           onChange={changeDateBeforeHandleSearch}
                           sx={{ width: 240 }}
                           InputLabelProps={{
@@ -581,7 +596,16 @@ export default function ShopFilterSidebar(props) {
                   </Typography>
                   <RadioGroup {...getFieldProps('rating')}>
                     <FormControl fullWidth>
-                      <Select
+                      <Autocomplete
+                        disablePortal
+                        size="small"
+                        id="user-select"
+                        value={filterName.region}
+                        onChange={(event, newValue) => changeRegionHandleSearch(newValue)}
+                        options={optionsRegions}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                      {/* <Select
                         labelId="region-select-label"
                         size="small"
                         id="region-select"
@@ -594,7 +618,7 @@ export default function ShopFilterSidebar(props) {
                             {item.name}
                           </MenuItem>
                         ))}
-                      </Select>
+                      </Select> */}
                     </FormControl>
                   </RadioGroup>
                 </div>
@@ -628,7 +652,7 @@ export default function ShopFilterSidebar(props) {
                           id="datetime-local"
                           type="datetime-local"
                           size="small"
-                          defaultValue={filterName.commentsDateFrom}
+                          value={filterName.commentsDateFrom}
                           onChange={changeDateAfterCommentaryHandleSearch}
                           sx={{ width: 240 }}
                           InputLabelProps={{
@@ -643,7 +667,7 @@ export default function ShopFilterSidebar(props) {
                           id="datetime-local"
                           type="datetime-local"
                           size="small"
-                          defaultValue={filterName.commentsDateTo}
+                          value={filterName.commentsDateTo}
                           onChange={changeDateBeforeCommentaryHandleSearch}
                           sx={{ width: 240 }}
                           InputLabelProps={{
@@ -664,7 +688,7 @@ export default function ShopFilterSidebar(props) {
                 type="submit"
                 color="inherit"
                 variant="outlined"
-                onClick={onResetFilter}
+                onClick={resetHandleSearch}
                 startIcon={<Icon icon={roundClearAll} />}
               >
                 Clear All

@@ -178,8 +178,6 @@ export default function UserList() {
             <TableContainer sx={{ overflowX: 'auto' }}>
               <Table>
                 <UserListHead
-                  order={order}
-                  orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={userList.length}
                   numSelected={selected.length}
