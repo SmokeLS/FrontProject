@@ -21,7 +21,8 @@ const initialState = {
   addressBook: [],
   invoices: [],
   notifications: null,
-  filters: null
+  managers: [],
+  regions: []
 };
 
 const slice = createSlice({
@@ -132,8 +133,16 @@ const slice = createSlice({
       state.notifications = action.payload;
     },
 
-    filterUsers(state, action) {
-      state.filters = action.payload;
+    // GET MANAGERS
+    getManagers(state, action) {
+      state.isLoading = true;
+      state.managers = action.payload;
+    },
+
+    // GET REGIONS
+    getRegions(state, action) {
+      state.isLoading = true;
+      state.regions = action.payload;
     }
   }
 });
@@ -142,7 +151,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { onToggleFollow, deleteUser, filterUsers } = slice.actions;
+export const { onToggleFollow, deleteUser } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -293,6 +302,34 @@ export function getUsers() {
     try {
       const response = await axios.get('/api/user/all');
       dispatch(slice.actions.getUsersSuccess(response.data.users));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getManagers() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/sd/companies/used_managers/');
+      dispatch(slice.actions.getManagers(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getRegions() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/sd/companies/used_regions/');
+      dispatch(slice.actions.getRegions(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

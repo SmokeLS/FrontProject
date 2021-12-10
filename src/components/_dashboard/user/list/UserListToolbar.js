@@ -109,7 +109,7 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserListToolbar({ numSelected, filterName, handleFunctions }) {
+export default function UserListToolbar({ numSelected, filterName, handleFunctions, newFilters }) {
   const location = useLocation();
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
@@ -212,6 +212,7 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
                   isOpenFilter={openFilter}
                   filterName={filterName}
                   handleFunctions={handleFunctions}
+                  newFilters={newFilters}
                   onResetFilter={handleResetFilter}
                   onOpenFilter={handleOpenFilter}
                   onCloseFilter={handleCloseFilter}

@@ -108,7 +108,6 @@ export default function UserList() {
     commentsDateFrom: '',
     commentsDateTo: ''
   });
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [newFilters, setNewFilters] = useState({
@@ -119,7 +118,7 @@ export default function UserList() {
     dateBefore: '&date_before=',
     dateAfter: '&date_after=',
     region: '&region=',
-    comments: '&text=',
+    comments: '&comments=',
     commentsDateFrom: '&comments_date_from=',
     commentsDateTo: '&comments_date_to='
   });
@@ -143,21 +142,6 @@ export default function UserList() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -170,7 +154,6 @@ export default function UserList() {
   const handleFunctions = {
     handleFilterByName: (search) => {
       setFilterName({ ...search, name: search.name });
-      setNewFilters({ ...search, name: `&name=${search.name}` });
     },
     handleFilterByTaxpayerId: (search) => {
       setFilterName({ ...search, taxpayerId: search.taxpayerId });
@@ -185,7 +168,7 @@ export default function UserList() {
       setFilterName({ ...search, status: search.status });
     },
     handleFilterByManager: (search) => {
-      setFilterName({ ...search, manager: search.target.value });
+      setFilterName({ ...search, user: search.user });
     },
     handleFilterByDateBefore: (search) => {
       setFilterName({ ...search, dateBefore: search.dateBefore });
@@ -194,16 +177,16 @@ export default function UserList() {
       setFilterName({ ...search, dateAfter: search.dateAfter });
     },
     handleFilterByRegion: (search) => {
-      setFilterName({ ...search, region: search.target.value });
+      setFilterName({ ...search, region: search.region });
     },
     handleFilterByCommentary: (search) => {
-      setFilterName({ ...search, commentary: search.commentary.value });
+      setFilterName({ ...search, comments: search.comments });
     },
     handleFilterByCommentaryDateFrom: (search) => {
-      setFilterName({ ...search, commentaryDateFrom: search.commentaryDateFrom.value });
+      setFilterName({ ...search, commentaryDateFrom: search.commentsDateFrom });
     },
     handleFilterByCommentaryDateTo: (search) => {
-      setFilterName({ ...search, commentaryDateTo: search.commentaryDateTo.value });
+      setFilterName({ ...search, commentaryDateTo: search.commentsDateTo });
     }
   };
 
