@@ -9,7 +9,7 @@ import axios from '../../utils/axios';
 const initialState = {
   isLoading: false,
   error: false,
-  myProfile: null,
+  profile: null,
   posts: [],
   users: [],
   userList: [],
@@ -43,7 +43,7 @@ const slice = createSlice({
     // GET PROFILE
     getProfileSuccess(state, action) {
       state.isLoading = false;
-      state.myProfile = action.payload;
+      state.profile = action.payload;
     },
 
     // GET POSTS
@@ -155,12 +155,12 @@ export const { onToggleFollow, deleteUser } = slice.actions;
 
 // ----------------------------------------------------------------------
 
-export function getProfile() {
+export function getProfile(id = 0) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/profile');
-      dispatch(slice.actions.getProfileSuccess(response.data.profile));
+      const response = await axios.get(`/api/v1/sd/companies/${id}/`);
+      dispatch(slice.actions.getProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

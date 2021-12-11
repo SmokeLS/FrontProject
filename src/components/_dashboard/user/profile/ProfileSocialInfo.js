@@ -30,7 +30,6 @@ ProfileSocialInfo.propTypes = {
 };
 
 export default function ProfileSocialInfo({ profile }) {
-  const { facebookLink, instagramLink, linkedinLink, twitterLink } = profile;
   const navigate = useNavigate();
   const location = useLocation();
   const scrollRef = useRef();
@@ -54,39 +53,18 @@ export default function ProfileSocialInfo({ profile }) {
     scrollMessagesToBottom();
   }, []);
 
-  const CONTACTS = [
-    {
-      name: 'Иванов Иван Иванович',
-      position: 'Директор',
-      email: 'example@domain.com',
-      phoneNumber: '+79854327365'
-    },
-    {
-      name: 'Иванов Иван Иванович',
-      position: 'Директор',
-      email: 'example@domain.com',
-      phoneNumber: '+79854327365'
-    },
-    {
-      name: 'Иванов Иван Иванович',
-      position: 'Директор',
-      email: 'example@domain.com',
-      phoneNumber: '+79854327365'
-    },
-    {
-      name: 'Иванов Иван Иванович',
-      position: 'Директор',
-      email: 'example@domain.com',
-      phoneNumber: '+79854327365'
-    }
-  ];
-
   return (
     <Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <CardHeader title="Контакты" sx={{ mt: -1, mb: 1 }} />
 
-        <CreateDialog setOpen={setOpen} selectedValue={selectedValue} open={open} onClose={handleClose} />
+        <CreateDialog
+          profile={profile}
+          setOpen={setOpen}
+          selectedValue={selectedValue}
+          open={open}
+          onClose={handleClose}
+        />
       </Box>
       <Divider />
       <Scrollbar
@@ -98,10 +76,25 @@ export default function ProfileSocialInfo({ profile }) {
         scrollableNodeProps={{ ref: scrollRef }}
       >
         <Stack spacing={2} sx={{ p: 3 }}>
-          {CONTACTS.map((contact, index) => (
+          {profile.contacts.map((contact, index) => (
             <Box key={index}>
               <Typography mr={-2} variant="body2">
-                <EditDialog isEdit selectedValue={selectedValue} open={open} onClose={handleClose} />
+                {profile.can_update_contacts ? (
+                  <EditDialog
+                    profile={profile}
+                    isEdit
+                    selectedValue={selectedValue}
+                    open={open}
+                    onClose={handleClose}
+                  />
+                ) : (
+                  <Typography component="span" mr={-2} variant="body2">
+                    Контакт{' '}
+                    <Typography component="span" variant="caption">
+                      #2382
+                    </Typography>
+                  </Typography>
+                )}
               </Typography>
               <Typography variant="body2" component="div">
                 {contact.name}, {contact.position}
@@ -110,7 +103,7 @@ export default function ProfileSocialInfo({ profile }) {
                 Email: {contact.email}
               </Typography>
               <Typography variant="body2" component="div">
-                Телефон: {contact.phoneNumber}
+                Телефон: {contact.phone}
               </Typography>
             </Box>
           ))}

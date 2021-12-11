@@ -12,7 +12,7 @@ ChatMessageList.propTypes = {
   conversation: PropTypes.object.isRequired
 };
 
-export default function ChatMessageList({ conversation }) {
+export default function ChatMessageList({ profile, conversation }) {
   const scrollRef = useRef();
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -38,11 +38,11 @@ export default function ChatMessageList({ conversation }) {
 
   return (
     <>
-      <Scrollbar scrollableNodeProps={{ ref: scrollRef }} sx={{ p: 3, height: 1 }}>
-        {conversation.messages.map((message) => (
+      <Scrollbar scrollableNodeProps={{ ref: scrollRef }} sx={{ p: 3 }}>
+        {profile.comments.map((comment) => (
           <ChatMessageItem
-            key={message.id}
-            message={message}
+            key={comment.id}
+            message={comment.text}
             conversation={conversation}
             onOpenLightbox={handleOpenLightbox}
           />

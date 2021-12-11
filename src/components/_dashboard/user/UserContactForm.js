@@ -24,7 +24,7 @@ UserContactForm.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default function UserContactForm({ isEdit, currentUser }) {
+export default function UserContactForm({ profile, isEdit, currentUser }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -78,9 +78,7 @@ export default function UserContactForm({ isEdit, currentUser }) {
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
         {isEdit && (
-          <Box sx={{ float: 'right', mt: -4, mr: 2 }}>
-            <Button>Удалить</Button>
-          </Box>
+          <Box sx={{ float: 'right', mt: -4, mr: 2 }}>{profile.can_destroy_contacts && <Button>Удалить</Button>}</Box>
         )}
         <Grid container spacing={3}>
           <Grid item xs={12}>

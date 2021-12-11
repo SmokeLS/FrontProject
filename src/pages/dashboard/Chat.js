@@ -16,7 +16,7 @@ import { ChatSidebar, ChatWindow } from '../../components/_dashboard/chat';
 
 // ----------------------------------------------------------------------
 
-export default function Chat() {
+export default function Chat({ profile }) {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
 
@@ -28,8 +28,8 @@ export default function Chat() {
   return (
     <Page title="Chat | Minimal-UI">
       <Container disableGutters maxWidth={themeStretch ? false : 'xl'} pl={2}>
-        <Card sx={{ minHeight: '660px', display: 'flex' }}>
-          <ChatWindow />
+        <Card sx={{ height: '720px', alignItems: 'stretch', display: 'flex' }}>
+          <ChatWindow profile={profile} />
         </Card>
       </Container>
     </Page>

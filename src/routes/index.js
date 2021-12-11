@@ -94,7 +94,7 @@ export default function Router() {
         {
           path: 'sd',
           children: [
-            { element: <Navigate to="/dashboard/user/profile" replace /> },
+            { element: <Navigate to="/dashboard/sd/profile" replace /> },
             { path: 'profile', element: <UserProfile /> },
             { path: 'all/:id', element: <UserId /> },
             { path: 'all/:id/contact/:id', element: <ContactCreate /> },

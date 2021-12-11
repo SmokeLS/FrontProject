@@ -23,7 +23,7 @@ const currentUserContact = {
 };
 
 export function SimpleDialog(props) {
-  const { onClose, selectedValue, open, isEdit } = props;
+  const { onClose, selectedValue, open, isEdit, profile } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -37,7 +37,7 @@ export function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       {isEdit && <DialogTitle>Редактирование контакта</DialogTitle>}
       {!isEdit && <DialogTitle>Создание нового контакта</DialogTitle>}
-      <UserContactForm isEdit={isEdit} currentUser={currentUserContact} />
+      <UserContactForm profile={profile} isEdit={isEdit} currentUser={currentUserContact} />
     </Dialog>
   );
 }
@@ -48,7 +48,7 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired
 };
 
-export function CreateDialog({ isEdit }) {
+export function CreateDialog({ profile, isEdit }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
@@ -63,28 +63,30 @@ export function CreateDialog({ isEdit }) {
 
   return (
     <div>
-      <Button
-        variant="body1"
-        sx={{
-          mr: 2,
-          mb: 1,
-          marginTop: '17px',
-          textDecoration: 'none',
-          fontSize: '1.125rem',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          color: '#3366FF'
-        }}
-        onClick={handleClickOpen}
-      >
-        Новый контакт
-      </Button>
-      <SimpleDialog isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
+      {profile.can_add_contacts && (
+        <Button
+          variant="body1"
+          sx={{
+            mr: 2,
+            mb: 1,
+            marginTop: '17px',
+            textDecoration: 'none',
+            fontSize: '1.125rem',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            color: '#3366FF'
+          }}
+          onClick={handleClickOpen}
+        >
+          Новый контакт
+        </Button>
+      )}
+      <SimpleDialog profile={profile} isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
     </div>
   );
 }
 
-export function EditDialog({ isEdit }) {
+export function EditDialog({ isEdit, profile }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
@@ -98,11 +100,20 @@ export function EditDialog({ isEdit }) {
   };
 
   return (
-    <div>
-      <Typography mr={-2} variant="body2" onClick={handleClickOpen} sx={{ cursor: 'pointer', color: '#3366FF' }}>
-        Контакт <Typography variant="caption">#2382</Typography>
+    <>
+      <Typography
+        component="span"
+        mr={-2}
+        variant="body2"
+        onClick={handleClickOpen}
+        sx={{ cursor: 'pointer', color: '#3366FF' }}
+      >
+        Контакт{' '}
+        <Typography component="span" variant="caption">
+          #2382
+        </Typography>
       </Typography>
-      <SimpleDialog isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
-    </div>
+      <SimpleDialog profile={profile} isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
+    </>
   );
 }

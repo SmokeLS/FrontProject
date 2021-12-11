@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import pinFill from '@iconify/icons-eva/pin-fill';
 import emailFill from '@iconify/icons-eva/email-fill';
 import roundBusinessCenter from '@iconify/icons-ic/round-business-center';
+import { useParams } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Link, Card, Typography, CardHeader, Stack } from '@mui/material';
@@ -24,31 +25,30 @@ ProfileAbout.propTypes = {
 };
 
 export default function ProfileAbout({ profile }) {
-  const { follower } = profile;
+  let regionInformation;
+  const params = useParams();
 
-  return (
-    <Card>
-      <CardHeader title="Информация" />
+  console.log(profile);
 
-      <Stack spacing={2} sx={{ p: 3 }}>
+  if (!profile?.city) {
+    regionInformation = (
+      <Stack direction="row">
         <Typography sx={{ fontWeight: 'bold' }} variant="body1">
-          ID, manager
-        </Typography>
-
-        <Stack direction="row">
-          <Typography sx={{ fontWeight: 'bold' }} variant="body1">
-            ИНН
-            <Typography variant="body1" component="span">
-              : {follower}
-            </Typography>
+          Регион
+          <Typography variant="body1" component="span">
+            : {profile?.region.name}
           </Typography>
-        </Stack>
-
+        </Typography>
+      </Stack>
+    );
+  } else {
+    regionInformation = (
+      <>
         <Stack direction="row">
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             Регион
             <Typography variant="body1" component="span">
-              : Самарская область
+              : {profile?.city.region.name}
             </Typography>
           </Typography>
         </Stack>
@@ -57,10 +57,43 @@ export default function ProfileAbout({ profile }) {
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             Город
             <Typography variant="body1" component="span">
-              : Самара
+              : {profile?.city.name}
             </Typography>
           </Typography>
         </Stack>
+      </>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader title="Информация" />
+
+      <Stack spacing={2} sx={{ p: 3 }}>
+        <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+          ID
+          <Typography variant="body1" component="span">
+            : {params.id}
+          </Typography>
+        </Typography>
+
+        <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+          Manager
+          <Typography variant="body1" component="span">
+            : {profile.user.full_name}
+          </Typography>
+        </Typography>
+
+        <Stack direction="row">
+          <Typography sx={{ fontWeight: 'bold' }} variant="body1">
+            ИНН
+            <Typography variant="body1" component="span">
+              : {profile.taxpayer_id}
+            </Typography>
+          </Typography>
+        </Stack>
+
+        {regionInformation}
 
         <Stack direction="row">
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">

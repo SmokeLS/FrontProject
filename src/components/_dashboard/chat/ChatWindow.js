@@ -39,7 +39,7 @@ const conversationSelector = (state) => {
   return initState;
 };
 
-export default function ChatWindow() {
+export default function ChatWindow({ profile }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -98,14 +98,12 @@ export default function ChatWindow() {
 
       <Box sx={{ flexGrow: 1, display: 'flex', overflow: 'hidden' }}>
         <Stack sx={{ flexGrow: 1 }}>
-          <ChatMessageList conversation={conversation} />
-
+          <ChatMessageList profile={profile} conversation={conversation} />
           <Divider />
-
           <ChatMessageInput
             conversationId={activeConversationId}
             onSend={handleSendMessage}
-            disabled={pathname === PATH_DASHBOARD.chat.new}
+            disabled={profile.can_add_comments}
           />
         </Stack>
       </Box>

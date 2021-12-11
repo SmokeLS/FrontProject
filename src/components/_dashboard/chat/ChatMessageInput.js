@@ -42,6 +42,12 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, ...
     setMessage(event.target.value);
   };
 
+  const handleKeyUp = (event) => {
+    if (event.key === 'Enter') {
+      handleSend();
+    }
+  };
+
   const handleSend = () => {
     if (!message) {
       return '';
@@ -63,13 +69,12 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, ...
   return (
     <RootStyle {...other}>
       <Input
-        disabled={disabled}
+        disabled={!disabled}
         fullWidth
         value={message}
         disableUnderline
+        onKeyUp={handleKeyUp}
         onChange={handleChangeMessage}
-        multiline
-        maxRows={4}
         placeholder="Текст комментария"
         sx={{ height: '100%' }}
       />

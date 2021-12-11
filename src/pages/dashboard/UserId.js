@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { capitalCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import heartFill from '@iconify/icons-eva/heart-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
 import roundPermMedia from '@iconify/icons-ic/round-perm-media';
@@ -10,6 +10,7 @@ import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container, Typography, Grid, Button } from '@mui/material';
 // redux
+
 import { useDispatch, useSelector } from '../../redux/store';
 import { getPosts, getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
 // routes
@@ -28,6 +29,7 @@ import {
   ProfileFollowers
 } from '../../components/_dashboard/user/profile';
 import ProfileFollowInfo from '../../components/_dashboard/user/profile/ProfileFollowInfo';
+import Timer from './Timer';
 
 // ----------------------------------------------------------------------
 
@@ -52,20 +54,21 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 export default function UserId() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { myProfile, posts, followers, friends, gallery } = useSelector((state) => state.user);
+  const { profile, posts, followers, friends, gallery } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('Комментарии');
   const [findFriends, setFindFriends] = useState('');
+  const location = useLocation();
 
   const params = useParams();
 
   useEffect(() => {
-    dispatch(getProfile());
-    dispatch(getPosts());
-    dispatch(getFollowers());
-    dispatch(getFriends());
-    dispatch(getGallery());
-  }, [dispatch]);
+    dispatch(getProfile(params.id));
+    // dispatch(getPosts());
+    // dispatch(getFollowers());
+    // dispatch(getFriends());
+    // dispatch(getGallery());
+  }, [dispatch, params]);
 
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
@@ -79,15 +82,11 @@ export default function UserId() {
     setFindFriends(event.target.value);
   };
 
-  if (!myProfile) {
-    return null;
-  }
-
   const PROFILE_TABS = [
     {
       value: 'Комментарии',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-      component: <Profile myProfile={myProfile} posts={posts} />
+      component: <Profile profile={profile} posts={posts} />
     },
     {
       value: 'Авто',
@@ -96,6 +95,7 @@ export default function UserId() {
     }
   ];
 
+  if (!profile) return null;
   return (
     <Page title="User: Profile | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -118,35 +118,37 @@ export default function UserId() {
             <Box>
               <Box sx={{ pl: 3, pt: 3, zIndex: 200, position: 'relative' }}>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="h5">OOO "ГИМА"</Typography>
+                  <Typography variant="h5">{profile.name}</Typography>
                   <Box mr={1}>
-                    <Button
-                      variant="body1"
-                      sx={{
-                        color: '#0045FF',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Изменить
-                    </Button>
-                    <Button
-                      variant="body1"
-                      sx={{
-                        color: '#0045FF',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Удалить
-                    </Button>
+                    {profile.can_update_company && (
+                      <Button
+                        variant="body1"
+                        sx={{
+                          color: '#0045FF',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Изменить
+                      </Button>
+                    )}
+                    {profile.can_update_company && (
+                      <Button
+                        variant="body1"
+                        sx={{
+                          color: '#0045FF',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Удалить
+                      </Button>
+                    )}
                   </Box>
                 </Box>
-                <Typography variant="caption" display="block">
-                  Текущее время: 13:50:34, UTC+3
-                </Typography>
+                <Timer profile={profile} />
               </Box>
             </Box>
             <Box sx={{ pl: 3, pt: 3, zIndex: 200, position: 'relative' }}>
-              <ProfileFollowInfo profile={myProfile} />
+              <ProfileFollowInfo profile={profile} />
             </Box>
           </Box>
           <TabsWrapperStyle>

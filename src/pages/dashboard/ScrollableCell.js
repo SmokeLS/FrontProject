@@ -20,7 +20,8 @@ export default function ScrollableCell({ comments }) {
           maxHeight: '200px',
           borderRadius: '10px',
           pl: 1,
-          pr: 1
+          pr: 1,
+          wordBreak: 'break-all'
         }}
         scrollableNodeProps={{ ref: scrollRef }}
       >

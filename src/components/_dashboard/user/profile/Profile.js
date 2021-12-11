@@ -16,19 +16,21 @@ Profile.propTypes = {
   posts: PropTypes.array
 };
 
-export default function Profile({ myProfile, posts }) {
+export default function Profile({ profile, posts }) {
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} sx={{ height: '800px' }}>
       <Grid item xs={12} md={4}>
         <Stack spacing={3}>
-          <ProfileAbout profile={myProfile} />
-          <ProfileSocialInfo profile={myProfile} />
+          <ProfileAbout profile={profile} />
+          {profile.can_view_contacts && <ProfileSocialInfo profile={profile} />}
         </Stack>
       </Grid>
 
-      <Grid item xs={12} md={8}>
-        <Chat />
-      </Grid>
+      {profile.can_view_comments && (
+        <Grid item xs={12} md={8}>
+          <Chat profile={profile} />
+        </Grid>
+      )}
     </Grid>
   );
 }

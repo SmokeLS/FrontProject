@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 // material
 import { Card, Stack, Typography, Divider } from '@mui/material';
 // utils
-import { fNumber } from '../../../../utils/formatNumber';
+import { format } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -20,15 +20,13 @@ ProfileFollowInfo.propTypes = {
 };
 
 export default function ProfileFollowInfo({ profile }) {
-  const { follower, following } = profile;
-
-  const [status, setStatus] = React.useState('');
+  const [status, setStatus] = React.useState(profile.status);
+  const [value, setValue] = React.useState(format(new Date(profile.date), "yyyy-MM-dd'T'HH:mm"));
 
   const handleChange = (event) => {
     setStatus(event.target.value);
+    setValue(profile.date);
   };
-
-  const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
 
   const handleChangeDate = (newValue) => {
     setValue(newValue);
@@ -48,76 +46,40 @@ export default function ProfileFollowInfo({ profile }) {
                 labelId="status-select-label"
                 id="status-select"
                 value={status}
+                disabled={!profile.can_update_status}
                 onChange={handleChange}
               >
-                <MenuItem value={10}>Новый</MenuItem>
-                <MenuItem value={20}>В работе</MenuItem>
-                <MenuItem value={30}>В архиве</MenuItem>
+                {profile.can_set_status_in_archive && <MenuItem value={0}>В архиве</MenuItem>}
+                {profile.can_set_status_in_work && <MenuItem value={1}>В работе</MenuItem>}
+                {profile.can_set_status_new && <MenuItem value={2}>Новый</MenuItem>}
               </Select>
             </FormControl>
           </Box>
         </Stack>
 
-        <Stack textAlign="center">
-          <Typography variant="body2" pl={1} sx={{ color: '#3366FF', textAlign: 'left' }}>
-            Дата контакта
-          </Typography>
-          <Box ml={1}>
-            <FormControl fullWidth>
-              <TextField
-                id="datetime-local"
-                type="datetime-local"
-                size="small"
-                sx={{ width: 230 }}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-            </FormControl>
-          </Box>
-        </Stack>
+        {profile.can_view_date && (
+          <Stack textAlign="center">
+            <Typography variant="body2" pl={1} sx={{ color: '#3366FF', textAlign: 'left' }}>
+              Дата контакта
+            </Typography>
+            <Box ml={1}>
+              <FormControl fullWidth>
+                <TextField
+                  id="datetime-local"
+                  type="datetime-local"
+                  size="small"
+                  sx={{ width: 230 }}
+                  defaultValue={value}
+                  disabled={!profile.can_update_contacts}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                />
+              </FormControl>
+            </Box>
+          </Stack>
+        )}
       </Stack>
     </>
   );
 }
-/* <Card sx={{ py: 3 }}>
-<Box textAlign="center">
-  <Box textAlign="center">
-    <Typography variant="body2" pl={2} sx={{ color: '#00AB55', textAlign: 'left' }}>
-      Текущий статус
-    </Typography>
-    <Box ml={1} mr={1}>
-      <FormControl fullWidth>
-        <Select
-          sx={{ textAlign: 'left', height: '40px' }}
-          labelId="status-select-label"
-          id="status-select"
-          value={age}
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Новый</MenuItem>
-          <MenuItem value={20}>В работе</MenuItem>
-          <MenuItem value={30}>В архиве</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
-  </Box>
-</Box>
-
-<Box textAlign="center">
-  <Typography variant="body2" pl={2} sx={{ color: '#3366FF', textAlign: 'left' }}>
-    Дата контакта
-  </Typography>
-  <Box ml={1} mr={1}>
-    <FormControl fullWidth>
-      <OutlinedInput
-        id="outlined-adornment-weight"
-        value={value}
-        onChange={handleChange}
-        aria-describedby="outlined-weight-helper-text"
-        sx={{ height: '40px' }}
-      />
-    </FormControl>
-  </Box>
-</Box>
-</Card> */
