@@ -270,8 +270,6 @@ export default function UserList() {
             ]}
           />
         )}
-
-        {/* <Typography sx={{ ml: 3 }}>Количество строк: {concatedUsers.length}</Typography> */}
         <Card>
           <UserListToolbar
             numSelected={selected.length}
@@ -307,7 +305,7 @@ export default function UserList() {
                               sx={{ cursor: 'pointer' }}
                               noWrap
                               onClick={() => {
-                                navigate(`/dashboard/user/list/${id}`);
+                                navigate(`/dashboard/sd/all/${id}`);
                               }}
                             >
                               {name}

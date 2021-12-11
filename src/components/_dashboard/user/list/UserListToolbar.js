@@ -196,7 +196,7 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
           sx={{ mb: 5, width: '100%' }}
         >
           <Stack direction="row" sx={{ width: '100%', mt: 5 }} justifyContent="flex-end" spacing={1} flexShrink={0}>
-            {location.pathname === '/dashboard/user/list' ? (
+            {location.pathname === '/dashboard/sd/all' ? (
               <>
                 <ShopFilterSidebar
                   formik={formik}

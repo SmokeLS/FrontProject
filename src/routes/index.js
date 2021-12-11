@@ -92,26 +92,26 @@ export default function Router() {
           ]
         },
         {
-          path: 'user',
+          path: 'sd',
           children: [
             { element: <Navigate to="/dashboard/user/profile" replace /> },
             { path: 'profile', element: <UserProfile /> },
-            { path: 'list/:id', element: <UserId /> },
-            { path: 'list/:id/contact/:id', element: <ContactCreate /> },
+            { path: 'all/:id', element: <UserId /> },
+            { path: 'all/:id/contact/:id', element: <ContactCreate /> },
             { path: 'cards', element: <UserCards /> },
-            { path: 'list', element: <UserList /> },
-            { path: 'new', element: <UserCreate /> },
+            { path: 'all', element: <UserList /> },
+            { path: 'add', element: <UserCreate /> },
             { path: ':name/edit', element: <UserCreate /> },
             { path: 'account', element: <UserAccount /> }
           ]
         },
         {
-          path: 'employee',
+          path: 'employees',
           children: [
-            { element: <Navigate to="/dashboard/employee/list" replace /> },
-            { path: 'list', element: <BlogPosts /> },
+            { element: <Navigate to="/dashboard/employees/all" replace /> },
+            { path: 'all', element: <BlogPosts /> },
             {
-              path: 'list/:id',
+              path: 'all/:id',
               element: <EmployeeId />
             },
             { path: 'post/:title', element: <BlogPost /> },

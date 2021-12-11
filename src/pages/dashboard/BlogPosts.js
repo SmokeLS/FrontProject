@@ -204,7 +204,7 @@ export default function UserList() {
                           scope="row"
                           sx={{ cursor: 'pointer' }}
                           onClick={() => {
-                            navigate(`/dashboard/employee/list/${id}`);
+                            navigate(`/dashboard/employees/all/${id}`);
                           }}
                         >
                           <Stack direction="row" alignItems="center" spacing={2}>
