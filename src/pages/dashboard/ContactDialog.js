@@ -36,7 +36,7 @@ export function SimpleDialog(props) {
   return (
     <Dialog onClose={handleClose} open={open}>
       {isEdit && <DialogTitle>Редактирование контакта</DialogTitle>}
-      {!isEdit && <DialogTitle>Создание нового контакта</DialogTitle>}
+      {!isEdit && <DialogTitle sx={{ mb: 2 }}>Создание нового контакта</DialogTitle>}
       <UserContactForm profile={profile} isEdit={isEdit} currentUser={currentUserContact} />
     </Dialog>
   );

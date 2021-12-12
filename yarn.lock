@@ -5979,7 +5979,12 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
-"date-fns@^2.0.0", "date-fns@^2.24.0":
+"date-fns-tz@^1.1.6":
+  "integrity" "sha512-nyy+URfFI3KUY7udEJozcoftju+KduaqkVfwyTIE0traBiVye09QnyWKLZK7drRr5h9B7sPJITmQnS3U6YOdQg=="
+  "resolved" "https://registry.npmjs.org/date-fns-tz/-/date-fns-tz-1.1.6.tgz"
+  "version" "1.1.6"
+
+"date-fns@^2.0.0", "date-fns@^2.24.0", "date-fns@>=2.0.0-alpha.13":
   "integrity" "sha512-6ujwvwgPID6zbI0o7UbURi2vlLDR9uP26+tW6Lg+Ji3w7dd0i3DOcjcClLjLPranT60SSEFBwdSyYwn/ZkPIuw=="
   "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.24.0.tgz"
   "version" "2.24.0"

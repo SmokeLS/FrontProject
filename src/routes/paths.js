@@ -38,13 +38,13 @@ export const PATH_DASHBOARD = {
     app: path(ROOTS_DASHBOARD, '/app')
   },
   user: {
-    root: path(ROOTS_DASHBOARD, '/sd'),
-    profile: path(ROOTS_DASHBOARD, '/sd/profile'),
-    userId: path(ROOTS_DASHBOARD, '/sd/all/:id'),
+    root: path(ROOTS_DASHBOARD, '/sd/companies'),
+    profile: path(ROOTS_DASHBOARD, '/sd/companies/profile'),
+    userId: path(ROOTS_DASHBOARD, '/sd/companies/all/:id'),
     userContact: path(ROOTS_DASHBOARD, '/employee/list/:id/contact/:id'),
     cards: path(ROOTS_DASHBOARD, '/sd/cards'),
-    list: path(ROOTS_DASHBOARD, '/sd/all'),
-    newUser: path(ROOTS_DASHBOARD, '/sd/add'),
+    list: path(ROOTS_DASHBOARD, '/sd/companies/all'),
+    newUser: path(ROOTS_DASHBOARD, '/sd/companies/add'),
     editById: path(ROOTS_DASHBOARD, `/sd/reece-chung/edit`),
     account: path(ROOTS_DASHBOARD, '/sd/account')
   },

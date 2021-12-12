@@ -12,7 +12,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
-  maxWidth: 320,
+  maxWidth: 640,
   padding: theme.spacing(1.5),
   marginTop: theme.spacing(0.5),
   borderRadius: theme.shape.borderRadius,

@@ -94,13 +94,13 @@ export default function Router() {
         {
           path: 'sd',
           children: [
-            { element: <Navigate to="/dashboard/sd/profile" replace /> },
+            { element: <Navigate to="/dashboard/sd/companies/" replace /> },
             { path: 'profile', element: <UserProfile /> },
-            { path: 'all/:id', element: <UserId /> },
-            { path: 'all/:id/contact/:id', element: <ContactCreate /> },
+            { path: 'companies/all/:id', element: <UserId /> },
+            { path: 'companies/all/:id/contact/:id', element: <ContactCreate /> },
             { path: 'cards', element: <UserCards /> },
-            { path: 'all', element: <UserList /> },
-            { path: 'add', element: <UserCreate /> },
+            { path: 'companies/all', element: <UserList /> },
+            { path: 'companies/add', element: <UserCreate /> },
             { path: ':name/edit', element: <UserCreate /> },
             { path: 'account', element: <UserAccount /> }
           ]

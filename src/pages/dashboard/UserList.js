@@ -305,7 +305,7 @@ export default function UserList() {
                               sx={{ cursor: 'pointer' }}
                               noWrap
                               onClick={() => {
-                                navigate(`/dashboard/sd/all/${id}`);
+                                navigate(`${PATH_DASHBOARD.user.list}/${id}`);
                               }}
                             >
                               {name}
