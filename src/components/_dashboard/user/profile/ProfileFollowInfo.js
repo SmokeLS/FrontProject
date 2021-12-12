@@ -11,7 +11,10 @@ import PropTypes from 'prop-types';
 // material
 import { Card, Stack, Typography, Divider } from '@mui/material';
 // utils
+import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useDispatch } from 'react-redux';
+import { setStatus, setDate } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -20,16 +23,20 @@ ProfileFollowInfo.propTypes = {
 };
 
 export default function ProfileFollowInfo({ profile }) {
-  const [status, setStatus] = React.useState(profile.status);
+  const [localStatus, setLocalStatus] = React.useState(profile.status);
   const [value, setValue] = React.useState(format(new Date(profile.date), "yyyy-MM-dd'T'HH:mm"));
+  const dispatch = useDispatch();
+  const params = useParams();
 
-  const handleChange = (event) => {
-    setStatus(event.target.value);
+  const handleChange = (id, event) => {
+    setLocalStatus(event.target.value);
     setValue(profile.date);
+    dispatch(setStatus(id, event.target.value));
   };
 
-  const handleChangeDate = (newValue) => {
+  const handleChangeDate = (id, newValue) => {
     setValue(newValue);
+    dispatch(setDate(id, newValue));
   };
 
   return (
@@ -45,9 +52,9 @@ export default function ProfileFollowInfo({ profile }) {
                 sx={{ textAlign: 'left', height: '40px', width: 230 }}
                 labelId="status-select-label"
                 id="status-select"
-                value={status}
+                value={localStatus}
                 disabled={!profile.can_update_status}
-                onChange={handleChange}
+                onChange={(e) => handleChange(params.id, e)}
               >
                 {profile.can_set_status_in_archive && <MenuItem value={0}>В архиве</MenuItem>}
                 {profile.can_set_status_in_work && <MenuItem value={1}>В работе</MenuItem>}
@@ -69,7 +76,8 @@ export default function ProfileFollowInfo({ profile }) {
                   type="datetime-local"
                   size="small"
                   sx={{ width: 230 }}
-                  defaultValue={value}
+                  value={value}
+                  onChange={() => handleChangeDate(params.id, value)}
                   disabled={!profile.can_update_contacts}
                   InputLabelProps={{
                     shrink: true

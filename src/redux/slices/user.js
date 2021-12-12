@@ -34,6 +34,11 @@ const slice = createSlice({
       state.isLoading = true;
     },
 
+    // START LOADING
+    stopLoading(state) {
+      state.isLoading = false;
+    },
+
     // HAS ERROR
     hasError(state, action) {
       state.isLoading = false;
@@ -330,6 +335,34 @@ export function getRegions() {
     try {
       const response = await axios.get('/api/v1/sd/companies/used_regions/');
       dispatch(slice.actions.getRegions(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function setStatus(id, status) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.patch(`/api/v1/sd/companies/${id}/update_status/`, { status });
+      dispatch(slice.actions.stopLoading());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function setDate(id, date) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.patch(`/api/v1/sd/companies/${id}/update_date/`, { date });
+      dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
