@@ -71,11 +71,11 @@ export function CreateDialog({ profile, isEdit }) {
             mb: 1,
             marginTop: '17px',
             textDecoration: 'none',
-            fontSize: '1.125rem',
             cursor: 'pointer',
             fontWeight: 'bold',
             color: '#3366FF'
           }}
+          size="small"
           onClick={handleClickOpen}
         >
           Новый контакт

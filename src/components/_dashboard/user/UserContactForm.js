@@ -7,6 +7,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack, Button, TextField, Typography, FormHelperText, FormControlLabel } from '@mui/material';
+import { useDispatch } from 'react-redux';
 // utils
 import { fData } from '../../../utils/formatNumber';
 import fakeRequest from '../../../utils/fakeRequest';
@@ -16,6 +17,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 import countries from './countries';
+import { setContacts } from '../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +29,7 @@ UserContactForm.propTypes = {
 export default function UserContactForm({ profile, isEdit, currentUser }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Обязательное поле'),
@@ -46,7 +49,8 @@ export default function UserContactForm({ profile, isEdit, currentUser }) {
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        await fakeRequest(500);
+        console.log(values);
+        dispatch(setContacts(values, profile.id));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Контакт успешно создан' : 'Контакт успешно обновлен', { variant: 'success' });
@@ -60,19 +64,6 @@ export default function UserContactForm({ profile, isEdit, currentUser }) {
   });
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file) {
-        setFieldValue('avatarUrl', {
-          ...file,
-          preview: URL.createObjectURL(file)
-        });
-      }
-    },
-    [setFieldValue]
-  );
 
   return (
     <FormikProvider value={formik}>

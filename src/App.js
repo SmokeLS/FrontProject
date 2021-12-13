@@ -6,7 +6,6 @@ import GlobalStyles from './theme/globalStyles';
 // hooks
 import useAuth from './hooks/useAuth';
 // components
-import Settings from './components/settings';
 import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';

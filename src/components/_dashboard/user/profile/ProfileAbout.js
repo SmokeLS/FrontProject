@@ -28,8 +28,6 @@ export default function ProfileAbout({ profile }) {
   let regionInformation;
   const params = useParams();
 
-  console.log(profile);
-
   if (!profile?.city) {
     regionInformation = (
       <Stack direction="row">

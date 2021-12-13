@@ -2,6 +2,7 @@
 import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
+import { format } from 'date-fns';
 import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
@@ -148,6 +149,12 @@ const slice = createSlice({
     getRegions(state, action) {
       state.isLoading = true;
       state.regions = action.payload;
+    },
+
+    // GET REGIONS
+    getContacts(state, action) {
+      state.isLoading = true;
+      state.profile.contacts = action.payload;
     }
   }
 });
@@ -363,6 +370,27 @@ export function setDate(id, date) {
     try {
       await axios.patch(`/api/v1/sd/companies/${id}/update_date/`, { date });
       dispatch(slice.actions.stopLoading());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function setContacts(data, profileId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      console.log(data, profileId);
+      const response = await axios.post(`/api/v1/sd/contacts/`, {
+        name: 'Иванов Иван Иванович',
+        position: 'Директор',
+        phone: '+78005553535',
+        email: 'something@mail.ru',
+        company: profileId
+      });
+      dispatch(slice.actions.getContacts(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -1,5 +1,5 @@
 /* eslint-disable no-debugger */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { Form, FormikProvider } from 'formik';
@@ -14,17 +14,11 @@ import {
   Stack,
   Button,
   Drawer,
-  Rating,
   Divider,
-  Checkbox,
-  FormGroup,
   Typography,
   RadioGroup,
   FormControl,
   FormControlLabel,
-  InputLabel,
-  Select,
-  MenuItem,
   InputAdornment,
   OutlinedInput,
   TextField,
@@ -33,15 +27,10 @@ import {
 } from '@mui/material';
 
 //
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
-import { useTheme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { filter, includes, orderBy } from 'lodash-es';
-import useSettings from '../../../../hooks/useSettings';
 import { MIconButton } from '../../../@material-extend';
 import Scrollbar from '../../../Scrollbar';
-import ColorManyPicker from '../../../ColorManyPicker';
-import { filterProducts, getProducts } from '../../../../redux/slices/product';
 import { getUserList, getManagers, getRegions } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
@@ -82,19 +71,6 @@ ShopFilterSidebar.propTypes = {
   formik: PropTypes.object
 };
 
-const SearchStyleDouble = styled(OutlinedInput)(({ theme }) => ({
-  width: 240,
-  transition: theme.transitions.create(['box-shadow', 'width'], {
-    easing: theme.transitions.easing.easeInOut,
-    duration: theme.transitions.duration.shorter
-  }),
-  '&.Mui-focused': { width: 240, boxShadow: theme.customShadows.z8 },
-  '& fieldset': {
-    borderWidth: `1px !important`,
-    borderColor: `${theme.palette.grey[500_32]} !important`
-  }
-}));
-
 const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
   width: 510,
   transition: theme.transitions.create(['box-shadow', 'width'], {
@@ -116,19 +92,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ShopFilterSidebar(props) {
-  const {
-    isOpenFilter,
-    onResetFilter,
-    onOpenFilter,
-    onCloseFilter,
-    formik,
-    filterName,
-    handleFunctions,
-    newFilters,
-    rowsPerPage,
-    page
-  } = props;
-  const { values, getFieldProps, resetForm } = formik;
+  const { isOpenFilter, onOpenFilter, onCloseFilter, formik, filterName, handleFunctions, rowsPerPage, page } = props;
+  const { getFieldProps, resetForm } = formik;
   const { managers, regions } = useSelector((state) => state.user);
 
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));

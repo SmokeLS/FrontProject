@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,7 +12,7 @@ import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useDispatch } from 'react-redux';
-import { setStatus, setDate } from '../../../../redux/slices/user';
+import { setStatus, setDate, getProfile } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -21,23 +22,26 @@ ProfileFollowInfo.propTypes = {
 
 export default function ProfileFollowInfo({ profile }) {
   const [localStatus, setLocalStatus] = useState(profile.status);
-  const [value, setValue] = useState(format(new Date(profile.date), "yyyy-MM-dd'T'HH:mm"));
+  // 2021-12-17T14:13
+  // console.log(format(profile.date, 'yyyy-MM-dd'));
+  const [value, setValue] = useState(profile.date);
   const dispatch = useDispatch();
   const params = useParams();
 
   useEffect(() => {
-    setLocalStatus(profile.status);
-  }, [profile.status]);
+    dispatch(setStatus(params.id, profile.status));
+    dispatch(setDate(params.id, value));
+  }, [profile.status, params, value, dispatch]);
 
   const handleChange = (id, event) => {
     setLocalStatus(event.target.value);
-    setValue(profile.date);
+    // setValue(profile.date);
     dispatch(setStatus(id, event.target.value));
   };
 
-  const handleChangeDate = (id, newValue) => {
-    setValue(newValue);
-    dispatch(setDate(id, newValue));
+  const handleChangeDate = (id, e) => {
+    setValue(e.target.value);
+    // dispatch(setDate(id, newValue));
   };
 
   return (
@@ -78,7 +82,7 @@ export default function ProfileFollowInfo({ profile }) {
                   size="small"
                   sx={{ width: 230 }}
                   value={value}
-                  onChange={() => handleChangeDate(params.id, value)}
+                  onChange={(e) => handleChangeDate(params.id, e)}
                   disabled={!profile.can_update_contacts}
                   InputLabelProps={{
                     shrink: true
