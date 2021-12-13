@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import micFill from '@iconify/icons-eva/mic-fill';
 import roundSend from '@iconify/icons-ic/round-send';
 import attach2Fill from '@iconify/icons-eva/attach-2-fill';
@@ -10,6 +10,9 @@ import roundAddPhotoAlternate from '@iconify/icons-ic/round-add-photo-alternate'
 import { styled } from '@mui/material/styles';
 import { Input, Divider, IconButton, InputAdornment, Stack } from '@mui/material';
 //
+import { useParams } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { getProfile, setComments } from '../../../redux/slices/user';
 import EmojiPicker from '../../EmojiPicker';
 
 // ----------------------------------------------------------------------
@@ -30,13 +33,19 @@ ChatMessageInput.propTypes = {
   onSend: PropTypes.func
 };
 
-export default function ChatMessageInput({ disabled, conversationId, onSend, ...other }) {
+export default function ChatMessageInput({ profile, disabled, conversationId, onSend, ...other }) {
   const fileInputRef = useRef(null);
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
+  const params = useParams();
 
   const handleAttach = () => {
     fileInputRef.current.click();
   };
+
+  useEffect(() => {
+    dispatch(getProfile(params.id));
+  }, [message, params, dispatch]);
 
   const handleChangeMessage = (event) => {
     setMessage(event.target.value);
@@ -48,20 +57,12 @@ export default function ChatMessageInput({ disabled, conversationId, onSend, ...
     }
   };
 
-  const handleSend = () => {
+  const handleSend = (e) => {
     if (!message) {
       return '';
     }
     if (onSend) {
-      onSend({
-        conversationId,
-        messageId: uuidv4(),
-        message,
-        contentType: 'text',
-        attachments: [],
-        createdAt: new Date(),
-        senderId: '8864c717-587d-472a-929a-8e5f298024da-0'
-      });
+      dispatch(setComments(message, params.id));
     }
     return setMessage('');
   };

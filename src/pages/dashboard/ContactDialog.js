@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -11,8 +11,11 @@ import Dialog from '@mui/material/Dialog';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import { blue } from '@mui/material/colors';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
+import { getProfile } from '../../redux/slices/user';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 const currentUserContact = {
@@ -37,7 +40,7 @@ export function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       {isEdit && <DialogTitle>Редактирование контакта</DialogTitle>}
       {!isEdit && <DialogTitle sx={{ mb: 2 }}>Создание нового контакта</DialogTitle>}
-      <UserContactForm profile={profile} isEdit={isEdit} currentUser={currentUserContact} />
+      <UserContactForm onClose={onClose} profile={profile} isEdit={isEdit} currentUser={currentUserContact} />
     </Dialog>
   );
 }
@@ -49,8 +52,10 @@ SimpleDialog.propTypes = {
 };
 
 export function CreateDialog({ profile, isEdit }) {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+  const [open, setOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(emails[1]);
+  const dispatch = useDispatch();
+  const params = useParams();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,6 +65,11 @@ export function CreateDialog({ profile, isEdit }) {
     setOpen(false);
     setSelectedValue(value);
   };
+
+  useEffect(() => {
+    console.log(true);
+    dispatch(getProfile(params.id));
+  }, [dispatch, params, open]);
 
   return (
     <div>
@@ -86,9 +96,9 @@ export function CreateDialog({ profile, isEdit }) {
   );
 }
 
-export function EditDialog({ isEdit, profile }) {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+export function EditDialog({ isEdit, profile, index }) {
+  const [open, setOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(emails[1]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -110,7 +120,7 @@ export function EditDialog({ isEdit, profile }) {
       >
         Контакт{' '}
         <Typography component="span" variant="caption">
-          #2382
+          #{index}
         </Typography>
       </Typography>
       <SimpleDialog profile={profile} isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />

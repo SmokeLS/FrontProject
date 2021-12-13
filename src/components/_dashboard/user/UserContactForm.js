@@ -1,3 +1,4 @@
+import { useParams } from 'react-router';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
@@ -17,7 +18,7 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 import countries from './countries';
-import { setContacts } from '../../../redux/slices/user';
+import { changeContacts, setContacts } from '../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -26,10 +27,11 @@ UserContactForm.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default function UserContactForm({ profile, isEdit, currentUser }) {
+export default function UserContactForm({ onClose, profile, isEdit, currentUser }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const params = useParams();
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Обязательное поле'),
@@ -49,12 +51,15 @@ export default function UserContactForm({ profile, isEdit, currentUser }) {
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        console.log(values);
-        dispatch(setContacts(values, profile.id));
+        if (!isEdit) {
+          dispatch(setContacts(values, profile.id));
+        } else {
+          dispatch(changeContacts(values, 1));
+        }
         resetForm();
         setSubmitting(false);
         enqueueSnackbar(!isEdit ? 'Контакт успешно создан' : 'Контакт успешно обновлен', { variant: 'success' });
-        navigate(PATH_DASHBOARD.user.list);
+        onClose();
       } catch (error) {
         console.error(error);
         setSubmitting(false);

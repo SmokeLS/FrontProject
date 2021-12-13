@@ -154,7 +154,13 @@ const slice = createSlice({
     // GET REGIONS
     getContacts(state, action) {
       state.isLoading = true;
-      state.profile.contacts = action.payload;
+      state.profile.contacts = [...state.profile.contacts, ...action.payload];
+    },
+
+    // GET REGIONS
+    getComments(state, action) {
+      state.isLoading = true;
+      state.profile.comments = [...state.profile.comments, ...action.payload];
     }
   }
 });
@@ -382,12 +388,11 @@ export function setContacts(data, profileId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      console.log(data, profileId);
       const response = await axios.post(`/api/v1/sd/contacts/`, {
-        name: 'Иванов Иван Иванович',
-        position: 'Директор',
-        phone: '+78005553535',
-        email: 'something@mail.ru',
+        name: data.name,
+        position: data.position,
+        phone: data.phoneNumber,
+        email: data.email,
         company: profileId
       });
       dispatch(slice.actions.getContacts(response.data));
@@ -396,3 +401,56 @@ export function setContacts(data, profileId) {
     }
   };
 }
+
+// ----------------------------------------------------------------------
+
+export function changeContacts(data, contactId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.patch(`/api/v1/sd/contacts/${contactId}`, {
+        name: data.name,
+        position: data.position,
+        phone: data.phoneNumber,
+        email: data.email
+      });
+      dispatch(slice.actions.getContacts(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function setComments(text, profileId) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post(`/api/v1/sd/comments/`, {
+        text,
+        company: profileId
+      });
+      dispatch(slice.actions.getComments(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function deleteCompany(id) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      axios.delete(`/api/v1/sd/companies/${id}/`, {
+        id
+      });
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+//

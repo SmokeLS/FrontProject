@@ -101,6 +101,7 @@ export default function ChatWindow({ profile }) {
           <ChatMessageList profile={profile} conversation={conversation} />
           <Divider />
           <ChatMessageInput
+            profile={profile}
             conversationId={activeConversationId}
             onSend={handleSendMessage}
             disabled={profile.can_add_comments}

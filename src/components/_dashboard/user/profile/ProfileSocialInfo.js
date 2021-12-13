@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
@@ -12,6 +12,7 @@ import { Link, Card, CardHeader, Stack, Box, Typography, Divider } from '@mui/ma
 import Scrollbar from '../../../Scrollbar';
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 import { EditDialog, CreateDialog } from '../../../../pages/dashboard/ContactDialog';
+import { getProfile } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ export default function ProfileSocialInfo({ profile }) {
   const scrollRef = useRef();
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState('somethign@mail.ru');
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -76,12 +78,13 @@ export default function ProfileSocialInfo({ profile }) {
                     selectedValue={selectedValue}
                     open={open}
                     onClose={handleClose}
+                    index={index}
                   />
                 ) : (
                   <Typography component="span" mr={-2} variant="body2">
                     Контакт{' '}
                     <Typography component="span" variant="caption">
-                      #2382
+                      #{index}
                     </Typography>
                   </Typography>
                 )}

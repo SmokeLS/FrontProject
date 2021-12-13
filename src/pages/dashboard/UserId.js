@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // material
@@ -9,7 +9,14 @@ import { Tab, Box, Card, Tabs, Container, Typography, Button } from '@mui/materi
 // redux
 
 import { useDispatch, useSelector } from '../../redux/store';
-import { getGallery, getFriends, getProfile, getFollowers, onToggleFollow } from '../../redux/slices/user';
+import {
+  getGallery,
+  getFriends,
+  getProfile,
+  getFollowers,
+  onToggleFollow,
+  deleteCompany
+} from '../../redux/slices/user';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -56,6 +63,7 @@ export default function UserId() {
   const [currentTab, setCurrentTab] = useState('Комментарии');
   const [findFriends, setFindFriends] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
 
   const params = useParams();
 
@@ -77,6 +85,11 @@ export default function UserId() {
 
   const handleFindFriends = (event) => {
     setFindFriends(event.target.value);
+  };
+
+  const deleteHandler = () => {
+    navigate(PATH_DASHBOARD.user.list);
+    dispatch(deleteCompany(params.id));
   };
 
   const PROFILE_TABS = [
@@ -135,6 +148,7 @@ export default function UserId() {
                           color: '#0045FF',
                           cursor: 'pointer'
                         }}
+                        onClick={() => deleteHandler()}
                       >
                         Удалить
                       </Button>
