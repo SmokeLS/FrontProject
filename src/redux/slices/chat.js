@@ -122,8 +122,8 @@ export function getContacts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/contacts');
-      dispatch(slice.actions.getContactsSuccess(response.data.contacts));
+      // const response = await axios.get('/api/chat/contacts');
+      // dispatch(slice.actions.getContactsSuccess(response.data.contacts));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -136,8 +136,8 @@ export function getConversations() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/conversations');
-      dispatch(slice.actions.getConversationsSuccess(response.data.conversations));
+      // const response = await axios.get('/api/chat/conversations');
+      // dispatch(slice.actions.getConversationsSuccess(response.data.conversations));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

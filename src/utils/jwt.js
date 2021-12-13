@@ -16,32 +16,6 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime;
 };
 
-// function saveToken(accessToken) {
-//   localStorage.setItem('accessToken', JSON.stringify(accessToken));
-// }
-
-// function getTokenData(login, password) {
-//   return fetch('api/auth', {
-//     method: 'POST',
-//     credentials: 'include',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       login,
-//       password
-//     })
-//   }).then((res) => {
-//     if (res.status === 200) {
-//       const tokenData = res.json();
-//       saveToken(JSON.stringify(tokenData)); // сохраняем полученный токен в sessionStorage, с помощью функции, заданной ранее
-//       return Promise.resolve();
-//     }
-//     return Promise.reject();
-//   });
-// }
-
 //  const handleTokenExpired = (exp) => {
 //   let expiredTimer;
 
@@ -68,4 +42,12 @@ const setSession = (accessToken) => {
   }
 };
 
-export { isValidToken, setSession, verify, sign };
+const setRefreshToken = (refreshToken) => {
+  if (refreshToken) {
+    localStorage.setItem('refresh', refreshToken);
+  } else {
+    localStorage.removeItem('refresh');
+  }
+};
+
+export { isValidToken, setSession, verify, sign, setRefreshToken };

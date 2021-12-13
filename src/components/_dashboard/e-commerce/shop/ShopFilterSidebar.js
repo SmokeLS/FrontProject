@@ -203,6 +203,7 @@ export default function ShopFilterSidebar(props) {
   //
 
   const changeManagerHandleSearch = (newValue) => {
+    console.log(newValue);
     if (!newValue) newValue = '';
     const allFilters = {
       user: `&user=${isValidId(newValue.id)}`,
@@ -246,7 +247,7 @@ export default function ShopFilterSidebar(props) {
 
     handleFunctions.handleFilterByStatus({
       ...filterName,
-      status: e.target.value
+      status: index
     });
   };
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -20,10 +20,14 @@ ProfileFollowInfo.propTypes = {
 };
 
 export default function ProfileFollowInfo({ profile }) {
-  const [localStatus, setLocalStatus] = React.useState(profile.status);
-  const [value, setValue] = React.useState(format(new Date(profile.date), "yyyy-MM-dd'T'HH:mm"));
+  const [localStatus, setLocalStatus] = useState(profile.status);
+  const [value, setValue] = useState(format(new Date(profile.date), "yyyy-MM-dd'T'HH:mm"));
   const dispatch = useDispatch();
   const params = useParams();
+
+  useEffect(() => {
+    setLocalStatus(profile.status);
+  }, [profile.status]);
 
   const handleChange = (id, event) => {
     setLocalStatus(event.target.value);

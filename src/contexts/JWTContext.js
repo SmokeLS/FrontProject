@@ -2,7 +2,7 @@ import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
-import { isValidToken, setSession } from '../utils/jwt';
+import { isValidToken, setSession, setRefreshToken } from '../utils/jwt';
 
 // ----------------------------------------------------------------------
 
@@ -121,8 +121,11 @@ function AuthProvider({ children }) {
       password
     });
 
-    const { access } = response.data;
+    console.log(response);
+    const { access, refresh } = response.data;
     setSession(access);
+    setRefreshToken(refresh);
+    // document.cookie = `refresh=${encodeURIComponent(refresh)}; samesite=strict`; // secure
 
     // login
     const responseUser = await axios.get('api/v1/users/me/');
@@ -162,9 +165,38 @@ function AuthProvider({ children }) {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const resetPassword = () => {};
+  const isAuth = async (refresh) => {
+    try {
+      const response = await axios.post('auth/jwt/refresh', { refresh });
 
-  const updateProfile = () => {};
+      console.log(response);
+      // setRefreshToken(response.data);
+      // setSession(access);
+
+      // dispatch({
+      //   type: 'INITIALIZE',
+      //   payload: {
+      //     isAuthenticated: true,
+      //     user,
+      //     userStatistics
+      //   }
+      // });
+    } catch (err) {
+      console.error(err);
+      dispatch({
+        type: 'INITIALIZE',
+        payload: {
+          isAuthenticated: false,
+          user: null,
+          userStatistics: null
+        }
+      });
+    }
+  };
+
+  // const resetPassword = () => {};
+
+  // const updateProfile = () => {};
 
   return (
     <AuthContext.Provider
@@ -174,8 +206,7 @@ function AuthProvider({ children }) {
         login,
         logout,
         register,
-        resetPassword,
-        updateProfile
+        isAuth
       }}
     >
       {children}

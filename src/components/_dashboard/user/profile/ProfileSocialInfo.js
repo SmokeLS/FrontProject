@@ -44,15 +44,6 @@ export default function ProfileSocialInfo({ profile }) {
     setSelectedValue(value);
   };
 
-  useEffect(() => {
-    const scrollMessagesToBottom = () => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      }
-    };
-    scrollMessagesToBottom();
-  }, []);
-
   return (
     <Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -73,7 +64,6 @@ export default function ProfileSocialInfo({ profile }) {
           borderRadius: '10px',
           overflowX: 'hidden'
         }}
-        scrollableNodeProps={{ ref: scrollRef }}
       >
         <Stack spacing={2} sx={{ p: 3 }}>
           {profile.contacts.map((contact, index) => (
