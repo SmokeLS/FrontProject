@@ -38,7 +38,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
 
   useEffect(() => {
     dispatch(getProfile(params.id));
-  }, []);
+  }, [contacts, dispatch, params]);
 
   const handleClickOpenDelete = () => {
     setOpenDelete(true);
@@ -75,7 +75,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
         if (!isEdit) {
           dispatch(setContacts(values, profile.id));
         } else {
-          dispatch(changeContacts(values, 1));
+          dispatch(changeContacts(values, contactId));
         }
         resetForm();
         setSubmitting(false);

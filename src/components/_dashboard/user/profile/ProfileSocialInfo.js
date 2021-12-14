@@ -1,12 +1,13 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate, useParams } from 'react-router-dom';
 // material
+import { useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import { Link, Card, CardHeader, Stack, Box, Typography, Divider } from '@mui/material';
 import Scrollbar from '../../../Scrollbar';
@@ -32,10 +33,11 @@ ProfileSocialInfo.propTypes = {
 
 export default function ProfileSocialInfo({ profile }) {
   const navigate = useNavigate();
-  const location = useLocation();
   const scrollRef = useRef();
+  const dispatch = useDispatch();
+  const params = useParams();
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('somethign@mail.ru');
+  const [selectedValue, setSelectedValue] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);

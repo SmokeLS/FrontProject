@@ -419,7 +419,7 @@ export function changeContacts(data, contactId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.patch(`/api/v1/sd/contacts/${contactId}`, {
+      const response = await axios.patch(`/api/v1/sd/contacts/${contactId}/`, {
         name: data.name,
         position: data.position,
         phone: data.phoneNumber,
@@ -471,7 +471,6 @@ export function deleteContact(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      console.log(true);
       axios.delete(`/api/v1/sd/contacts/${id}/`, {
         id
       });

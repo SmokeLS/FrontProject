@@ -59,7 +59,6 @@ export function CreateDialog({ profile, isEdit }) {
   };
 
   useEffect(() => {
-    console.log(true);
     dispatch(getProfile(params.id));
   }, [dispatch, params, open]);
 
