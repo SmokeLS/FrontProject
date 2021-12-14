@@ -161,6 +161,17 @@ const slice = createSlice({
     getComments(state, action) {
       state.isLoading = true;
       state.profile.comments = [...state.profile.comments, ...action.payload];
+    },
+
+    // GET REGIONS
+    getNewDate(state, action) {
+      state.isLoading = true;
+      state.profile.date = action.payload;
+    },
+
+    getChangedProfileSuccess(state, action) {
+      state.isLoading = true;
+      state.profile = { ...state.profile, ...action.payload };
     }
   }
 });
@@ -370,12 +381,12 @@ export function setStatus(id, status) {
 
 // ----------------------------------------------------------------------
 
-export function setDate(id, date) {
+export function setDate(id, formatedDate, date) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.patch(`/api/v1/sd/companies/${id}/update_date/`, { date });
-      dispatch(slice.actions.stopLoading());
+      await axios.patch(`/api/v1/sd/companies/${id}/update_date/`, { date: formatedDate });
+      dispatch(slice.actions.getNewDate(date));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -447,10 +458,40 @@ export function deleteCompany(id) {
       axios.delete(`/api/v1/sd/companies/${id}/`, {
         id
       });
+      dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };
 }
 
-//
+// ----------------------------------------------------------------------
+
+export function deleteContact(id) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      console.log(true);
+      axios.delete(`/api/v1/sd/contacts/${id}/`, {
+        id
+      });
+      dispatch(slice.actions.stopLoading());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getChangedProfile(id, data) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.patch(`/api/v1/sd/companies/${id}/`, { data });
+      dispatch(slice.actions.getChangedProfileSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}

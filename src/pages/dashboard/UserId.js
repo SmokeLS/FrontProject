@@ -34,6 +34,8 @@ import {
 } from '../../components/_dashboard/user/profile';
 import ProfileFollowInfo from '../../components/_dashboard/user/profile/ProfileFollowInfo';
 import Timer from './Timer';
+import { CompanyDialog } from './CompanyDialog';
+import { DeleteDialog } from './DeleteDialog';
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +66,26 @@ export default function UserId() {
   const [findFriends, setFindFriends] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
+  const [openChange, setOpenChange] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [selectedValue, setSelectedValue] = useState();
+
+  const handleClickOpenChange = () => {
+    setOpenChange(true);
+  };
+
+  const handleCloseChange = (value) => {
+    setOpenChange(false);
+    setSelectedValue(value);
+  };
+
+  const handleClickOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
+  const handleCloseDelete = (value) => {
+    setOpenDelete(false);
+  };
 
   const params = useParams();
 
@@ -131,27 +153,47 @@ export default function UserId() {
                   <Typography variant="h5">{profile.name}</Typography>
                   <Box mr={1}>
                     {profile.can_update_company && (
-                      <Button
-                        variant="body1"
-                        sx={{
-                          color: '#0045FF',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Изменить
-                      </Button>
+                      <>
+                        <Button
+                          variant="body1"
+                          sx={{
+                            color: '#0045FF',
+                            cursor: 'pointer'
+                          }}
+                          size="small"
+                          onClick={handleClickOpenChange}
+                        >
+                          Изменить
+                        </Button>
+                        <CompanyDialog
+                          profile={profile}
+                          setOpen={setOpenChange}
+                          selectedValue={selectedValue}
+                          open={openChange}
+                          onClose={handleCloseChange}
+                        />
+                      </>
                     )}
                     {profile.can_update_company && (
-                      <Button
-                        variant="body1"
-                        sx={{
-                          color: '#0045FF',
-                          cursor: 'pointer'
-                        }}
-                        onClick={() => deleteHandler()}
-                      >
-                        Удалить
-                      </Button>
+                      <>
+                        <Button
+                          variant="body1"
+                          sx={{
+                            color: '#0045FF',
+                            cursor: 'pointer'
+                          }}
+                          onClick={handleClickOpenDelete}
+                        >
+                          Удалить
+                        </Button>
+                        <DeleteDialog
+                          title="Вы уверены, что хотите удалить компанию?"
+                          setOpen={setOpenDelete}
+                          open={openDelete}
+                          deleteHandler={deleteHandler}
+                          onClose={handleCloseDelete}
+                        />
+                      </>
                     )}
                   </Box>
                 </Box>

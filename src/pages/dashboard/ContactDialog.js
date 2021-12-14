@@ -17,16 +17,8 @@ import { blue } from '@mui/material/colors';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 import { getProfile } from '../../redux/slices/user';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
-const currentUserContact = {
-  name: 'Иванов Иван Иванович',
-  position: 'Директор',
-  email: 'something@mail.ru',
-  phoneNumber: '88005553535'
-};
-
 export function SimpleDialog(props) {
-  const { onClose, selectedValue, open, isEdit, profile } = props;
+  const { onClose, selectedValue, open, isEdit, profile, contactId } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -40,7 +32,7 @@ export function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       {isEdit && <DialogTitle>Редактирование контакта</DialogTitle>}
       {!isEdit && <DialogTitle sx={{ mb: 2 }}>Создание нового контакта</DialogTitle>}
-      <UserContactForm onClose={onClose} profile={profile} isEdit={isEdit} currentUser={currentUserContact} />
+      <UserContactForm contactId={contactId} onClose={onClose} profile={profile} isEdit={isEdit} />
     </Dialog>
   );
 }
@@ -53,7 +45,7 @@ SimpleDialog.propTypes = {
 
 export function CreateDialog({ profile, isEdit }) {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
+  const [selectedValue, setSelectedValue] = useState('');
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -96,9 +88,9 @@ export function CreateDialog({ profile, isEdit }) {
   );
 }
 
-export function EditDialog({ isEdit, profile, index }) {
+export function EditDialog({ isEdit, profile, index, contactId }) {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
+  const [selectedValue, setSelectedValue] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -120,10 +112,17 @@ export function EditDialog({ isEdit, profile, index }) {
       >
         Контакт{' '}
         <Typography component="span" variant="caption">
-          #{index}
+          #{index + 1}
         </Typography>
       </Typography>
-      <SimpleDialog profile={profile} isEdit={isEdit} selectedValue={selectedValue} open={open} onClose={handleClose} />
+      <SimpleDialog
+        contactId={contactId}
+        profile={profile}
+        isEdit={isEdit}
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+      />
     </>
   );
 }

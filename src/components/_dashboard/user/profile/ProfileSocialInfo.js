@@ -79,6 +79,7 @@ export default function ProfileSocialInfo({ profile }) {
                     open={open}
                     onClose={handleClose}
                     index={index}
+                    contactId={contact.id}
                   />
                 ) : (
                   <Typography component="span" mr={-2} variant="body2">

@@ -1,5 +1,5 @@
 /* eslint-disable no-debugger */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { Form, FormikProvider } from 'formik';
@@ -95,7 +95,6 @@ export default function ShopFilterSidebar(props) {
   const { isOpenFilter, onOpenFilter, onCloseFilter, formik, filterName, handleFunctions, rowsPerPage, page } = props;
   const { getFieldProps, resetForm } = formik;
   const { managers, regions } = useSelector((state) => state.user);
-
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
   const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
 
@@ -475,26 +474,12 @@ export default function ShopFilterSidebar(props) {
                       <Autocomplete
                         disablePortal
                         size="small"
-                        id="user-select"
+                        id="user-select-users"
                         value={filterName.user}
                         onChange={(event, newValue) => changeManagerHandleSearch(newValue)}
                         options={optionsManagers}
                         renderInput={(params) => <TextField {...params} />}
                       />
-                      {/* <Select
-                        labelId="user-select-label"
-                        size="small"
-                        id="user-select"
-                        value={filterName.user}
-                        onChange={changeManagerHandleSearch}
-                      >
-                        <MenuItem value={EMPTY}>Любой</MenuItem>
-                        {managers.map((item) => (
-                          <MenuItem key={item.id} value={item}>
-                            {item.full_name}
-                          </MenuItem>
-                        ))}
-                      </Select> */}
                     </FormControl>
                   </RadioGroup>
                 </div>
@@ -565,7 +550,7 @@ export default function ShopFilterSidebar(props) {
                       <Autocomplete
                         disablePortal
                         size="small"
-                        id="user-select"
+                        id="user-select-regions"
                         value={filterName.region}
                         onChange={(event, newValue) => changeRegionHandleSearch(newValue)}
                         options={optionsRegions}

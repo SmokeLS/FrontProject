@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { Typography } from '@mui/material';
 
 export default function Timer({ profile }) {
+  // console.log(profile);
   const date = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),

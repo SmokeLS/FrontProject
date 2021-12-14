@@ -22,26 +22,29 @@ ProfileFollowInfo.propTypes = {
 
 export default function ProfileFollowInfo({ profile }) {
   const [localStatus, setLocalStatus] = useState(profile.status);
-  // 2021-12-17T14:13
-  // console.log(format(profile.date, 'yyyy-MM-dd'));
-  const [value, setValue] = useState(profile.date);
+  const [value, setValue] = useState('');
   const dispatch = useDispatch();
   const params = useParams();
 
   useEffect(() => {
-    dispatch(setStatus(params.id, profile.status));
-    dispatch(setDate(params.id, value));
-  }, [profile.status, params, value, dispatch]);
+    const formatedValueDates = profile.date.split(' ')[0].split('.').reverse().join('.');
+    const formatedValue = `${formatedValueDates} ${profile.date.split(' ')[1]}`;
+    setValue(format(new Date(formatedValue), "yyyy-MM-dd'T'hh:mm"));
+  }, []);
 
   const handleChange = (id, event) => {
+    console.log(event.target.value);
     setLocalStatus(event.target.value);
     // setValue(profile.date);
     dispatch(setStatus(id, event.target.value));
   };
 
   const handleChangeDate = (id, e) => {
+    console.log(e.target.value);
     setValue(e.target.value);
-    // dispatch(setDate(id, newValue));
+    // const newDate = format(e.target.value, 'yyyy-MM-dd HH-mm');
+    // console.log(newDate);
+    dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy hh:mm'), e.target.value));
   };
 
   return (

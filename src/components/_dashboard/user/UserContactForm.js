@@ -1,14 +1,14 @@
 import { useParams } from 'react-router';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
 // material
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack, Button, TextField, Typography, FormHelperText, FormControlLabel } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // utils
 import { fData } from '../../../utils/formatNumber';
 import fakeRequest from '../../../utils/fakeRequest';
@@ -18,7 +18,8 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import Label from '../../Label';
 import { UploadAvatar } from '../../upload';
 import countries from './countries';
-import { changeContacts, setContacts } from '../../../redux/slices/user';
+import { changeContacts, deleteContact, setContacts, getProfile } from '../../../redux/slices/user';
+import { DeleteDialog } from '../../../pages/dashboard/DeleteDialog';
 
 // ----------------------------------------------------------------------
 
@@ -27,11 +28,31 @@ UserContactForm.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default function UserContactForm({ onClose, profile, isEdit, currentUser }) {
+export default function UserContactForm({ onClose, profile, isEdit, currentUser, contactId }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const params = useParams();
+  const [openDelete, setOpenDelete] = useState(false);
+  const contacts = useSelector((state) => state.user.profile.contacts);
+
+  useEffect(() => {
+    dispatch(getProfile(params.id));
+  }, []);
+
+  const handleClickOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
+  const handleCloseDelete = (value) => {
+    setOpenDelete(false);
+  };
+
+  const deleteHandler = () => {
+    console.log(contactId);
+    navigate(`${PATH_DASHBOARD.user.list}/${params.id}`);
+    dispatch(deleteContact(contactId));
+  };
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Обязательное поле'),
@@ -74,7 +95,20 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser 
     <FormikProvider value={formik}>
       <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
         {isEdit && (
-          <Box sx={{ float: 'right', mt: -4, mr: 2 }}>{profile.can_destroy_contacts && <Button>Удалить</Button>}</Box>
+          <Box sx={{ float: 'right', mt: -4, mr: 2 }}>
+            {profile.can_destroy_contacts && (
+              <>
+                <Button onClick={handleClickOpenDelete}>Удалить</Button>
+                <DeleteDialog
+                  title="Вы уверены, что хотите удалить комментарий?"
+                  setOpen={setOpenDelete}
+                  open={openDelete}
+                  deleteHandler={deleteHandler}
+                  onClose={handleCloseDelete}
+                />
+              </>
+            )}
+          </Box>
         )}
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -84,6 +118,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser 
                   <TextField
                     fullWidth
                     label="ФИО"
+                    placeholder="Иванов Иван Иванович"
                     {...getFieldProps('name')}
                     error={Boolean(touched.name && errors.name)}
                     helperText={touched.name && errors.name}
@@ -91,6 +126,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser 
                   <TextField
                     fullWidth
                     label="Должность"
+                    placeholder="Менеджер"
                     {...getFieldProps('position')}
                     error={Boolean(touched.position && errors.position)}
                     helperText={touched.position && errors.position}
@@ -101,6 +137,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser 
                   <TextField
                     fullWidth
                     label="Почта"
+                    placeholder="email@gmail.com"
                     {...getFieldProps('email')}
                     error={Boolean(touched.email && errors.email)}
                     helperText={touched.email && errors.email}
@@ -108,6 +145,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser 
                   <TextField
                     fullWidth
                     label="Номер телефона"
+                    placeholder="+79190283535"
                     {...getFieldProps('phoneNumber')}
                     error={Boolean(touched.phoneNumber && errors.phoneNumber)}
                     helperText={touched.phoneNumber && errors.phoneNumber}
