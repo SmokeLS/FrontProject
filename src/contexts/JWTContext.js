@@ -16,10 +16,21 @@ const initialState = {
 const handlers = {
   INITIALIZE: (state, action) => {
     const { isAuthenticated, user, userStatistics } = action.payload;
+    console.log(true);
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
+      user,
+      userStatistics
+    };
+  },
+  AUTOLOGIN: (state, action) => {
+    const { user, userStatistics } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
       user,
       userStatistics
     };
@@ -57,7 +68,8 @@ const AuthContext = createContext({
   method: 'jwt',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve()
+  register: () => Promise.resolve(),
+  isAuth: () => Promise.resolve()
 });
 
 AuthProvider.propTypes = {
@@ -89,6 +101,8 @@ function AuthProvider({ children }) {
               userStatistics
             }
           });
+        } else if (window.localStorage.getItem('refresh')) {
+          isAuth();
         } else {
           dispatch({
             type: 'INITIALIZE',
@@ -121,11 +135,9 @@ function AuthProvider({ children }) {
       password
     });
 
-    console.log(response);
     const { access, refresh } = response.data;
     setSession(access);
     setRefreshToken(refresh);
-    // document.cookie = `refresh=${encodeURIComponent(refresh)}; samesite=strict`; // secure
 
     // login
     const responseUser = await axios.get('api/v1/users/me/');
@@ -143,7 +155,7 @@ function AuthProvider({ children }) {
   };
 
   const register = async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/account/register', {
+    const response = await axios.post('api/account/register', {
       email,
       password,
       firstName,
@@ -162,25 +174,30 @@ function AuthProvider({ children }) {
 
   const logout = async () => {
     setSession(null);
+    setRefreshToken(null);
     dispatch({ type: 'LOGOUT' });
   };
 
-  const isAuth = async (refresh) => {
+  const isAuth = async () => {
     try {
+      const refresh = window.localStorage.getItem('refresh');
       const response = await axios.post('auth/jwt/refresh', { refresh });
 
-      console.log(response);
-      // setRefreshToken(response.data);
-      // setSession(access);
+      localStorage.setItem('accessToken', response.data.access);
+      axios.defaults.headers.common.Authorization = `Bearer ${response.data.access}`;
 
-      // dispatch({
-      //   type: 'INITIALIZE',
-      //   payload: {
-      //     isAuthenticated: true,
-      //     user,
-      //     userStatistics
-      //   }
-      // });
+      const responseUser = await axios.get('api/v1/users/me/');
+      const user = { ...responseUser.data };
+
+      // statistics
+
+      const responseStatistics = await axios.get('api/v1/users/my_sd_statistics/');
+      const userStatistics = { ...responseStatistics.data };
+
+      dispatch({
+        type: 'AUTOLOGIN',
+        payload: { user, userStatistics }
+      });
     } catch (err) {
       console.error(err);
       dispatch({

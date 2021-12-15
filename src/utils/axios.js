@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AuthProvider } from '../contexts/JWTContext';
+import { isValidToken, setSession } from './jwt';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,19 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     if (error.response) {
       if (error.response.status === 401) {
-        AuthProvider.isAuth(localStorage.getItem('refresh'));
+        try {
+          const refresh = window.localStorage.getItem('refresh');
+
+          if (refresh && isValidToken(refresh)) {
+            const response = await axios.post('auth/jwt/refresh', { refresh });
+
+            setSession(response.data.accessToken);
+          } else {
+            console.log('refresh is expired');
+          }
+        } catch (err) {
+          console.error(err);
+        }
         // Do something, call refreshToken() request for example;
         // return a request
         // return axios_instance(config);

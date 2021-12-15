@@ -30,21 +30,23 @@ export function CompanyDialog(props) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const params = useParams();
-  const { managers, regions } = useSelector((state) => state.user);
+  const { managers, regions, cities } = useSelector((state) => state.user);
 
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
   const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
+  const optionsCities = cities.map((item) => ({ label: item.name, id: item.id }));
 
   useEffect(() => {
-    dispatch(getManagers(params.id));
-    dispatch(getRegions(params.id));
+    dispatch(getManagers());
+    dispatch(getRegions());
+    // dispatch(getRegions());
   }, []);
 
   const companySchema = Yup.object().shape({
     user: Yup.object(),
     name: Yup.string().required('Обязательное поле'),
     taxpayer_id: Yup.string().required('Обязательное поле'),
-    // region: Yup.object().required('Обязательное поле'),
+    region: Yup.object().required('Обязательное поле'),
     city: Yup.string(),
     date: Yup.string().required('Обязательное поле')
   });
@@ -57,7 +59,7 @@ export function CompanyDialog(props) {
       taxpayer_id: '',
       region: '',
       city: '',
-      date: ''
+      address: ''
     },
     validationSchema: companySchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -93,86 +95,93 @@ export function CompanyDialog(props) {
         <Form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Card sx={{ p: 3 }}>
+              <Card sx={{ p: 3, width: 560 }}>
                 <Stack spacing={3}>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                    <Autocomplete
-                      disablePortal
-                      id="user_id"
-                      name="user_id"
-                      sx={{ width: '100%' }}
-                      options={optionsManagers}
-                      onChange={(e, value) => {
-                        console.log(value);
-                        setFieldValue('user', value !== null ? value : optionsManagers.id);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          id="user_id"
-                          label="Менеджер"
-                          {...params}
-                          sx={{ width: '100%' }}
-                          {...getFieldProps('user')}
-                        />
-                      )}
-                      isOptionEqualToValue={(option, value) => option.id === value.id}
-                    />
-                    <TextField
-                      label="Название компании"
-                      {...getFieldProps('name')}
-                      fullWidth
-                      error={Boolean(touched.name && errors.name)}
-                      helperText={touched.name && errors.name}
-                    />
-                  </Stack>
+                  <Autocomplete
+                    disablePortal
+                    id="user_id"
+                    name="user_id"
+                    sx={{ width: '100%' }}
+                    options={optionsManagers}
+                    onChange={(e, value) => {
+                      console.log(value);
+                      setFieldValue('user', value !== null ? value : optionsManagers.id);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        id="user_id"
+                        label="Менеджер"
+                        {...params}
+                        sx={{ width: '100%' }}
+                        {...getFieldProps('user')}
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                  />
+                  <TextField
+                    label="Название компании"
+                    {...getFieldProps('name')}
+                    fullWidth
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name && errors.name}
+                  />
 
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                    <TextField
-                      fullWidth
-                      label="ИНН"
-                      {...getFieldProps('taxpayer_id')}
-                      error={Boolean(touched.taxpayer_id && errors.taxpayer_id)}
-                      helperText={touched.taxpayer_id && errors.taxpayer_id}
-                    />
-                    <Autocomplete
-                      disablePortal
-                      id="region_id"
-                      name="region_id"
-                      sx={{ width: '100%' }}
-                      options={optionsRegions}
-                      isOptionEqualToValue={(option, value) => option.id === value.id}
-                      onChange={(e, value) => {
-                        console.log(value);
-                        setFieldValue('region', value !== null ? value : optionsManagers.id);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          label="Регион"
-                          {...params}
-                          id="region_id"
-                          sx={{ width: '100%' }}
-                          {...getFieldProps('region')}
-                        />
-                      )}
-                    />
-                  </Stack>
+                  <TextField
+                    fullWidth
+                    label="ИНН"
+                    {...getFieldProps('taxpayer_id')}
+                    error={Boolean(touched.taxpayer_id && errors.taxpayer_id)}
+                    helperText={touched.taxpayer_id && errors.taxpayer_id}
+                  />
+                  <Autocomplete
+                    disablePortal
+                    id="region_id"
+                    name="region_id"
+                    sx={{ width: '100%' }}
+                    options={optionsRegions}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                    onChange={(e, value) => {
+                      console.log(value);
+                      setFieldValue('region', value !== null ? value : optionsManagers.id);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        label="Регион"
+                        {...params}
+                        id="region_id"
+                        sx={{ width: '100%' }}
+                        {...getFieldProps('region')}
+                      />
+                    )}
+                  />
 
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }}>
-                    <TextField
-                      fullWidth
-                      label="Город"
-                      {...getFieldProps('city')}
-                      error={Boolean(touched.city && errors.city)}
-                      helperText={touched.city && errors.city}
-                    />
-                    <TextField
-                      fullWidth
-                      label="Дата"
-                      {...getFieldProps('date')}
-                      error={Boolean(touched.date && errors.date)}
-                      helperText={touched.date && errors.date}
-                    />
-                  </Stack>
+                  <Autocomplete
+                    disablePortal
+                    id="city"
+                    name="city"
+                    sx={{ width: '100%' }}
+                    options={optionsCities}
+                    onChange={(e, value) => {
+                      setFieldValue('city', value !== null ? value : optionsCities.id);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        id="city"
+                        label="Город"
+                        {...params}
+                        sx={{ width: '100%' }}
+                        {...getFieldProps('city')}
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                  />
+                  <TextField
+                    fullWidth
+                    label="address"
+                    {...getFieldProps('address')}
+                    error={Boolean(touched.address && errors.address)}
+                    helperText={touched.address && errors.address}
+                  />
 
                   <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                     <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

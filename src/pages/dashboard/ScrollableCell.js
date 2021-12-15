@@ -37,6 +37,13 @@ export default function ScrollableCell({ comments }) {
               <Divider />
             </div>
           ))}
+          {!comments.length && (
+            <Box sx={{ minHeight: 50 }} display="flex" justifyContent="center" alignItems="center">
+              <Typography mb={1} sx={{ fontSize: '14px' }}>
+                Пусто
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Scrollbar>
     </TableCell>

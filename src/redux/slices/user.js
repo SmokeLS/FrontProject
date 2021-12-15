@@ -2,7 +2,6 @@
 import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
-import { format } from 'date-fns';
 import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
@@ -23,7 +22,8 @@ const initialState = {
   invoices: [],
   notifications: null,
   managers: [],
-  regions: []
+  regions: [],
+  cities: []
 };
 
 const slice = createSlice({
@@ -172,6 +172,17 @@ const slice = createSlice({
     getChangedProfileSuccess(state, action) {
       state.isLoading = true;
       state.profile = { ...state.profile, ...action.payload };
+    },
+
+    // GET CITIES
+    getCitiesSuccess(state, action) {
+      state.isLoading = true;
+      state.cities = action.payload;
+    },
+
+    getAddedProfile(state, action) {
+      state.isLoading = true;
+      state.profile = [...state.profile, ...action.payload];
     }
   }
 });
@@ -188,7 +199,7 @@ export function getProfile(id = 0) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/sd/companies/${id}/`);
+      const response = await axios.get(`api/v1/sd/companies/${id}/`);
       dispatch(slice.actions.getProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -202,7 +213,7 @@ export function getPosts() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/posts');
+      const response = await axios.get('api/user/posts');
       dispatch(slice.actions.getPostsSuccess(response.data.posts));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -216,7 +227,7 @@ export function getFollowers() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/social/followers');
+      const response = await axios.get('api/user/social/followers');
       dispatch(slice.actions.getFollowersSuccess(response.data.followers));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -230,7 +241,7 @@ export function getFriends() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/social/friends');
+      const response = await axios.get('api/user/social/friends');
       dispatch(slice.actions.getFriendsSuccess(response.data.friends));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -244,7 +255,7 @@ export function getGallery() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/social/gallery');
+      const response = await axios.get('api/user/social/gallery');
       dispatch(slice.actions.getGallerySuccess(response.data.gallery));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -258,7 +269,7 @@ export function getUserList(pageSize = 5, page = 0, filters = '') {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/sd/companies/?page=${page + 1}&page_size=${pageSize}${filters}`);
+      const response = await axios.get(`api/v1/sd/companies/?page=${page + 1}&page_size=${pageSize}${filters}`);
       dispatch(slice.actions.getCountSuccess(response.data.count));
       dispatch(slice.actions.getUserListSuccess(response.data.results));
     } catch (error) {
@@ -273,7 +284,7 @@ export function getCards() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/account/cards');
+      const response = await axios.get('api/user/account/cards');
       dispatch(slice.actions.getCardsSuccess(response.data.cards));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -287,7 +298,7 @@ export function getAddressBook() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/account/address-book');
+      const response = await axios.get('api/user/account/address-book');
       dispatch(slice.actions.getAddressBookSuccess(response.data.addressBook));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -301,7 +312,7 @@ export function getInvoices() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/account/invoices');
+      const response = await axios.get('api/user/account/invoices');
       dispatch(slice.actions.getInvoicesSuccess(response.data.invoices));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -315,7 +326,7 @@ export function getNotifications() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/account/notifications-settings');
+      const response = await axios.get('api/user/account/notifications-settings');
       dispatch(slice.actions.getNotificationsSuccess(response.data.notifications));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -329,7 +340,7 @@ export function getUsers() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/user/all');
+      const response = await axios.get('api/user/all');
       dispatch(slice.actions.getUsersSuccess(response.data.users));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -343,7 +354,7 @@ export function getManagers() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/v1/sd/companies/used_managers/');
+      const response = await axios.get('api/v1/sd/companies/used_managers/');
       dispatch(slice.actions.getManagers(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -357,7 +368,7 @@ export function getRegions() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/v1/sd/companies/used_regions/');
+      const response = await axios.get('api/v1/sd/companies/used_regions/');
       dispatch(slice.actions.getRegions(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -371,7 +382,7 @@ export function setStatus(id, status) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.patch(`/api/v1/sd/companies/${id}/update_status/`, { status });
+      await axios.patch(`api/v1/sd/companies/${id}/update_status/`, { status });
       dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -385,7 +396,7 @@ export function setDate(id, formatedDate, date) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.patch(`/api/v1/sd/companies/${id}/update_date/`, { date: formatedDate });
+      await axios.patch(`api/v1/sd/companies/${id}/update_date/`, { date: formatedDate });
       dispatch(slice.actions.getNewDate(date));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -399,7 +410,7 @@ export function setContacts(data, profileId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`/api/v1/sd/contacts/`, {
+      const response = await axios.post(`api/v1/sd/contacts/`, {
         name: data.name,
         position: data.position,
         phone: data.phoneNumber,
@@ -419,7 +430,7 @@ export function changeContacts(data, contactId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.patch(`/api/v1/sd/contacts/${contactId}/`, {
+      const response = await axios.patch(`api/v1/sd/contacts/${contactId}/`, {
         name: data.name,
         position: data.position,
         phone: data.phoneNumber,
@@ -438,7 +449,7 @@ export function setComments(text, profileId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`/api/v1/sd/comments/`, {
+      const response = await axios.post(`api/v1/sd/comments/`, {
         text,
         company: profileId
       });
@@ -455,7 +466,7 @@ export function deleteCompany(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      axios.delete(`/api/v1/sd/companies/${id}/`, {
+      axios.delete(`api/v1/sd/companies/${id}/`, {
         id
       });
       dispatch(slice.actions.stopLoading());
@@ -471,7 +482,7 @@ export function deleteContact(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      axios.delete(`/api/v1/sd/contacts/${id}/`, {
+      axios.delete(`api/v1/sd/contacts/${id}/`, {
         id
       });
       dispatch(slice.actions.stopLoading());
@@ -487,8 +498,43 @@ export function getChangedProfile(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.patch(`/api/v1/sd/companies/${id}/`, { data });
+      const response = await axios.patch(`api/v1/sd/companies/${id}/`, { data });
       dispatch(slice.actions.getChangedProfileSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getCities() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('api/v1/cities/');
+      dispatch(slice.actions.getCitiesSuccess(response.data.results));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function setCompany(data) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post('api/v1/sd/companies/', {
+        user: data.user.id,
+        name: data.name,
+        taxpayer_id: data.taxpayer_id,
+        region: data.region.id,
+        city: data.city.id,
+        date: data.date
+      });
+      dispatch(slice.actions.getAddedProfile(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

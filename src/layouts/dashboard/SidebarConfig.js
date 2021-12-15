@@ -59,7 +59,7 @@ const sidebarConfig = [
           },
           { title: 'Мои компании', permission: false, path: PATH_DASHBOARD.user.cards },
           { title: 'Новые компании', permission: false, path: PATH_DASHBOARD.user.profile },
-          { title: 'Архив', permission: false, path: PATH_DASHBOARD.user.newUser }
+          { title: 'Архив', permission: false, path: PATH_DASHBOARD.user.userContact }
         ]
       }
     ]
