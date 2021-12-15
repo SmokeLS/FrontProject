@@ -41,7 +41,7 @@ export const SORT_BY_OPTIONS = [
   { value: 'priceAsc', label: 'Price: Low-High' }
 ];
 export const FILTER_GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
-export const FILTER_CATEGORY_OPTIONS = ['Любой', 'В архиве', 'В работе', 'Новый'];
+export const FILTER_CATEGORY_OPTIONS = ['Любой', 'В архиве', 'Новый', 'В работе'];
 export const FILTER_MANAGERS_OPTIONS = ['В архиве', 'В работе', 'Новый'];
 export const EMPTY = { id: '', full_name: '' };
 export const FILTER_REGIONS_OPTIONS = ['region1', 'region2'];

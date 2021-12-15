@@ -78,7 +78,7 @@ export default function ProfileAbout({ profile }) {
         <Typography sx={{ fontWeight: 'bold' }} variant="body1">
           Manager
           <Typography variant="body1" component="span">
-            : {profile.user.full_name}
+            : {profile?.user?.full_name}
           </Typography>
         </Typography>
 

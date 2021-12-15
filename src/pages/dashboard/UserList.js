@@ -321,8 +321,8 @@ export default function UserList() {
                             color={(status === 0 && 'error') || (status === 1 && 'info') || (status === 2 && 'success')}
                           >
                             {status === 0 && 'В архиве'}
-                            {status === 1 && 'В работе'}
-                            {status === 2 && 'Новый'}
+                            {status === 1 && 'Новый'}
+                            {status === 2 && 'В работе'}
                           </Label>
                         </TableCell>
                         <ScrollableCell comments={comments} />

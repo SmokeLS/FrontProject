@@ -41,6 +41,7 @@ export default function ChatMessageList({ profile, conversation }) {
       <Scrollbar scrollableNodeProps={{ ref: scrollRef }} sx={{ p: 3 }}>
         {profile.comments.map((comment) => (
           <ChatMessageItem
+            comment={comment}
             key={comment.id}
             message={comment.text}
             conversation={conversation}

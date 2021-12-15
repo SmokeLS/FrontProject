@@ -73,7 +73,7 @@ export function CreateDialog({ profile, isEdit }) {
             marginTop: '17px',
             textDecoration: 'none',
             cursor: 'pointer',
-            fontWeight: 'bold',
+            fontWeight: 'normal',
             color: '#3366FF'
           }}
           size="small"
@@ -111,7 +111,7 @@ export function EditDialog({ isEdit, profile, index, contactId }) {
       >
         Контакт{' '}
         <Typography component="span" variant="caption">
-          #{index + 1}
+          #{contactId}
         </Typography>
       </Typography>
       <SimpleDialog

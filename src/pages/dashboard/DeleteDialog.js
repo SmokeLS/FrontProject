@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -6,7 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { Stack } from '@mui/material';
+import { DialogActions, DialogContent, DialogContentText, Slide, Stack } from '@mui/material';
+
+const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export function DeleteDialog(props) {
   const { onClose, selectedValue, open, deleteHandler, title } = props;
@@ -16,14 +18,20 @@ export function DeleteDialog(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle mb={2}>{title}</DialogTitle>
-      <Card sx={{ p: 3 }}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-around" spacing={3}>
-          <Button onClick={deleteHandler}>Да</Button>
-          <Button onClick={handleClose}>Нет</Button>
-        </Stack>
-      </Card>
+    <Dialog
+      open={open}
+      TransitionComponent={Transition}
+      keepMounted
+      onClose={handleClose}
+      aria-describedby="alert-dialog-slide-description"
+    >
+      <DialogTitle>{title}</DialogTitle>
+      <DialogActions sx={{ justifyContent: 'flex-start' }}>
+        <Button variant="outlined" color="error" onClick={deleteHandler}>
+          Удалить
+        </Button>
+        <Button onClick={handleClose}>Отмена</Button>
+      </DialogActions>
     </Dialog>
   );
 }

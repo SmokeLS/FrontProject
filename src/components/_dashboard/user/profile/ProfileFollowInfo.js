@@ -29,22 +29,19 @@ export default function ProfileFollowInfo({ profile }) {
   useEffect(() => {
     const formatedValueDates = profile.date.split(' ')[0].split('.').reverse().join('.');
     const formatedValue = `${formatedValueDates} ${profile.date.split(' ')[1]}`;
-    setValue(format(new Date(formatedValue), "yyyy-MM-dd'T'hh:mm"));
+    setValue(format(new Date(formatedValue), "yyyy-MM-dd'T'HH:mm"));
   }, []);
 
   const handleChange = (id, event) => {
     console.log(event.target.value);
     setLocalStatus(event.target.value);
-    // setValue(profile.date);
     dispatch(setStatus(id, event.target.value));
   };
 
   const handleChangeDate = (id, e) => {
     console.log(e.target.value);
     setValue(e.target.value);
-    // const newDate = format(e.target.value, 'yyyy-MM-dd HH-mm');
-    // console.log(newDate);
-    dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy hh:mm'), e.target.value));
+    dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy HH:mm'), e.target.value));
   };
 
   return (
@@ -65,8 +62,8 @@ export default function ProfileFollowInfo({ profile }) {
                 onChange={(e) => handleChange(params.id, e)}
               >
                 {profile.can_set_status_in_archive && <MenuItem value={0}>В архиве</MenuItem>}
-                {profile.can_set_status_in_work && <MenuItem value={1}>В работе</MenuItem>}
-                {profile.can_set_status_new && <MenuItem value={2}>Новый</MenuItem>}
+                {profile.can_set_status_new && <MenuItem value={1}>Новый</MenuItem>}
+                {profile.can_set_status_in_work && <MenuItem value={2}>В работе</MenuItem>}
               </Select>
             </FormControl>
           </Box>

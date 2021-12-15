@@ -44,7 +44,7 @@ ChatMessageItem.propTypes = {
   onOpenLightbox: PropTypes.func
 };
 
-export default function ChatMessageItem({ message, conversation, onOpenLightbox }) {
+export default function ChatMessageItem({ comment, message, conversation, onOpenLightbox }) {
   return (
     <RootStyle>
       <Box
@@ -53,6 +53,11 @@ export default function ChatMessageItem({ message, conversation, onOpenLightbox 
         }}
       >
         <div>
+          <InfoStyle variant="caption">
+            {`${comment.user.full_name},`}&nbsp;
+            {comment.date_created}
+          </InfoStyle>
+
           <ContentStyle>
             <Typography sx={{ wordBreak: 'break-all' }} variant="body2">
               {message}

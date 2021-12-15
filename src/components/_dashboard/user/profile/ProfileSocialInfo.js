@@ -87,12 +87,12 @@ export default function ProfileSocialInfo({ profile }) {
                   <Typography component="span" mr={-2} variant="body2">
                     Контакт{' '}
                     <Typography component="span" variant="caption">
-                      #{index}
+                      #{contact.id}
                     </Typography>
                   </Typography>
                 )}
               </Typography>
-              <Typography variant="body2" component="div">
+              <Typography variant="body2" fontWeight="bold" component="div">
                 {contact.name}, {contact.position}
               </Typography>
               <Typography variant="body2" component="div">

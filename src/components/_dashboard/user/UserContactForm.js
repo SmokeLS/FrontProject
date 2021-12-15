@@ -49,9 +49,8 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
   };
 
   const deleteHandler = () => {
-    console.log(contactId);
-    navigate(`${PATH_DASHBOARD.user.list}/${params.id}`);
     dispatch(deleteContact(contactId));
+    setOpenDelete(false);
   };
 
   const NewUserSchema = Yup.object().shape({
@@ -100,7 +99,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
               <>
                 <Button onClick={handleClickOpenDelete}>Удалить</Button>
                 <DeleteDialog
-                  title="Вы уверены, что хотите удалить комментарий?"
+                  title="Вы уверены, что хотите удалить контакт?"
                   setOpen={setOpenDelete}
                   open={openDelete}
                   deleteHandler={deleteHandler}
