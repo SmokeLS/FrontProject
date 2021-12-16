@@ -6,7 +6,7 @@ import { isValidToken, setSession, setRefreshToken } from '../utils/jwt';
 
 // ----------------------------------------------------------------------
 
-const initialState = {
+export const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
@@ -16,7 +16,6 @@ const initialState = {
 const handlers = {
   INITIALIZE: (state, action) => {
     const { isAuthenticated, user, userStatistics } = action.payload;
-    console.log(true);
     return {
       ...state,
       isAuthenticated,
@@ -27,10 +26,10 @@ const handlers = {
   },
   AUTOLOGIN: (state, action) => {
     const { user, userStatistics } = action.payload;
-
     return {
       ...state,
       isAuthenticated: true,
+      isInitialized: true,
       user,
       userStatistics
     };
@@ -61,7 +60,7 @@ const handlers = {
   }
 };
 
-const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
+export const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
 
 const AuthContext = createContext({
   ...initialState,
@@ -101,7 +100,7 @@ function AuthProvider({ children }) {
               userStatistics
             }
           });
-        } else if (window.localStorage.getItem('refresh')) {
+        } else if (window.localStorage.getItem('accessToken')) {
           isAuth();
         } else {
           dispatch({
@@ -182,6 +181,8 @@ function AuthProvider({ children }) {
     try {
       const refresh = window.localStorage.getItem('refresh');
       const response = await axios.post('auth/jwt/refresh', { refresh });
+
+      console.log(response);
 
       localStorage.setItem('accessToken', response.data.access);
       axios.defaults.headers.common.Authorization = `Bearer ${response.data.access}`;

@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 // material
-import { Card, Container } from '@mui/material';
+import { Card, Container, styled } from '@mui/material';
 // redux
-import { styled } from '@mui/material/styles';
 import { useDispatch } from '../../redux/store';
 import { getConversations, getContacts } from '../../redux/slices/chat';
 // routes
@@ -16,6 +15,10 @@ import { ChatSidebar, ChatWindow } from '../../components/_dashboard/chat';
 
 // ----------------------------------------------------------------------
 
+const ModifiedCard = styled(Card)(({ theme }) => ({
+  height: 'calc(60vh - 100px)'
+}));
+
 export default function Chat({ profile }) {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
@@ -26,12 +29,10 @@ export default function Chat({ profile }) {
   }, [dispatch]);
 
   return (
-    <Page title="Chat | Minimal-UI">
-      <Container disableGutters maxWidth={themeStretch ? false : 'xl'} pl={2}>
-        <Card sx={{ height: '720px', alignItems: 'stretch', display: 'flex' }}>
-          <ChatWindow profile={profile} />
-        </Card>
-      </Container>
-    </Page>
+    <Container disableGutters maxWidth={themeStretch ? false : 'xl'} pl={2}>
+      <ModifiedCard sx={{ alignItems: 'stretch', display: 'flex' }}>
+        <ChatWindow profile={profile} />
+      </ModifiedCard>
+    </Container>
   );
 }

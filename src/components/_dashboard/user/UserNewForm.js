@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { Form, FormikProvider, useFormik } from 'formik';
@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
 //
 import { getCities, getManagers, getRegions, setCompany } from '../../../redux/slices/user';
 
@@ -34,8 +35,9 @@ UserNewForm.propTypes = {
 export default function UserNewForm({ isEdit, currentUser }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { managers, regions, cities } = useSelector((state) => state.user);
+  const { managers, regions, cities, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const isMountedRef = useIsMountedRef();
 
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
   const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
@@ -43,7 +45,14 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const NewUserSchema = Yup.object().shape({
     user: Yup.object(),
     name: Yup.string().required('Обязательное поле'),
-    taxpayer_id: Yup.string().required('Обязательное поле'),
+    taxpayer_id: Yup.string()
+      .required('Обязательное поле')
+      .test(
+        'len',
+        'Данное поле должно состоять из 10 или 12 чисел',
+        // eslint-disable-next-line no-restricted-globals
+        (val) => (val?.length === 10 || val?.length === 12) && !isNaN(val)
+      ),
     region: Yup.object(),
     city: Yup.object(),
     date: Yup.string().required('Обязательное поле')
@@ -62,19 +71,21 @@ export default function UserNewForm({ isEdit, currentUser }) {
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        dispatch(setCompany(values));
-        resetForm();
-        setSubmitting(false);
-        enqueueSnackbar('Компания успешно добавлена', { variant: 'success' });
+        dispatch(setCompany(values, navigate));
+        throw new Error(error);
       } catch (error) {
         console.error(error);
         setSubmitting(false);
-        setErrors(error);
+        setErrors({
+          afterSubmit: 'Проверьте правильность введенных данных'
+        });
       }
     }
   });
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
+
+  console.log(error);
 
   useEffect(() => {
     dispatch(getManagers());
@@ -126,6 +137,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     {...getFieldProps('taxpayer_id')}
                     error={Boolean(touched.taxpayer_id && errors.taxpayer_id)}
                     helperText={touched.taxpayer_id && errors.taxpayer_id}
+                    placeholder="3664069397"
                   />
                   <Autocomplete
                     disablePortal
@@ -176,8 +188,13 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     {...getFieldProps('date')}
                     error={Boolean(touched.date && errors.date)}
                     helperText={touched.date && errors.date}
+                    placeholder="DD.MM.YYYY HH.MM"
                   />
                 </Stack>
+
+                <FormHelperText error fontSize={18} sx={{ px: 2, textAlign: 'center' }}>
+                  {errors.afterSubmit}
+                </FormHelperText>
 
                 <Box
                   sx={{ mt: 3, display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', minHeight: '36vh' }}

@@ -3,6 +3,7 @@ import { map, filter } from 'lodash';
 import { createSlice } from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
+import { PATH_DASHBOARD } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,8 @@ const initialState = {
   notifications: null,
   managers: [],
   regions: [],
-  cities: []
+  cities: [],
+  selectedId: null
 };
 
 const slice = createSlice({
@@ -191,7 +193,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { onToggleFollow, deleteUser } = slice.actions;
+export const { onToggleFollow, deleteUser, hasError } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -522,7 +524,7 @@ export function getCities() {
 
 // ----------------------------------------------------------------------
 
-export function setCompany(data) {
+export function setCompany(data, navigate) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
@@ -534,6 +536,7 @@ export function setCompany(data) {
         city: data.city.id,
         date: data.date
       });
+      navigate(`${PATH_DASHBOARD.user.list}/${response.data.id}`);
       dispatch(slice.actions.getAddedProfile(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

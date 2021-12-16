@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { blue } from '@mui/material/colors';
 import { Autocomplete, Box, FormControl, Grid, RadioGroup, Stack, TextField } from '@mui/material';
-import { getChangedProfile, getManagers, getProfile, getRegions } from '../../redux/slices/user';
+import { getChangedProfile, getCities, getManagers, getProfile, getRegions } from '../../redux/slices/user';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 
 export function CompanyDialog(props) {
@@ -39,16 +39,16 @@ export function CompanyDialog(props) {
   useEffect(() => {
     dispatch(getManagers());
     dispatch(getRegions());
-    // dispatch(getRegions());
+    dispatch(getCities());
   }, []);
 
   const companySchema = Yup.object().shape({
     user: Yup.object(),
     name: Yup.string().required('Обязательное поле'),
     taxpayer_id: Yup.string().required('Обязательное поле'),
-    region: Yup.object().required('Обязательное поле'),
-    city: Yup.string(),
-    date: Yup.string().required('Обязательное поле')
+    region: Yup.object(),
+    city: Yup.object(),
+    address: Yup.string()
   });
 
   const formik = useFormik({
@@ -64,7 +64,6 @@ export function CompanyDialog(props) {
     validationSchema: companySchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        console.log(values);
         dispatch(getChangedProfile(profile.id, values));
         resetForm();
         setSubmitting(false);
@@ -80,6 +79,7 @@ export function CompanyDialog(props) {
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
+  console.log(errors);
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -177,7 +177,7 @@ export function CompanyDialog(props) {
                   />
                   <TextField
                     fullWidth
-                    label="address"
+                    label="Адрес"
                     {...getFieldProps('address')}
                     error={Boolean(touched.address && errors.address)}
                     helperText={touched.address && errors.address}

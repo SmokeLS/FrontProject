@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { useReducer } from 'react';
+import { initialState, reducer } from '../contexts/JWTContext';
 import { isValidToken, setSession } from './jwt';
 
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({
-  // withCredentials: true,
+  withCredentials: true,
   baseURL: 'http://51.250.7.40/'
 });
 
@@ -22,11 +24,20 @@ axiosInstance.interceptors.response.use(
           const refresh = window.localStorage.getItem('refresh');
 
           if (refresh && isValidToken(refresh)) {
-            const response = await axios.post('auth/jwt/refresh', { refresh });
-
-            setSession(response.data.accessToken);
+            const response = await axios.post('http://51.250.7.40/auth/jwt/refresh', { refresh });
+            setSession(response.data.access);
           } else {
-            console.log('refresh is expired');
+            const [state, dispatch] = useReducer(reducer, initialState);
+            console.log('refresh is expired', state);
+            localStorage.clear();
+            dispatch({
+              type: 'INITIALIZE',
+              payload: {
+                isAuthenticated: false,
+                user: null,
+                userStatistics: null
+              }
+            });
           }
         } catch (err) {
           console.error(err);
@@ -40,5 +51,27 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// // Add a request interceptor
+// axiosInstance.interceptors.request.use(
+//   (config) =>
+//     // Do something before request is sent
+//     config,
+//   (error) =>
+//     // Do something with request error
+//     Promise.reject(error)
+// );
+
+// // Add a response interceptor
+// axiosInstance.interceptors.response.use(
+//   (response) =>
+//     // Any status code that lie within the range of 2xx cause this function to trigger
+//     // Do something with response data
+//     response,
+//   (error) =>
+//     // Any status codes that falls outside the range of 2xx cause this function to trigger
+//     // Do something with response error
+//     Promise.reject(error)
+// );
 
 export default axiosInstance;
