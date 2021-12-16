@@ -85,8 +85,6 @@ export default function UserNewForm({ isEdit, currentUser }) {
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
-  console.log(error);
-
   useEffect(() => {
     dispatch(getManagers());
     dispatch(getRegions());

@@ -3,6 +3,9 @@ import { formatDistanceToNowStrict } from 'date-fns';
 // material
 import { styled } from '@mui/material/styles';
 import { Avatar, Box, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getMe } from '../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -45,15 +48,26 @@ ChatMessageItem.propTypes = {
 };
 
 export default function ChatMessageItem({ comment, message, conversation, onOpenLightbox }) {
+  const user = useSelector((state) => state.user.me);
+  const dispatch = useDispatch();
+  const isMe = comment?.user?.id === user?.id;
+
+  useEffect(() => {
+    dispatch(getMe());
+  }, [dispatch]);
+
   return (
     <RootStyle>
       <Box
         sx={{
-          display: 'flex'
+          display: 'flex',
+          ...(isMe && {
+            ml: 'auto'
+          })
         }}
       >
         <div>
-          <InfoStyle variant="caption">
+          <InfoStyle variant="caption" sx={{ ...(isMe && { justifyContent: 'flex-end' }) }}>
             {`${comment.user.full_name},`}&nbsp;
             {comment.date_created}
           </InfoStyle>

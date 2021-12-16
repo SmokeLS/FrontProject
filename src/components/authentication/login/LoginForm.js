@@ -27,8 +27,8 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    login: Yup.string().required('login is required'),
-    password: Yup.string().required('Password is required')
+    login: Yup.string().required('Логин не может быть пустым'),
+    password: Yup.string().required('Пароль не может быть пустым')
   });
 
   const formik = useFormik({
@@ -73,7 +73,7 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
+          {errors.afterSubmit && <Alert severity="error">Вы ввели неправильный логин или пароль</Alert>}
 
           <TextField
             fullWidth

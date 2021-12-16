@@ -25,7 +25,9 @@ const initialState = {
   managers: [],
   regions: [],
   cities: [],
-  selectedId: null
+  selectedId: null,
+  sd_managers: [],
+  me: null
 };
 
 const slice = createSlice({
@@ -147,6 +149,12 @@ const slice = createSlice({
       state.managers = action.payload;
     },
 
+    // GET SDMANAGERS
+    getSdManagers(state, action) {
+      state.isLoading = true;
+      state.sd_managers = action.payload;
+    },
+
     // GET REGIONS
     getRegions(state, action) {
       state.isLoading = true;
@@ -156,13 +164,13 @@ const slice = createSlice({
     // GET REGIONS
     getContacts(state, action) {
       state.isLoading = true;
-      state.profile.contacts = [...state.profile.contacts, ...action.payload];
+      state.profile.contacts = [...state.profile.contacts, action.payload];
     },
 
     // GET REGIONS
     getComments(state, action) {
       state.isLoading = true;
-      state.profile.comments = [...state.profile.comments, ...action.payload];
+      state.profile.comments = [...state.profile.comments, action.payload];
     },
 
     // GET REGIONS
@@ -173,7 +181,7 @@ const slice = createSlice({
 
     getChangedProfileSuccess(state, action) {
       state.isLoading = true;
-      state.profile = { ...state.profile, ...action.payload };
+      state.profile = { ...action.payload };
     },
 
     // GET CITIES
@@ -185,6 +193,11 @@ const slice = createSlice({
     getAddedProfile(state, action) {
       state.isLoading = true;
       state.profile = [...state.profile, ...action.payload];
+    },
+
+    getMe(state, action) {
+      state.isLoading = true;
+      state.me = action.payload;
     }
   }
 });
@@ -366,6 +379,20 @@ export function getManagers() {
 
 // ----------------------------------------------------------------------
 
+export function getSdManagers() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('api/v1/users/sd_managers/');
+      dispatch(slice.actions.getSdManagers(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
 export function getRegions() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -500,7 +527,15 @@ export function getChangedProfile(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.patch(`api/v1/sd/companies/${id}/`, { data });
+      await axios.patch(`api/v1/sd/companies/${id}/`, {
+        user: data.user.id,
+        address: data.address,
+        name: data.name,
+        city: data.city.id,
+        taxpayer_id: data.taxpayer_id,
+        region: data.region.id
+      });
+      const response = await axios.get(`api/v1/sd/companies/${id}/`);
       dispatch(slice.actions.getChangedProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -538,6 +573,20 @@ export function setCompany(data, navigate) {
       });
       navigate(`${PATH_DASHBOARD.user.list}/${response.data.id}`);
       dispatch(slice.actions.getAddedProfile(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getMe() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/users/me/');
+      dispatch(slice.actions.getMe(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

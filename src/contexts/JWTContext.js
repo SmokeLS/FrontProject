@@ -182,8 +182,6 @@ function AuthProvider({ children }) {
       const refresh = window.localStorage.getItem('refresh');
       const response = await axios.post('auth/jwt/refresh', { refresh });
 
-      console.log(response);
-
       localStorage.setItem('accessToken', response.data.access);
       axios.defaults.headers.common.Authorization = `Bearer ${response.data.access}`;
 

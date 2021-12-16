@@ -33,13 +33,11 @@ export default function ProfileFollowInfo({ profile }) {
   }, []);
 
   const handleChange = (id, event) => {
-    console.log(event.target.value);
     setLocalStatus(event.target.value);
     dispatch(setStatus(id, event.target.value));
   };
 
   const handleChangeDate = (id, e) => {
-    console.log(e.target.value);
     setValue(e.target.value);
     dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy HH:mm'), e.target.value));
   };

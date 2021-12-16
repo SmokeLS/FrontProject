@@ -9,9 +9,10 @@ import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import PersonIcon from '@mui/icons-material/Person';
+import { Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { blue } from '@mui/material/colors';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
@@ -19,7 +20,7 @@ import { getProfile } from '../../redux/slices/user';
 
 export function SimpleDialog(props) {
   const { onClose, selectedValue, open, isEdit, profile, contactId } = props;
-
+  const error = useSelector((state) => state.user.error);
   const handleClose = () => {
     onClose(selectedValue);
   };

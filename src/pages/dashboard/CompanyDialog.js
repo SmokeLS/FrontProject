@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { blue } from '@mui/material/colors';
 import { Autocomplete, Box, FormControl, Grid, RadioGroup, Stack, TextField } from '@mui/material';
-import { getChangedProfile, getCities, getManagers, getProfile, getRegions } from '../../redux/slices/user';
+import { getChangedProfile, getCities, getSdManagers, getProfile, getRegions } from '../../redux/slices/user';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 
 export function CompanyDialog(props) {
@@ -30,14 +30,14 @@ export function CompanyDialog(props) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const params = useParams();
-  const { managers, regions, cities } = useSelector((state) => state.user);
+  const { sd_managers, regions, cities } = useSelector((state) => state.user);
 
-  const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
+  const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id }));
   const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
   const optionsCities = cities.map((item) => ({ label: item.name, id: item.id }));
 
   useEffect(() => {
-    dispatch(getManagers());
+    dispatch(getSdManagers());
     dispatch(getRegions());
     dispatch(getCities());
   }, []);
@@ -45,7 +45,14 @@ export function CompanyDialog(props) {
   const companySchema = Yup.object().shape({
     user: Yup.object(),
     name: Yup.string().required('Обязательное поле'),
-    taxpayer_id: Yup.string().required('Обязательное поле'),
+    taxpayer_id: Yup.string()
+      .required('Обязательное поле')
+      .test(
+        'len',
+        'Данное поле должно состоять из 10 или 12 чисел',
+        // eslint-disable-next-line no-restricted-globals
+        (val) => (val?.length === 10 || val?.length === 12) && !isNaN(val)
+      ),
     region: Yup.object(),
     city: Yup.object(),
     address: Yup.string()
@@ -79,7 +86,6 @@ export function CompanyDialog(props) {
 
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
-  console.log(errors);
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -104,7 +110,6 @@ export function CompanyDialog(props) {
                     sx={{ width: '100%' }}
                     options={optionsManagers}
                     onChange={(e, value) => {
-                      console.log(value);
                       setFieldValue('user', value !== null ? value : optionsManagers.id);
                     }}
                     renderInput={(params) => (
@@ -141,7 +146,6 @@ export function CompanyDialog(props) {
                     options={optionsRegions}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     onChange={(e, value) => {
-                      console.log(value);
                       setFieldValue('region', value !== null ? value : optionsManagers.id);
                     }}
                     renderInput={(params) => (

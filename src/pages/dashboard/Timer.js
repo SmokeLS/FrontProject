@@ -12,16 +12,14 @@ export default function Timer({ profile }) {
     new Date().getMinutes(),
     new Date().getSeconds()
   );
-
   const [timer, setTimer] = useState(format(date, 'HH:mm:ss'));
-
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date(
         new Date().getFullYear(),
         new Date().getMonth(),
         new Date().getDay(),
-        new Date().getUTCHours() + profile.region.timezone.value,
+        new Date().getUTCHours() + profile?.region?.timezone?.value,
         new Date().getMinutes(),
         new Date().getSeconds()
       );
@@ -30,6 +28,8 @@ export default function Timer({ profile }) {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  if (!profile?.region) return null;
 
   return (
     <Typography variant="caption" display="block">

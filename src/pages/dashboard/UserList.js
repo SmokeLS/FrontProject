@@ -237,7 +237,11 @@ export default function UserList() {
     filteredCommentaries
   );
 
-  if (concatedUsers.length) isUserNotFound = false;
+  if (concatedUsers.length) {
+    isUserNotFound = false;
+  } else {
+    isUserNotFound = true;
+  }
 
   return (
     <Page title="User: List | Minimal-UI">

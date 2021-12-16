@@ -34,11 +34,13 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
   const dispatch = useDispatch();
   const params = useParams();
   const [openDelete, setOpenDelete] = useState(false);
+  const [update, setUpdate] = useState(false);
   const contacts = useSelector((state) => state.user.profile.contacts);
+  const error = useSelector((state) => state.user.error);
 
   useEffect(() => {
     dispatch(getProfile(params.id));
-  }, [contacts, dispatch, params]);
+  }, [openDelete, update, dispatch, params]);
 
   const handleClickOpenDelete = () => {
     setOpenDelete(true);
@@ -50,14 +52,17 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
 
   const deleteHandler = () => {
     dispatch(deleteContact(contactId));
+    onClose();
     setOpenDelete(false);
   };
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Обязательное поле'),
     position: Yup.string(),
-    email: Yup.string().email(),
-    phoneNumber: Yup.string()
+    email: Yup.string().email('Email должен быть валидным'),
+    phoneNumber: Yup.string().test('len', 'Введите корректный номер телефона', (val) =>
+      val.match(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/)
+    )
   });
 
   const formik = useFormik({
@@ -65,25 +70,27 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
     initialValues: {
       name: currentUser?.name || '',
       position: currentUser?.position || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || ''
+      email: currentUser?.email || 'mail@mail.ru',
+      phoneNumber: currentUser?.phoneNumber || '+79190283935'
     },
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
         if (!isEdit) {
           dispatch(setContacts(values, profile.id));
+          dispatch(getProfile(params.id));
         } else {
           dispatch(changeContacts(values, contactId));
+          dispatch(getProfile(params.id));
         }
         resetForm();
         setSubmitting(false);
-        enqueueSnackbar(!isEdit ? 'Контакт успешно создан' : 'Контакт успешно обновлен', { variant: 'success' });
+        setUpdate(true);
         onClose();
       } catch (error) {
         console.error(error);
         setSubmitting(false);
-        setErrors(error);
+        setErrors({ afterSubmit: error.message });
       }
     }
   });
@@ -150,6 +157,10 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
                     helperText={touched.phoneNumber && errors.phoneNumber}
                   />
                 </Stack>
+
+                <FormHelperText error fontSize={18} sx={{ px: 2, textAlign: 'center' }}>
+                  {errors.afterSubmit}
+                </FormHelperText>
 
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

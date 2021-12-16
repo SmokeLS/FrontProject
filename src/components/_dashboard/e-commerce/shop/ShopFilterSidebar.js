@@ -102,9 +102,6 @@ export default function ShopFilterSidebar(props) {
 
   useEffect(() => {
     dispatch(getManagers());
-  }, []);
-
-  useEffect(() => {
     dispatch(getRegions());
   }, []);
 
@@ -167,7 +164,6 @@ export default function ShopFilterSidebar(props) {
   //
 
   const changeManagerHandleSearch = (newValue) => {
-    console.log(newValue);
     if (!newValue) newValue = '';
     const allFilters = {
       user: `&user=${isValidId(newValue.id)}`,
@@ -192,7 +188,6 @@ export default function ShopFilterSidebar(props) {
 
   const changeStatusHandleSearch = (e, index) => {
     if (index === -1) index = '';
-    console.log(e.target);
 
     const allFilters = {
       user: `&user=${isValidId(filterName.user.id)}`,

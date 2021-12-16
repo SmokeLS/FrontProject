@@ -97,7 +97,7 @@ export default function ProfileAbout({ profile }) {
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             Адрес
             <Typography variant="body1" component="span">
-              : Ставропольский район, Приморский поселок, ясная улица, дом 7
+              : {profile.address}
             </Typography>
           </Typography>
         </Stack>
