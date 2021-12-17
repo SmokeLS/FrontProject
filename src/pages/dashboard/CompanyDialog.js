@@ -31,16 +31,21 @@ export function CompanyDialog(props) {
   const dispatch = useDispatch();
   const params = useParams();
   const { sd_managers, regions, cities } = useSelector((state) => state.user);
+  const [query, setQuery] = useState('');
 
-  const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id }));
-  const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
-  const optionsCities = cities.map((item) => ({ label: item.name, id: item.id }));
+  const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id, key: item.id }));
+  const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id, key: item.id }));
+  const optionsCities = cities.map((item) => ({ label: item.name, id: item.id, key: item.id }));
 
   useEffect(() => {
     dispatch(getSdManagers());
     dispatch(getRegions());
     dispatch(getCities());
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getCities(query));
+  }, [query, dispatch]);
 
   const companySchema = Yup.object().shape({
     user: Yup.object(),
@@ -61,17 +66,18 @@ export function CompanyDialog(props) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      user: '',
-      name: '',
-      taxpayer_id: '',
-      region: '',
-      city: '',
-      address: ''
+      user: profile.user,
+      name: profile.name,
+      taxpayer_id: profile.taxpayer_id,
+      region: profile.region.name,
+      city: profile.city,
+      address: profile.address
     },
     validationSchema: companySchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        dispatch(getChangedProfile(profile.id, values));
+        console.log(values);
+        await dispatch(getChangedProfile(profile.id, values));
         resetForm();
         setSubmitting(false);
         enqueueSnackbar('Компания успешно изменена', { variant: 'success' });
@@ -90,10 +96,6 @@ export function CompanyDialog(props) {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle mb={2}>Изменить компанию</DialogTitle>
@@ -105,16 +107,15 @@ export function CompanyDialog(props) {
                 <Stack spacing={3}>
                   <Autocomplete
                     disablePortal
-                    id="user_id"
-                    name="user_id"
+                    id="user"
+                    name="user"
                     sx={{ width: '100%' }}
                     options={optionsManagers}
-                    onChange={(e, value) => {
-                      setFieldValue('user', value !== null ? value : optionsManagers.id);
-                    }}
+                    value={profile.user.full_name}
+                    onChange={(e, value) => setFieldValue('user', value)}
                     renderInput={(params) => (
                       <TextField
-                        id="user_id"
+                        id="user"
                         label="Менеджер"
                         {...params}
                         sx={{ width: '100%' }}
@@ -145,8 +146,9 @@ export function CompanyDialog(props) {
                     sx={{ width: '100%' }}
                     options={optionsRegions}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
+                    value={profile.city.region.name}
                     onChange={(e, value) => {
-                      setFieldValue('region', value !== null ? value : optionsManagers.id);
+                      setFieldValue('region', value !== null ? value : optionsRegions.id);
                     }}
                     renderInput={(params) => (
                       <TextField
@@ -163,21 +165,29 @@ export function CompanyDialog(props) {
                     disablePortal
                     id="city"
                     name="city"
-                    sx={{ width: '100%' }}
                     options={optionsCities}
+                    value={profile.city.name}
+                    sx={{ width: '100%' }}
                     onChange={(e, value) => {
                       setFieldValue('city', value !== null ? value : optionsCities.id);
                     }}
+                    renderOption={(props, option) => (
+                      <Box {...props} key={option.id}>
+                        {option.label}
+                      </Box>
+                    )}
                     renderInput={(params) => (
                       <TextField
                         id="city"
                         label="Город"
-                        {...params}
                         sx={{ width: '100%' }}
                         {...getFieldProps('city')}
+                        onChange={(e) => {
+                          setQuery(e.target.value);
+                        }}
+                        {...params}
                       />
                     )}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
                   />
                   <TextField
                     fullWidth

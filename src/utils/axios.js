@@ -7,7 +7,7 @@ import { isValidToken, setSession } from './jwt';
 
 const axiosInstance = axios.create({
   withCredentials: true,
-  baseURL: 'http://51.250.7.40/'
+  baseURL: 'http://62.84.113.176/'
 });
 
 // axiosInstance.interceptors.response.use(
@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
           const refresh = window.localStorage.getItem('refresh');
 
           if (refresh && isValidToken(refresh)) {
-            const response = await axios.post('http://51.250.7.40/auth/jwt/refresh', { refresh });
+            const response = await axios.post('http://62.84.113.176/auth/jwt/refresh', { refresh });
             setSession(response.data.access);
           } else {
             const [state, dispatch] = useReducer(reducer, initialState);

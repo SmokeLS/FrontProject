@@ -71,7 +71,7 @@ export default function ProfileAbout({ profile }) {
         <Typography sx={{ fontWeight: 'bold' }} variant="body1">
           ID
           <Typography variant="body1" component="span">
-            : {params.id}
+            : {params?.id}
           </Typography>
         </Typography>
 
@@ -86,7 +86,7 @@ export default function ProfileAbout({ profile }) {
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             ИНН
             <Typography variant="body1" component="span">
-              : {profile.taxpayer_id}
+              : {profile?.taxpayer_id}
             </Typography>
           </Typography>
         </Stack>
@@ -97,7 +97,7 @@ export default function ProfileAbout({ profile }) {
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             Адрес
             <Typography variant="body1" component="span">
-              : {profile.address}
+              : {profile?.address}
             </Typography>
           </Typography>
         </Stack>

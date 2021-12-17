@@ -7,7 +7,16 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import PropTypes from 'prop-types';
 // material
-import { Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Stack,
+  Typography
+} from '@mui/material';
 // utils
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -24,7 +33,12 @@ export default function ProfileFollowInfo({ profile }) {
   const [localStatus, setLocalStatus] = useState(profile.status);
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
+  const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const params = useParams();
+
+  const handleClose = () => {
+    setOpenErrorDialog(false);
+  };
 
   useEffect(() => {
     const formatedValueDates = profile.date.split(' ')[0].split('.').reverse().join('.');
@@ -38,8 +52,12 @@ export default function ProfileFollowInfo({ profile }) {
   };
 
   const handleChangeDate = (id, e) => {
-    setValue(e.target.value);
-    dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy HH:mm'), e.target.value));
+    if (new Date(e.target.value) > new Date()) {
+      setValue(e.target.value);
+      dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy HH:mm'), e.target.value));
+    } else {
+      setOpenErrorDialog(true);
+    }
   };
 
   return (
@@ -68,27 +86,37 @@ export default function ProfileFollowInfo({ profile }) {
         </Stack>
 
         {profile.can_view_date && (
-          <Stack textAlign="center">
-            <Typography variant="body2" pl={1} sx={{ color: '#3366FF', textAlign: 'left' }}>
-              Дата контакта
-            </Typography>
-            <Box ml={1}>
-              <FormControl fullWidth>
-                <TextField
-                  id="datetime-local"
-                  type="datetime-local"
-                  size="small"
-                  sx={{ width: 230 }}
-                  value={value}
-                  onChange={(e) => handleChangeDate(params.id, e)}
-                  disabled={!profile.can_update_contacts}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                />
-              </FormControl>
-            </Box>
-          </Stack>
+          <>
+            <Stack textAlign="center">
+              <Typography variant="body2" pl={1} sx={{ color: '#3366FF', textAlign: 'left' }}>
+                Дата контакта
+              </Typography>
+              <Box ml={1}>
+                <FormControl fullWidth>
+                  <TextField
+                    id="datetime-local"
+                    type="datetime-local"
+                    size="small"
+                    sx={{ width: 230 }}
+                    value={value}
+                    onChange={(e) => handleChangeDate(params.id, e)}
+                    disabled={!profile.can_update_contacts}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </FormControl>
+              </Box>
+            </Stack>
+            <div>
+              <Dialog open={openErrorDialog} onClick={handleClose} onClose={setOpenErrorDialog}>
+                <DialogTitle justifyContent="center">Ошибка</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>Укажите корректную дату</DialogContentText>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </>
         )}
       </Stack>
     </>

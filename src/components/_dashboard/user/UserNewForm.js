@@ -37,6 +37,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
   const { managers, regions, cities, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [query, setQuery] = useState('');
   const isMountedRef = useIsMountedRef();
 
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
@@ -55,7 +56,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
       ),
     region: Yup.object(),
     city: Yup.object(),
-    date: Yup.string().required('Обязательное поле')
+    address: Yup.string().required('Обязательное поле')
   });
 
   const formik = useFormik({
@@ -66,12 +67,12 @@ export default function UserNewForm({ isEdit, currentUser }) {
       taxpayer_id: '',
       region: '',
       city: '',
-      date: ''
+      address: ''
     },
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        dispatch(setCompany(values, navigate));
+        await dispatch(setCompany(values, navigate));
         throw new Error(error);
       } catch (error) {
         console.error(error);
@@ -90,6 +91,10 @@ export default function UserNewForm({ isEdit, currentUser }) {
     dispatch(getRegions());
     dispatch(getCities());
   }, []);
+
+  useEffect(() => {
+    dispatch(getCities(query));
+  }, [query, dispatch]);
 
   return (
     <FormikProvider value={formik}>
@@ -164,29 +169,36 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     disablePortal
                     id="city"
                     name="city"
-                    sx={{ width: '100%' }}
+                    getOptionLabel={(option) => option.label}
                     options={optionsCities}
+                    sx={{ width: '100%' }}
                     onChange={(e, value) => {
                       setFieldValue('city', value !== null ? value : optionsCities.id);
                     }}
+                    renderOption={(props, option) => (
+                      <Box {...props} key={option.id}>
+                        {option.label}
+                      </Box>
+                    )}
                     renderInput={(params) => (
                       <TextField
                         id="city"
                         label="Город"
-                        {...params}
                         sx={{ width: '100%' }}
                         {...getFieldProps('city')}
+                        onChange={(e) => {
+                          setQuery(e.target.value);
+                        }}
+                        {...params}
                       />
                     )}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
                   />
                   <TextField
                     fullWidth
-                    label="Дата"
-                    {...getFieldProps('date')}
-                    error={Boolean(touched.date && errors.date)}
-                    helperText={touched.date && errors.date}
-                    placeholder="DD.MM.YYYY HH.MM"
+                    label="Адрес"
+                    {...getFieldProps('address')}
+                    error={Boolean(touched.address && errors.address)}
+                    helperText={touched.address && errors.address}
                   />
                 </Stack>
 

@@ -60,8 +60,10 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
     name: Yup.string().required('Обязательное поле'),
     position: Yup.string(),
     email: Yup.string().email('Email должен быть валидным'),
-    phoneNumber: Yup.string().test('len', 'Введите корректный номер телефона', (val) =>
-      val.match(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/)
+    phoneNumber: Yup.string().test(
+      'len',
+      'Введите корректный номер телефона',
+      (val) => val?.match(/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/) || !val
     )
   });
 
@@ -70,8 +72,8 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
     initialValues: {
       name: currentUser?.name || '',
       position: currentUser?.position || '',
-      email: currentUser?.email || 'mail@mail.ru',
-      phoneNumber: currentUser?.phoneNumber || '+79190283935'
+      email: currentUser?.email || '',
+      phoneNumber: currentUser?.phoneNumber || ''
     },
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {

@@ -393,7 +393,7 @@ export function getSdManagers() {
 
 // ----------------------------------------------------------------------
 
-export function getRegions() {
+export function getRegions(str) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
@@ -545,11 +545,11 @@ export function getChangedProfile(id, data) {
 
 // ----------------------------------------------------------------------
 
-export function getCities() {
+export function getCities(search) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('api/v1/cities/');
+      const response = await axios.get(`api/v1/cities/?search=${search}`);
       dispatch(slice.actions.getCitiesSuccess(response.data.results));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -569,7 +569,7 @@ export function setCompany(data, navigate) {
         taxpayer_id: data.taxpayer_id,
         region: data.region.id,
         city: data.city.id,
-        date: data.date
+        address: data.address
       });
       navigate(`${PATH_DASHBOARD.user.list}/${response.data.id}`);
       dispatch(slice.actions.getAddedProfile(response.data));
