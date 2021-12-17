@@ -24,6 +24,7 @@ const initialState = {
   notifications: null,
   managers: [],
   regions: [],
+  allRegions: [],
   cities: [],
   selectedId: null,
   sd_managers: [],
@@ -159,6 +160,12 @@ const slice = createSlice({
     getRegions(state, action) {
       state.isLoading = true;
       state.regions = action.payload;
+    },
+
+    // GET REGIONS
+    getAllRegions(state, action) {
+      state.isLoading = true;
+      state.allRegions = action.payload;
     },
 
     // GET REGIONS
@@ -393,12 +400,26 @@ export function getSdManagers() {
 
 // ----------------------------------------------------------------------
 
-export function getRegions(str) {
+export function getRegions() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get('api/v1/sd/companies/used_regions/');
       dispatch(slice.actions.getRegions(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getAllRegions(str = '') {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`api/v1/regions/?search=${str}`);
+      dispatch(slice.actions.getAllRegions(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -439,6 +460,7 @@ export function setContacts(data, profileId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
+      console.log(data);
       const response = await axios.post(`api/v1/sd/contacts/`, {
         name: data.name,
         position: data.position,
@@ -446,6 +468,7 @@ export function setContacts(data, profileId) {
         email: data.email,
         company: profileId
       });
+      console.log(response.data);
       dispatch(slice.actions.getContacts(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -527,15 +550,17 @@ export function getChangedProfile(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.patch(`api/v1/sd/companies/${id}/`, {
-        user: data.user.id,
-        address: data.address,
-        name: data.name,
-        city: data.city.id,
-        taxpayer_id: data.taxpayer_id,
-        region: data.region.id
+      const a = await axios.patch(`api/v1/sd/companies/${id}/`, {
+        user: data.user.id || null,
+        address: data.address || null,
+        name: data.name || null,
+        city: data.city.id || null,
+        taxpayer_id: data.taxpayer_id || null,
+        region: data.region.id || null
       });
+      console.log(a);
       const response = await axios.get(`api/v1/sd/companies/${id}/`);
+      console.log(response.data);
       dispatch(slice.actions.getChangedProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -545,11 +570,11 @@ export function getChangedProfile(id, data) {
 
 // ----------------------------------------------------------------------
 
-export function getCities(search) {
+export function getCities(search = '', regionId = '') {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`api/v1/cities/?search=${search}`);
+      const response = await axios.get(`api/v1/cities/?search=${search}&region=${regionId}`);
       dispatch(slice.actions.getCitiesSuccess(response.data.results));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

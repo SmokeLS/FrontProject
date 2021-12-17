@@ -23,7 +23,7 @@ import {
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 //
-import { getCities, getManagers, getRegions, setCompany } from '../../../redux/slices/user';
+import { getCities, getManagers, getAllRegions, setCompany } from '../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -35,13 +35,14 @@ UserNewForm.propTypes = {
 export default function UserNewForm({ isEdit, currentUser }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { managers, regions, cities, error } = useSelector((state) => state.user);
+  const { managers, allRegions, cities, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
+  const [localRegion, setLocalRegion] = useState('');
   const isMountedRef = useIsMountedRef();
 
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
-  const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id }));
+  const optionsRegions = allRegions.map((item) => ({ label: item.name, id: item.id }));
   const optionsCities = cities.map((item) => ({ label: item.name, id: item.id }));
   const NewUserSchema = Yup.object().shape({
     user: Yup.object(),
@@ -88,13 +89,13 @@ export default function UserNewForm({ isEdit, currentUser }) {
 
   useEffect(() => {
     dispatch(getManagers());
-    dispatch(getRegions());
+    dispatch(getAllRegions());
     dispatch(getCities());
   }, []);
 
   useEffect(() => {
-    dispatch(getCities(query));
-  }, [query, dispatch]);
+    dispatch(getCities(query, localRegion.id));
+  }, [query, dispatch, localRegion]);
 
   return (
     <FormikProvider value={formik}>
@@ -150,6 +151,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
                     options={optionsRegions}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     onChange={(e, value) => {
+                      setLocalRegion(value);
                       setFieldValue('region', value !== null ? value : optionsManagers.id);
                     }}
                     renderInput={(params) => (

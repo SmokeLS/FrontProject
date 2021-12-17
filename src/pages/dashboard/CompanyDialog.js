@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { blue } from '@mui/material/colors';
 import { Autocomplete, Box, FormControl, Grid, RadioGroup, Stack, TextField } from '@mui/material';
-import { getChangedProfile, getCities, getSdManagers, getProfile, getRegions } from '../../redux/slices/user';
+import { getChangedProfile, getCities, getSdManagers, getProfile, getAllRegions } from '../../redux/slices/user';
 import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 
 export function CompanyDialog(props) {
@@ -30,25 +30,28 @@ export function CompanyDialog(props) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const params = useParams();
-  const { sd_managers, regions, cities } = useSelector((state) => state.user);
+  const { sd_managers, allRegions, cities } = useSelector((state) => state.user);
   const [query, setQuery] = useState('');
 
+  const [managers, setManagers] = useState(profile.user.full_name);
+  const [regions, setRegions] = useState(profile.city.region.name);
+  const [city, setCity] = useState(profile.city.name);
+
   const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id, key: item.id }));
-  const optionsRegions = regions.map((item) => ({ label: item.name, id: item.id, key: item.id }));
+  const optionsRegions = allRegions.map((item) => ({ label: item.name, id: item.id, key: item.id }));
   const optionsCities = cities.map((item) => ({ label: item.name, id: item.id, key: item.id }));
 
   useEffect(() => {
     dispatch(getSdManagers());
-    dispatch(getRegions());
+    dispatch(getAllRegions());
     dispatch(getCities());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getCities(query));
-  }, [query, dispatch]);
+    dispatch(getCities(query, regions.id));
+  }, [query, dispatch, regions]);
 
   const companySchema = Yup.object().shape({
-    user: Yup.object(),
     name: Yup.string().required('Обязательное поле'),
     taxpayer_id: Yup.string()
       .required('Обязательное поле')
@@ -57,10 +60,7 @@ export function CompanyDialog(props) {
         'Данное поле должно состоять из 10 или 12 чисел',
         // eslint-disable-next-line no-restricted-globals
         (val) => (val?.length === 10 || val?.length === 12) && !isNaN(val)
-      ),
-    region: Yup.object(),
-    city: Yup.object(),
-    address: Yup.string()
+      )
   });
 
   const formik = useFormik({
@@ -111,8 +111,11 @@ export function CompanyDialog(props) {
                     name="user"
                     sx={{ width: '100%' }}
                     options={optionsManagers}
-                    value={profile.user.full_name}
-                    onChange={(e, value) => setFieldValue('user', value)}
+                    value={managers}
+                    onChange={(e, value) => {
+                      setManagers(value);
+                      setFieldValue('user', value);
+                    }}
                     renderInput={(params) => (
                       <TextField
                         id="user"
@@ -146,9 +149,10 @@ export function CompanyDialog(props) {
                     sx={{ width: '100%' }}
                     options={optionsRegions}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
-                    value={profile.city.region.name}
+                    value={regions}
                     onChange={(e, value) => {
-                      setFieldValue('region', value !== null ? value : optionsRegions.id);
+                      setRegions(value);
+                      setFieldValue('region', value !== null ? value : '');
                     }}
                     renderInput={(params) => (
                       <TextField
@@ -166,10 +170,11 @@ export function CompanyDialog(props) {
                     id="city"
                     name="city"
                     options={optionsCities}
-                    value={profile.city.name}
+                    value={city}
                     sx={{ width: '100%' }}
                     onChange={(e, value) => {
-                      setFieldValue('city', value !== null ? value : optionsCities.id);
+                      setCity(value);
+                      setFieldValue('city', value !== null ? value : '');
                     }}
                     renderOption={(props, option) => (
                       <Box {...props} key={option.id}>
