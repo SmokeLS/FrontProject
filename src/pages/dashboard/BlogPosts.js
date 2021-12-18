@@ -153,13 +153,13 @@ export default function EmployeeList() {
           heading="Все сотрудники"
           links={[
             { name: 'Сотрудники', href: PATH_DASHBOARD.root },
-            { name: 'Все сотрудники', href: PATH_DASHBOARD.user.root }
+            { name: 'Все сотрудники', href: PATH_DASHBOARD.employees.list }
           ]}
           action={
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
+              to={PATH_DASHBOARD.employees.newEmployee}
               startIcon={<Icon icon={plusFill} />}
             >
               Новая карточка

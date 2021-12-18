@@ -36,7 +36,7 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
     patronymic: Yup.string(),
     phone: Yup.string(),
     email: Yup.string(),
-    position: Yup.object(),
+    position: Yup.object().nullable(),
     number: Yup.string(),
     series: Yup.string(),
     issued: Yup.string(),
@@ -53,11 +53,11 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
       patronymic: employee.patronymic || '',
       phone: employee.phone || '',
       email: employee.email || '',
-      //   position: position[0],
+      position: employee.position,
       number: employee.passport_number || '',
       series: employee.passport_series || '',
       issued: employee.passport_issued || '',
-      date: employee.passport_date || '',
+      date: employee.passport_date || null,
       code: employee.passport_code || ''
     },
     // validationSchema: EditSchema,
@@ -196,7 +196,6 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
                     id="number"
                     label="Номер"
                     variant="outlined"
-                    placeholder="YYYY-MM-DD"
                     {...getFieldProps('number')}
                     error={Boolean(touched.number && errors.number)}
                     helperText={touched.number && errors.number}
@@ -236,6 +235,7 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
                     id="date"
                     label="Когда выдан"
                     variant="outlined"
+                    placeholder="YYYY-MM-DD"
                     {...getFieldProps('date')}
                     error={Boolean(touched.date && errors.date)}
                     helperText={touched.date && errors.date}
@@ -262,9 +262,6 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
           </Form>
         </FormikProvider>
       </DialogContent>
-      {/* <DialogActions>
-        <Button>Изменить</Button>
-      </DialogActions> */}
     </Dialog>
   );
 }

@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import { Container, Typography, Grid, List, ListItem, ListItemText, Button, Stack } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getEmployee, blockEmployee, deleteEmployee } from '../../redux/slices/user';
+import { getEmployee, blockEmployee, unblockEmployee, deleteEmployee } from '../../redux/slices/user';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -59,10 +59,16 @@ export default function EmployeeId() {
 
   const blockHandler = () => {
     dispatch(blockEmployee(params.id, employee));
+    dispatch(getEmployee(params.id));
+  };
+
+  const unblockHandler = () => {
+    dispatch(unblockEmployee(params.id, employee));
+    dispatch(getEmployee(params.id));
   };
 
   const deleteHandler = () => {
-    navigate(PATH_DASHBOARD.employee.list);
+    navigate(PATH_DASHBOARD.employees.list);
     dispatch(deleteEmployee(params.id));
   };
 
@@ -89,16 +95,22 @@ export default function EmployeeId() {
           heading={`Карточка сотрудника #${params.id}`}
           links={[
             { name: 'Система', href: PATH_DASHBOARD.root },
-            { name: 'Все сотрудники', href: PATH_DASHBOARD.user.list },
+            { name: 'Все сотрудники', href: PATH_DASHBOARD.employees.list },
             { name: `Карточка сотрудника #${params.id}` }
           ]}
         />
         <Grid item xs={12} md={6}>
           <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
             <Stack spacing={2} direction="row">
-              <Button onClick={blockHandler} variant="outlined">
-                Заблокировать
-              </Button>
+              {!employee.is_banned ? (
+                <Button onClick={blockHandler} variant="outlined">
+                  Заблокировать
+                </Button>
+              ) : (
+                <Button onClick={unblockHandler} variant="outlined">
+                  Разблокировать
+                </Button>
+              )}
               <Button onClick={openEditDialog} variant="outlined">
                 Изменить
               </Button>

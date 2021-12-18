@@ -23,7 +23,7 @@ import {
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 //
-import { getCities, getManagers, getAllRegions, setCompany } from '../../../redux/slices/user';
+import { getCities, getManagers, getAllRegions, setCompany, getSdManagers } from '../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -35,13 +35,13 @@ UserNewForm.propTypes = {
 export default function UserNewForm({ isEdit, currentUser }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { managers, allRegions, cities, error } = useSelector((state) => state.user);
+  const { sd_managers, allRegions, cities, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
   const [localRegion, setLocalRegion] = useState('');
   const isMountedRef = useIsMountedRef();
 
-  const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
+  const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id }));
   const optionsRegions = allRegions.map((item) => ({ label: item.name, id: item.id }));
   const optionsCities = cities.map((item) => ({ label: item.name, id: item.id }));
   const NewUserSchema = Yup.object().shape({
@@ -88,7 +88,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const { errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps } = formik;
 
   useEffect(() => {
-    dispatch(getManagers());
+    dispatch(getSdManagers());
     dispatch(getAllRegions());
     dispatch(getCities());
   }, []);

@@ -33,9 +33,9 @@ export function CompanyDialog(props) {
   const { sd_managers, allRegions, cities } = useSelector((state) => state.user);
   const [query, setQuery] = useState('');
 
-  const [managers, setManagers] = useState(profile.user.full_name);
-  const [regions, setRegions] = useState(profile.city.region.name);
-  const [city, setCity] = useState(profile.city.name);
+  const [managers, setManagers] = useState(profile.user?.full_name);
+  const [regions, setRegions] = useState(profile.city?.region?.name);
+  const [city, setCity] = useState(profile.city?.name);
 
   const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id, key: item.id }));
   const optionsRegions = allRegions.map((item) => ({ label: item.name, id: item.id, key: item.id }));
@@ -48,7 +48,7 @@ export function CompanyDialog(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getCities(query, regions.id));
+    dispatch(getCities(query, regions?.id));
   }, [query, dispatch, regions]);
 
   const companySchema = Yup.object().shape({
@@ -76,7 +76,6 @@ export function CompanyDialog(props) {
     validationSchema: companySchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
-        console.log(values);
         await dispatch(getChangedProfile(profile.id, values));
         resetForm();
         setSubmitting(false);

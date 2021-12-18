@@ -21,7 +21,7 @@ const initialState = {
   selectedId: null,
   sd_managers: [],
   me: null,
-  employee: null,
+  employee: [],
   managedGroups: []
 };
 
@@ -360,7 +360,7 @@ export function getChangedEmployee(id, data) {
     try {
       await axios.patch(`api/v1/users/${id}/`, {
         username: data.username,
-        position: data.position.id,
+        position: data.position?.id,
         full_name: data.full_name,
         name: data.name,
         surname: data.surname,
@@ -374,6 +374,36 @@ export function getChangedEmployee(id, data) {
         passport_code: data.code
       });
       const response = await axios.get(`api/v1/users/${id}/`);
+      dispatch(slice.actions.getEmployee(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function setEmployee(data, navigate) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post(`api/v1/users/`, {
+        username: data.username,
+        position: data.position.id,
+        full_name: data.full_name,
+        name: data.name,
+        surname: data.surname,
+        patronymic: data.patronymic,
+        contact_phone: data.phone,
+        contact_email: data.email,
+        passport_series: data.series,
+        passport_number: data.number,
+        passport_issued: data.issued,
+        passport_date: data.date,
+        passport_code: data.code
+      });
+      console.log(response.data);
+      navigate(`${PATH_DASHBOARD.employees.list}/${response.data.id}`);
       dispatch(slice.actions.getEmployee(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -401,12 +431,27 @@ export function blockEmployee(id, employee) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.put(`api/v1/users/${id}/`, {
+      await axios.post(`api/v1/users/${id}/ban_user/`, {
         ...employee,
-        position: employee.position.id,
-        is_banned: true
+        position: employee.position.id
       });
-      console.log(response);
+      dispatch(slice.actions.stopLoading());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function unblockEmployee(id, employee) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.post(`api/v1/users/${id}/activate_user/`, {
+        ...employee,
+        position: employee.position.id
+      });
       dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
