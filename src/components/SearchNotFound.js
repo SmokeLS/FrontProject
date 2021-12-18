@@ -4,10 +4,6 @@ import { Paper, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-SearchNotFound.propTypes = {
-  searchQuery: PropTypes.object
-};
-
 export default function SearchNotFound({ searchQuery, ...other }) {
   return (
     <Paper {...other}>

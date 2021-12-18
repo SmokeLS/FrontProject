@@ -14,6 +14,7 @@ const initialState = {
   posts: [],
   users: [],
   userList: [],
+  employeeList: [],
   count: 0,
   followers: [],
   friends: [],
@@ -118,6 +119,11 @@ const slice = createSlice({
     getUserListSuccess(state, action) {
       state.isLoading = false;
       state.userList = action.payload;
+    },
+
+    getEmployeeListSuccess(state, action) {
+      state.isLoading = false;
+      state.employeeList = action.payload;
     },
 
     // GET CARDS
@@ -302,6 +308,21 @@ export function getUserList(pageSize = 5, page = 0, filters = '') {
 
 // ----------------------------------------------------------------------
 
+export function getEmployeeList(pageSize = 5, page = 0, search = '') {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/users/?page=${page + 1}&page_size=${pageSize}&search=${search}`);
+      dispatch(slice.actions.getCountSuccess(response.data.count));
+      dispatch(slice.actions.getEmployeeListSuccess(response.data.results));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
 export function getCards() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -460,7 +481,6 @@ export function setContacts(data, profileId) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      console.log(data);
       const response = await axios.post(`api/v1/sd/contacts/`, {
         name: data.name,
         position: data.position,
@@ -468,7 +488,6 @@ export function setContacts(data, profileId) {
         email: data.email,
         company: profileId
       });
-      console.log(response.data);
       dispatch(slice.actions.getContacts(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -550,7 +569,7 @@ export function getChangedProfile(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const a = await axios.patch(`api/v1/sd/companies/${id}/`, {
+      await axios.patch(`api/v1/sd/companies/${id}/`, {
         user: data.user.id || null,
         address: data.address || null,
         name: data.name || null,
@@ -558,9 +577,7 @@ export function getChangedProfile(id, data) {
         taxpayer_id: data.taxpayer_id || null,
         region: data.region.id || null
       });
-      console.log(a);
       const response = await axios.get(`api/v1/sd/companies/${id}/`);
-      console.log(response.data);
       dispatch(slice.actions.getChangedProfileSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

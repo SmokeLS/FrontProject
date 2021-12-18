@@ -75,7 +75,7 @@ const Demo = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserId() {
+export default function EmployeeId() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { myProfile, posts, followers, friends, gallery, userList } = useSelector((state) => state.user);

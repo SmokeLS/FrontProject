@@ -109,7 +109,16 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserListToolbar({ numSelected, filterName, handleFunctions, newFilters, rowsPerPage, page }) {
+export default function UserListToolbar({
+  numSelected,
+  filterName,
+  handleFunctions,
+  newFilters,
+  rowsPerPage,
+  page,
+  changeNameHandleSearch,
+  query
+}) {
   const location = useLocation();
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
@@ -214,22 +223,19 @@ export default function UserListToolbar({ numSelected, filterName, handleFunctio
               </>
             ) : (
               <Box mt={1}>
-                <RadioGroup sx={{ minWidth: 160 }} {...getFieldProps('rating')}>
-                  <FormControl fullWidth>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={selectValue}
-                      onChange={handleChange}
-                    >
-                      {FILTER_MANAGERS_OPTIONS.map((item) => (
-                        <MenuItem key={item} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </RadioGroup>
+                <div>
+                  <OutlinedInput
+                    value={query}
+                    size="small"
+                    onChange={changeNameHandleSearch}
+                    placeholder="Поиск по имени"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+                      </InputAdornment>
+                    }
+                  />
+                </div>
               </Box>
             )}
           </Stack>

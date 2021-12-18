@@ -26,7 +26,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserList, deleteUser } from '../../redux/slices/user';
+import { getEmployeeList, deleteUser } from '../../redux/slices/user';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -80,36 +80,28 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserList() {
+export default function EmployeeList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  const { employeeList } = useSelector((state) => state.user);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
+  const [query, setQuery] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getUserList());
-  }, [dispatch]);
+    dispatch(getEmployeeList(rowsPerPage, page, query));
+  }, [dispatch, rowsPerPage, page, query]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = userList.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleClick = (event, name) => {
@@ -144,9 +136,13 @@ export default function UserList() {
     dispatch(deleteUser(userId));
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+  const changeNameHandleSearch = (e) => {
+    setQuery(e.target.value);
+  };
 
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - employeeList.length) : 0;
+
+  const filteredUsers = applySortFilter(employeeList, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -172,33 +168,24 @@ export default function UserList() {
         />
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar query={query} changeNameHandleSearch={changeNameHandleSearch} />
 
           <Scrollbar>
             <TableContainer sx={{ overflowX: 'auto' }}>
               <Table>
                 <UserListHead
                   headLabel={TABLE_HEAD}
-                  rowCount={userList.length}
+                  rowCount={employeeList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, zipCode, employeeStatus, taxpayer_id, email } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const { id, username, full_name, contact_email, contact_phone, is_banned } = row;
+                    const isItemSelected = selected.indexOf(full_name) !== -1;
 
                     return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                        sx={{ verticalAlign: 'top' }}
-                      >
+                      <TableRow hover key={id} tabIndex={-1} sx={{ verticalAlign: 'top' }}>
                         <TableCell
                           component="th"
                           scope="row"
@@ -209,20 +196,23 @@ export default function UserList() {
                         >
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {username}
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{name}</TableCell>
-                        <TableCell align="left">{email}</TableCell>
-                        <TableCell align="left">{zipCode}</TableCell>
+                        <TableCell align="left">{full_name}</TableCell>
+                        <TableCell align="left">{contact_email}</TableCell>
+                        <TableCell align="left">{contact_phone}</TableCell>
                         <TableCell ml={4}>
-                          <Label
-                            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(employeeStatus === 'Заблокирован' && 'error') || 'success'}
-                          >
-                            {employeeStatus}
-                          </Label>
+                          {is_banned ? (
+                            <Label variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'} color="error">
+                              Заблокирован
+                            </Label>
+                          ) : (
+                            <Label variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'} color="success">
+                              Активный
+                            </Label>
+                          )}
                         </TableCell>
                       </TableRow>
                     );
@@ -249,7 +239,7 @@ export default function UserList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
             component="div"
-            count={userList.length}
+            count={employeeList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
