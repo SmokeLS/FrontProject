@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -7,15 +7,27 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { useParams } from 'react-router';
+import { List, ListItem, Autocomplete, Stack, Typography } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
+import { getChangedEmployee, getManagedGroupsList } from '../../redux/slices/user';
 
 export default function EditEmployeeDialog({ employee, openDialog, handleClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const params = useParams();
+  const { managedGroups } = useSelector((state) => state.user);
+  const position = managedGroups.filter((item) => item.id === employee.position.id);
+  const managedOptions = managedGroups.map((item) => ({ label: item.name, id: item.id }));
+
+  useEffect(() => {
+    dispatch(getManagedGroupsList());
+  }, [dispatch]);
+
+  const [group, setGroup] = useState(employee.position.name);
 
   const EditSchema = Yup.object().shape({
     username: Yup.string().required('Обязательное поле'),
@@ -24,33 +36,34 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
     patronymic: Yup.string(),
     phone: Yup.string(),
     email: Yup.string(),
-    position: Yup.string(),
+    position: Yup.object(),
     number: Yup.string(),
     series: Yup.string(),
     issued: Yup.string(),
-    date: Yup.string(),
+    // date: Yup.string(),
     code: Yup.string()
   });
 
   const formik = useFormik({
     initialValues: {
       username: employee.username || '',
+      full_name: employee.full_name || '',
       surname: employee.surname || '',
       name: employee.name || '',
       patronymic: employee.patronymic || '',
       phone: employee.phone || '',
       email: employee.email || '',
-      position: employee.position.name || '',
+      //   position: position[0],
       number: employee.passport_number || '',
       series: employee.passport_series || '',
       issued: employee.passport_issued || '',
       date: employee.passport_date || '',
       code: employee.passport_code || ''
     },
-    validationSchema: EditSchema,
+    // validationSchema: EditSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
-        console.log(values);
+        await dispatch(getChangedEmployee(params.id, values));
         enqueueSnackbar('Update event success', { variant: 'success' });
         resetForm();
         setSubmitting(false);
@@ -152,13 +165,27 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
                   <Typography variant="body1" sx={{ width: '200px' }}>
                     Должность:
                   </Typography>
-                  <TextField
+                  <Autocomplete
+                    disablePortal
                     id="position"
-                    label="Должность"
-                    variant="outlined"
-                    {...getFieldProps('position')}
-                    error={Boolean(touched.position && errors.position)}
-                    helperText={touched.position && errors.position}
+                    name="position"
+                    sx={{ width: '220px' }}
+                    options={managedOptions}
+                    value={group}
+                    onChange={(e, value) => {
+                      setGroup(value);
+                      setFieldValue('position', value);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        id="position"
+                        label="Должность"
+                        {...params}
+                        sx={{ width: '100%' }}
+                        {...getFieldProps('position')}
+                      />
+                    )}
+                    isOptionEqualToValuе
                   />
                 </ListItem>
                 <ListItem>
@@ -169,6 +196,7 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
                     id="number"
                     label="Номер"
                     variant="outlined"
+                    placeholder="YYYY-MM-DD"
                     {...getFieldProps('number')}
                     error={Boolean(touched.number && errors.number)}
                     helperText={touched.number && errors.number}

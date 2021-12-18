@@ -21,7 +21,8 @@ const initialState = {
   selectedId: null,
   sd_managers: [],
   me: null,
-  employee: null
+  employee: null,
+  managedGroups: []
 };
 
 const slice = createSlice({
@@ -208,6 +209,11 @@ const slice = createSlice({
     getEmployee(state, action) {
       state.isLoading = true;
       state.employee = action.payload;
+    },
+
+    getManagedGroupsSuccess(state, action) {
+      state.isLoading = true;
+      state.managedGroups = action.payload;
     }
   }
 });
@@ -320,6 +326,20 @@ export function getEmployeeList(pageSize = 5, page = 0, search = '') {
 
 // ----------------------------------------------------------------------
 
+export function getManagedGroupsList(search = '') {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/users/managed_groups/`);
+      dispatch(slice.actions.getManagedGroupsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
 export function getEmployee(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -334,11 +354,40 @@ export function getEmployee(id) {
 
 // ----------------------------------------------------------------------
 
+export function getChangedEmployee(id, data) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.patch(`api/v1/users/${id}/`, {
+        username: data.username,
+        position: data.position.id,
+        full_name: data.full_name,
+        name: data.name,
+        surname: data.surname,
+        patronymic: data.patronymic,
+        contact_phone: data.phone,
+        contact_email: data.email,
+        passport_series: data.series,
+        passport_number: data.number,
+        passport_issued: data.issued,
+        passport_date: data.date,
+        passport_code: data.code
+      });
+      const response = await axios.get(`api/v1/users/${id}/`);
+      dispatch(slice.actions.getEmployee(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
 export function deleteEmployee(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await axios.delete(`/api/v1/users/${id}/`);
+      await axios.delete(`api/v1/users/${id}/`);
       dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -352,7 +401,7 @@ export function blockEmployee(id, employee) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.put(`/api/v1/users/${id}/`, {
+      const response = await axios.put(`api/v1/users/${id}/`, {
         ...employee,
         position: employee.position.id,
         is_banned: true
