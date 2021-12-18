@@ -45,7 +45,7 @@ export function CompanyDialog(props) {
     dispatch(getSdManagers());
     dispatch(getAllRegions());
     dispatch(getCities());
-  }, [dispatch]);
+  }, [dispatch, params.id]);
 
   useEffect(() => {
     dispatch(getCities(query, regions?.id));
