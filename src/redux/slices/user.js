@@ -11,25 +11,17 @@ const initialState = {
   isLoading: false,
   error: false,
   profile: null,
-  posts: [],
-  users: [],
   userList: [],
   employeeList: [],
   count: 0,
-  followers: [],
-  friends: [],
-  gallery: [],
-  cards: null,
-  addressBook: [],
-  invoices: [],
-  notifications: null,
   managers: [],
   regions: [],
   allRegions: [],
   cities: [],
   selectedId: null,
   sd_managers: [],
-  me: null
+  me: null,
+  employee: null
 };
 
 const slice = createSlice({
@@ -211,6 +203,11 @@ const slice = createSlice({
     getMe(state, action) {
       state.isLoading = true;
       state.me = action.payload;
+    },
+
+    getEmployee(state, action) {
+      state.isLoading = true;
+      state.employee = action.payload;
     }
   }
 });
@@ -315,6 +312,53 @@ export function getEmployeeList(pageSize = 5, page = 0, search = '') {
       const response = await axios.get(`/api/v1/users/?page=${page + 1}&page_size=${pageSize}&search=${search}`);
       dispatch(slice.actions.getCountSuccess(response.data.count));
       dispatch(slice.actions.getEmployeeListSuccess(response.data.results));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getEmployee(id) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/users/${id}/`);
+      dispatch(slice.actions.getEmployee(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function deleteEmployee(id) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await axios.delete(`/api/v1/users/${id}/`);
+      dispatch(slice.actions.stopLoading());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function blockEmployee(id, employee) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.put(`/api/v1/users/${id}/`, {
+        ...employee,
+        position: employee.position.id,
+        is_banned: true
+      });
+      console.log(response);
+      dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

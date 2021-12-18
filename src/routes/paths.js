@@ -48,17 +48,6 @@ export const PATH_DASHBOARD = {
     editById: path(ROOTS_DASHBOARD, `/sd/reece-chung/edit`),
     account: path(ROOTS_DASHBOARD, '/sd/account')
   },
-  eCommerce: {
-    root: path(ROOTS_DASHBOARD, '/e-commerce'),
-    shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
-    product: path(ROOTS_DASHBOARD, '/e-commerce/product/:name'),
-    productById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-air-force-1-ndestrukt'),
-    list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
-    newProduct: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
-    editById: path(ROOTS_DASHBOARD, '/e-commerce/product/nike-blazer-low-77-vintage/edit'),
-    checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
-    invoice: path(ROOTS_DASHBOARD, '/e-commerce/invoice')
-  },
   employees: {
     root: path(ROOTS_DASHBOARD, '/employees'),
     list: path(ROOTS_DASHBOARD, '/employees/all'),
