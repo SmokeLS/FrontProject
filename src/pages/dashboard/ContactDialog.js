@@ -19,7 +19,7 @@ import UserContactForm from '../../components/_dashboard/user/UserContactForm';
 import { getProfile } from '../../redux/slices/user';
 
 export function SimpleDialog(props) {
-  const { onClose, selectedValue, open, isEdit, profile, contactId } = props;
+  const { onClose, selectedValue, open, isEdit, profile, contact } = props;
   const error = useSelector((state) => state.user.error);
   const handleClose = () => {
     onClose(selectedValue);
@@ -33,7 +33,7 @@ export function SimpleDialog(props) {
     <Dialog onClose={handleClose} open={open}>
       {isEdit && <DialogTitle>Редактирование контакта</DialogTitle>}
       {!isEdit && <DialogTitle sx={{ mb: 2 }}>Создание нового контакта</DialogTitle>}
-      <UserContactForm contactId={contactId} onClose={onClose} profile={profile} isEdit={isEdit} />
+      <UserContactForm contact={contact} onClose={onClose} profile={profile} isEdit={isEdit} />
     </Dialog>
   );
 }
@@ -88,7 +88,7 @@ export function CreateDialog({ profile, isEdit }) {
   );
 }
 
-export function EditDialog({ isEdit, profile, index, contactId }) {
+export function EditDialog({ isEdit, profile, index, contact }) {
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState('');
 
@@ -112,11 +112,11 @@ export function EditDialog({ isEdit, profile, index, contactId }) {
       >
         Контакт{' '}
         <Typography component="span" variant="caption">
-          #{contactId}
+          #{contact.id}
         </Typography>
       </Typography>
       <SimpleDialog
-        contactId={contactId}
+        contact={contact}
         profile={profile}
         isEdit={isEdit}
         selectedValue={selectedValue}

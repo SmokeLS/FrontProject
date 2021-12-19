@@ -38,7 +38,7 @@ export default function UserCreate() {
           links={[
             { name: 'Компании', href: PATH_DASHBOARD.root },
             { name: 'Все компании', href: PATH_DASHBOARD.user.list },
-            { name: !isEdit ? 'Новая карточка' : name }
+            { name: !isEdit ? 'Добавить компапнию' : name }
           ]}
         />
         <UserNewForm isEdit={isEdit} currentUser={currentUser} />

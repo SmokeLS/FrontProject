@@ -38,17 +38,14 @@ export default function ResetPassword() {
           {!sent ? (
             <>
               <Typography variant="h3" paragraph>
-                Forgot your password?
+                Забыли пароль?
               </Typography>
               <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-                Please enter the email address associated with your account and We will email you a link to reset your
-                password.
+                Для восстановления доступа обратитесь к администратору или начальству.
               </Typography>
 
-              <ResetPasswordForm onSent={() => setSent(true)} onGetEmail={(value) => setEmail(value)} />
-
               <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
-                Back
+                Назад
               </Button>
             </>
           ) : (

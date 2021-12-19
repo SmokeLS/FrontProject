@@ -124,7 +124,7 @@ export default function EmployeeId() {
             <List>
               <ListItem>
                 <Typography variant="body1" sx={{ width: '200px' }}>
-                  Username:
+                  Имя пользователя:
                 </Typography>
                 <ListItemText primary={`${employee.username}`} />
               </ListItem>

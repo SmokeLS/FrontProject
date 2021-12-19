@@ -64,7 +64,7 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
         await dispatch(getChangedEmployee(params.id, values));
-        enqueueSnackbar('Update event success', { variant: 'success' });
+        enqueueSnackbar('Данные успешно обновлены', { variant: 'success' });
         resetForm();
         setSubmitting(false);
       } catch (error) {
@@ -85,11 +85,11 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
               <List>
                 <ListItem>
                   <Typography variant="body1" sx={{ width: '200px' }}>
-                    Username:
+                    Имя пользователя:
                   </Typography>
                   <TextField
                     id="username"
-                    label="Username"
+                    label="Имя пользователя"
                     variant="outlined"
                     {...getFieldProps('username')}
                     error={Boolean(touched.username && errors.username)}

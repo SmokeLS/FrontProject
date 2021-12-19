@@ -56,8 +56,8 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.user.list,
             permission: false,
             children: [{ title: 'Все компании', path: PATH_DASHBOARD.user.id }]
-          },
-          { title: 'Мои компании', permission: false, path: PATH_DASHBOARD.user.cards }
+          }
+          // { title: 'Мои компании', permission: false, path: PATH_DASHBOARD.user.cards }
         ]
       }
     ]

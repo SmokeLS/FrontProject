@@ -1,4 +1,5 @@
 /* eslint-disable no-debugger */
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -35,6 +36,8 @@ export default function ProfileFollowInfo({ profile }) {
   const dispatch = useDispatch();
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const params = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpenErrorDialog(false);
@@ -56,7 +59,7 @@ export default function ProfileFollowInfo({ profile }) {
       setValue(e.target.value);
       dispatch(setDate(id, format(new Date(e.target.value), 'dd.MM.yyyy HH:mm'), e.target.value));
     } else {
-      setOpenErrorDialog(true);
+      enqueueSnackbar('Нельзя ставить прошлые дату и время', { variant: 'error' });
     }
   };
 

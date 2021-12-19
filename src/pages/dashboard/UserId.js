@@ -119,12 +119,12 @@ export default function UserId() {
       value: 'Комментарии',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
       component: <Profile profile={profile} posts={posts} />
-    },
-    {
-      value: 'Авто',
-      icon: <Icon icon={roundPermMedia} width={20} height={20} />,
-      component: <ProfileGallery gallery={gallery} />
     }
+    // {
+    //   value: 'Авто',
+    //   icon: <Icon icon={roundPermMedia} width={20} height={20} />,
+    //   component: <ProfileGallery gallery={gallery} />
+    // }
   ];
 
   if (!profile) return null;

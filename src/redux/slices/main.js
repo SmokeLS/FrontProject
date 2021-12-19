@@ -358,7 +358,7 @@ export function getChangedEmployee(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const a = await axios.put(`/api/v1/users/${id}/`, {
+      await axios.put(`/api/v1/users/${id}/`, {
         username: data.username,
         position: data.position.id,
         full_name: data.full_name,
@@ -373,7 +373,6 @@ export function getChangedEmployee(id, data) {
         passport_date: data.date,
         passport_code: data.code
       });
-      console.log(a);
       const response = await axios.get(`api/v1/users/${id}/`);
       dispatch(slice.actions.getEmployee(response.data));
     } catch (error) {
@@ -407,7 +406,6 @@ export function blockEmployee(id, employee) {
         position: employee.position.id,
         is_banned: true
       });
-      console.log(response);
       dispatch(slice.actions.stopLoading());
     } catch (error) {
       dispatch(slice.actions.hasError(error));

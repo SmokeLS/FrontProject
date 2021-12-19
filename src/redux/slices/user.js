@@ -22,7 +22,8 @@ const initialState = {
   sd_managers: [],
   me: null,
   employee: [],
-  managedGroups: []
+  managedGroups: [],
+  filters: null
 };
 
 const slice = createSlice({
@@ -214,6 +215,10 @@ const slice = createSlice({
     getManagedGroupsSuccess(state, action) {
       state.isLoading = true;
       state.managedGroups = action.payload;
+    },
+
+    getFilters(state, action) {
+      state.filters = action.payload;
     }
   }
 });
@@ -222,7 +227,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { onToggleFollow, deleteUser, hasError } = slice.actions;
+export const { onToggleFollow, deleteUser, hasError, getFilters } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -402,7 +407,6 @@ export function setEmployee(data, navigate) {
         passport_date: data.date,
         passport_code: data.code
       });
-      console.log(response.data);
       navigate(`${PATH_DASHBOARD.employees.list}/${response.data.id}`);
       dispatch(slice.actions.getEmployee(response.data));
     } catch (error) {

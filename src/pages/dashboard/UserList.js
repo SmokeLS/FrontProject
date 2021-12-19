@@ -47,11 +47,11 @@ import useAuth from '../../hooks/useAuth';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Название', alignRight: false },
-  { id: 'user', label: 'Имя', alignRight: false },
+  { id: 'user', label: 'Менеджер', alignRight: false },
   { id: 'InvidialNumber', label: 'ИНН', alignRight: false },
   { id: 'contactdate', label: 'Дата контакта', alignRight: false },
   { id: 'status', label: 'Статус', alignRight: false },
-  { id: 'Commentary', label: 'Комментарий', alignRight: false }
+  { id: 'Commentary', label: 'Комментарии', alignRight: false }
 ];
 // ----------------------------------------------------------------------
 
@@ -261,7 +261,7 @@ export default function UserList() {
                 to={PATH_DASHBOARD.user.newUser}
                 startIcon={<Icon icon={plusFill} />}
               >
-                Новая карточка
+                Добавить компанию
               </Button>
             }
           />
@@ -282,6 +282,7 @@ export default function UserList() {
             rowsPerPage={rowsPerPage}
             page={page}
             handleFunctions={handleFunctions}
+            setPage={setPage}
           />
           <Scrollbar>
             <TableContainer>

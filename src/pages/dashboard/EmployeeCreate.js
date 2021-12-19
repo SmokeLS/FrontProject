@@ -100,7 +100,7 @@ export default function EmployeeCreate() {
           links={[
             { name: 'Сотрудники', href: PATH_DASHBOARD.root },
             { name: 'Все сотрудники', href: PATH_DASHBOARD.user.list },
-            { name: !isEdit ? 'Новая карточка' : name }
+            { name: !isEdit ? 'Добавить сотрудника' : name }
           ]}
         />
         <FormikProvider value={formik}>
@@ -112,11 +112,11 @@ export default function EmployeeCreate() {
                     <List>
                       <ListItem>
                         <Typography variant="body1" sx={{ width: '200px' }}>
-                          Username:
+                          Имя пользователя:
                         </Typography>
                         <TextField
                           id="username"
-                          label="Username"
+                          label="Имя пользователя"
                           variant="outlined"
                           {...getFieldProps('username')}
                           error={Boolean(touched.username && errors.username)}

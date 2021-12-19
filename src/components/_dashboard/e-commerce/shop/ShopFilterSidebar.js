@@ -31,7 +31,7 @@ import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { MIconButton } from '../../../@material-extend';
 import Scrollbar from '../../../Scrollbar';
-import { getUserList, getManagers, getRegions } from '../../../../redux/slices/user';
+import { getUserList, getManagers, getRegions, getFilters } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 export const SORT_BY_OPTIONS = [
@@ -92,7 +92,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ShopFilterSidebar(props) {
-  const { isOpenFilter, onOpenFilter, onCloseFilter, formik, filterName, handleFunctions, rowsPerPage, page } = props;
+  const { isOpenFilter, onOpenFilter, onCloseFilter, formik, filterName, handleFunctions, rowsPerPage, page, setPage } =
+    props;
   const { getFieldProps, resetForm } = formik;
   const { managers, regions } = useSelector((state) => state.user);
   const optionsManagers = managers.map((item) => ({ label: item.full_name, id: item.id }));
@@ -115,6 +116,8 @@ export default function ShopFilterSidebar(props) {
       .map((item) => item)
       .join('');
 
+    setPage(0);
+    dispatch(getFilters(newFilter));
     dispatch(getUserList(rowsPerPage, page, newFilter));
   };
   const changeNameHandleSearch = (e) => {

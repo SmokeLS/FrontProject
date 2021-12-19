@@ -28,7 +28,7 @@ UserContactForm.propTypes = {
   currentUser: PropTypes.object
 };
 
-export default function UserContactForm({ onClose, profile, isEdit, currentUser, contactId }) {
+export default function UserContactForm({ onClose, profile, isEdit, currentUser, contact }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
   };
 
   const deleteHandler = () => {
-    dispatch(deleteContact(contactId));
+    dispatch(deleteContact(contact.id));
     onClose();
     setOpenDelete(false);
   };
@@ -70,10 +70,10 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: currentUser?.name || '',
-      position: currentUser?.position || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || ''
+      name: contact?.name || '',
+      position: contact?.position || '',
+      email: contact?.email || '',
+      phoneNumber: contact?.phone || ''
     },
     validationSchema: NewUserSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
@@ -82,7 +82,7 @@ export default function UserContactForm({ onClose, profile, isEdit, currentUser,
           dispatch(setContacts(values, profile.id));
           dispatch(getProfile(params.id));
         } else {
-          dispatch(changeContacts(values, contactId));
+          dispatch(changeContacts(values, contact.id));
           dispatch(getProfile(params.id));
         }
         resetForm();

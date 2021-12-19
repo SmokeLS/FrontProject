@@ -68,8 +68,8 @@ export default function ChatMessageItem({ comment, message, conversation, onOpen
       >
         <div>
           <InfoStyle variant="caption" sx={{ ...(isMe && { justifyContent: 'flex-end' }) }}>
-            {`${comment.user.full_name},`}&nbsp;
-            {comment.date_created}
+            {`${comment?.user?.full_name},`}&nbsp;
+            {comment?.date_created}
           </InfoStyle>
 
           <ContentStyle>

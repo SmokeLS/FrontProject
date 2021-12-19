@@ -117,7 +117,8 @@ export default function UserListToolbar({
   rowsPerPage,
   page,
   changeNameHandleSearch,
-  query
+  query,
+  setPage
 }) {
   const location = useLocation();
   const theme = useTheme();
@@ -218,6 +219,7 @@ export default function UserListToolbar({
                   onCloseFilter={handleCloseFilter}
                   rowsPerPage={rowsPerPage}
                   page={page}
+                  setPage={setPage}
                 />
                 <ShopProductSort />
               </>

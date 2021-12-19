@@ -42,7 +42,7 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../components/_d
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'username', label: 'Username', alignRight: false },
+  { id: 'username', label: 'Имя пользователя', alignRight: false },
   { id: 'name', label: 'ФИО', alignRight: false },
   { id: 'email', label: 'Почта', alignRight: false },
   { id: 'telephone', label: 'Телефон', alignRight: false },
@@ -162,7 +162,7 @@ export default function EmployeeList() {
               to={PATH_DASHBOARD.employees.newEmployee}
               startIcon={<Icon icon={plusFill} />}
             >
-              Новая карточка
+              Добавить сотрудника
             </Button>
           }
         />

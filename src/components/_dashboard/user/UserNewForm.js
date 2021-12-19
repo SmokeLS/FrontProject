@@ -47,14 +47,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const NewUserSchema = Yup.object().shape({
     user: Yup.object(),
     name: Yup.string().required('Обязательное поле'),
-    taxpayer_id: Yup.string()
-      .required('Обязательное поле')
-      .test(
-        'len',
-        'Данное поле должно состоять из 10 или 12 чисел',
-        // eslint-disable-next-line no-restricted-globals
-        (val) => (val?.length === 10 || val?.length === 12) && !isNaN(val)
-      ),
+    taxpayer_id: Yup.string(),
     region: Yup.object(),
     city: Yup.object(),
     address: Yup.string().required('Обязательное поле')
@@ -74,12 +67,17 @@ export default function UserNewForm({ isEdit, currentUser }) {
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
       try {
         await dispatch(setCompany(values, navigate));
-        throw new Error(error);
+        throw error.response;
       } catch (error) {
-        console.error(error);
         setSubmitting(false);
         setErrors({
-          afterSubmit: 'Проверьте правильность введенных данных'
+          afterSubmit: error.data.detail,
+          taxpayer_id: error.data.taxpayer_id,
+          name: error.data.name,
+          user: error.data.user,
+          reion: error.data.region,
+          city: error.data.city,
+          address: error.data.address
         });
       }
     }
@@ -118,6 +116,8 @@ export default function UserNewForm({ isEdit, currentUser }) {
                       <TextField
                         id="user"
                         label="Менеджер"
+                        error={Boolean(errors.user)}
+                        helperText={errors.user}
                         {...params}
                         sx={{ width: '100%' }}
                         {...getFieldProps('user')}
@@ -159,6 +159,8 @@ export default function UserNewForm({ isEdit, currentUser }) {
                         label="Регион"
                         {...params}
                         id="region"
+                        error={Boolean(errors.region)}
+                        helperText={errors.region}
                         sx={{ width: '100%' }}
                         {...getFieldProps('region')}
                       />
@@ -186,6 +188,8 @@ export default function UserNewForm({ isEdit, currentUser }) {
                       <TextField
                         id="city"
                         label="Город"
+                        error={Boolean(errors.city)}
+                        helperText={errors.city}
                         sx={{ width: '100%' }}
                         {...getFieldProps('city')}
                         onChange={(e) => {

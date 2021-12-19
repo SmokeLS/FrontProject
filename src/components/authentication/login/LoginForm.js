@@ -41,7 +41,10 @@ export default function LoginForm() {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         await login(values.login, values.password);
-        enqueueSnackbar('Login success', {
+        if (isMountedRef.current) {
+          setSubmitting(false);
+        }
+        enqueueSnackbar('Вход выполнен успешно', {
           variant: 'success',
           action: (key) => (
             <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -49,15 +52,12 @@ export default function LoginForm() {
             </MIconButton>
           )
         });
-        if (isMountedRef.current) {
-          setSubmitting(false);
-        }
       } catch (error) {
         console.error(error);
         resetForm();
         if (isMountedRef.current) {
           setSubmitting(false);
-          setErrors({ afterSubmit: error.message });
+          setErrors({ afterSubmit: error.response.data.detail });
         }
       }
     }
@@ -73,13 +73,13 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {errors.afterSubmit && <Alert severity="error">Вы ввели неправильный логин или пароль</Alert>}
+          {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
 
           <TextField
             fullWidth
             autoComplete="username"
             type="Login"
-            label="Login"
+            label="Имя пользователя"
             {...getFieldProps('login')}
             error={Boolean(touched.login && errors.login)}
             helperText={touched.login && errors.login}
@@ -89,7 +89,7 @@ export default function LoginForm() {
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label="Пароль"
             {...getFieldProps('password')}
             InputProps={{
               endAdornment: (
@@ -112,7 +112,7 @@ export default function LoginForm() {
         </Stack>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-          Login
+          Войти
         </LoadingButton>
       </Form>
     </FormikProvider>

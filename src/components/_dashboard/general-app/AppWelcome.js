@@ -27,6 +27,11 @@ AppWelcome.propTypes = {
 };
 
 export default function AppWelcome({ displayName }) {
+  const handleClickNavigate = () => {
+    window.location.href = 'https://forms.yandex.ru/cloud/61a6795b621917842f4e23c4/';
+    return null;
+  };
+
   return (
     <RootStyle>
       <CardContent
@@ -42,12 +47,12 @@ export default function AppWelcome({ displayName }) {
         </Typography>
 
         <Typography variant="body2" sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: 'auto' }}>
-          По всем вопросам, касающихся работы системы просьба писать на почту tpass-dev@yandex.ru. Если вы нашли ошибки
-          ошибки в работе системы просьба заполнить форму!
+          По вопросам, ксающихся работы системы просьба обращаться через форму. Так же вы можете писать на почту
+          tpass-dev@yandex.ru, указывая тему обращения.
         </Typography>
 
-        <Button variant="contained" to="#" component={RouterLink}>
-          Сообщить об ошибке
+        <Button variant="contained" to="#" onClick={handleClickNavigate} component={RouterLink}>
+          Открыть форму
         </Button>
       </CardContent>
     </RootStyle>
