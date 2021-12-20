@@ -91,10 +91,6 @@ export default function UserId() {
 
   useEffect(() => {
     dispatch(getProfile(params.id));
-    // dispatch(getPosts());
-    // dispatch(getFollowers());
-    // dispatch(getFriends());
-    // dispatch(getGallery());
   }, [dispatch, params]);
 
   const handleChangeTab = (event, newValue) => {

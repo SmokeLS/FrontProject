@@ -13,9 +13,10 @@ export const initialState = {
   userStatistics: null
 };
 
-const handlers = {
+export const handlers = {
   INITIALIZE: (state, action) => {
     const { isAuthenticated, user, userStatistics } = action.payload;
+
     return {
       ...state,
       isAuthenticated,

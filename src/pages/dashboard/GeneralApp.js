@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // material
 import { Container, Grid, Stack, Typography } from '@mui/material';
 // hooks
@@ -9,31 +9,20 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import { AppWelcome, AppWidgetsStats } from '../../components/_dashboard/general-app';
+import { getUser, getUserStatistics } from '../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
 export default function GeneralApp() {
   const { themeStretch } = useSettings();
   const { user, userStatistics } = useAuth();
+  const { userMe, userMeStatistics } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function refresh() {
-      const response = await axios.get('/api/v1/users/me/');
-
-      const user = { ...response.data };
-
-      const responseStatistics = await axios.get('api/v1/users/my_sd_statistics/');
-      const userStatistics = { ...responseStatistics.data };
-
-      dispatch({
-        type: 'INITIALIZE',
-        payload: {
-          isAuthenticated: true,
-          user,
-          userStatistics
-        }
-      });
+      dispatch(getUserStatistics());
+      dispatch(getUser());
     }
     refresh();
   }, [user, userStatistics, dispatch]);
@@ -54,7 +43,7 @@ export default function GeneralApp() {
                 </Typography>
               </Grid>
 
-              {Object.entries(userStatistics).map((userStat, index) => (
+              {Object.entries(!userMeStatistics ? userStatistics : userMeStatistics).map((userStat, index) => (
                 <Grid key={index} item xs={12} md={6} lg={3}>
                   <AppWidgetsStats userStat={userStat} item xs={4} />
                 </Grid>

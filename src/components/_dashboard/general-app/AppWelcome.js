@@ -51,7 +51,7 @@ export default function AppWelcome({ displayName }) {
           tpass-dev@yandex.ru, указывая тему обращения.
         </Typography>
 
-        <Button variant="contained" to="#" onClick={handleClickNavigate} component={RouterLink}>
+        <Button variant="contained" target="_blank" to="#" onClick={handleClickNavigate} component={RouterLink}>
           Открыть форму
         </Button>
       </CardContent>

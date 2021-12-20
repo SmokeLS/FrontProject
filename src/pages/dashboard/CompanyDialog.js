@@ -30,11 +30,18 @@ export function CompanyDialog(props) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const params = useParams();
-  const { sd_managers, allRegions, cities } = useSelector((state) => state.user);
+  const { sd_managers, allRegions, cities, allRegionsNoCities } = useSelector((state) => state.user);
   const [query, setQuery] = useState('');
 
+  let regionStateValue;
+
+  if (!profile.city) {
+    regionStateValue = profile.region?.name;
+  } else {
+    regionStateValue = profile.city?.region?.name;
+  }
   const [managers, setManagers] = useState(profile.user?.full_name);
-  const [regions, setRegions] = useState(profile.city?.region?.name);
+  const [regions, setRegions] = useState(regionStateValue);
   const [city, setCity] = useState(profile.city?.name);
 
   const optionsManagers = sd_managers.map((item) => ({ label: item.full_name, id: item.id, key: item.id }));
@@ -42,10 +49,17 @@ export function CompanyDialog(props) {
   const optionsCities = cities.map((item) => ({ label: item.name, id: item.id, key: item.id }));
 
   useEffect(() => {
+    if (!profile.city) {
+      setRegions(profile.region?.name);
+    } else {
+      setRegions(profile.city?.region?.name);
+    }
+    setManagers(profile.user?.full_name);
+    setCity(profile.city?.name);
     dispatch(getSdManagers());
     dispatch(getAllRegions());
     dispatch(getCities());
-  }, [dispatch, params.id]);
+  }, [dispatch, params.id, profile]);
 
   useEffect(() => {
     dispatch(getCities(query, regions?.id));

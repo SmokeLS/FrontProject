@@ -23,7 +23,9 @@ const initialState = {
   me: null,
   employee: [],
   managedGroups: [],
-  filters: null
+  filters: null,
+  userMe: null,
+  userMeStatistics: null
 };
 
 const slice = createSlice({
@@ -146,79 +148,90 @@ const slice = createSlice({
 
     // GET MANAGERS
     getManagers(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.managers = action.payload;
     },
 
     // GET SDMANAGERS
     getSdManagers(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.sd_managers = action.payload;
     },
 
     // GET REGIONS
     getRegions(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.regions = action.payload;
     },
 
     // GET REGIONS
     getAllRegions(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.allRegions = action.payload;
     },
 
     // GET REGIONS
     getContacts(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.profile.contacts = [...state.profile.contacts, action.payload];
     },
 
     // GET REGIONS
     getComments(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.profile.comments = [...state.profile.comments, action.payload];
     },
 
     // GET REGIONS
     getNewDate(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.profile.date = action.payload;
     },
 
     getChangedProfileSuccess(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.profile = { ...action.payload };
     },
 
     // GET CITIES
     getCitiesSuccess(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.cities = action.payload;
     },
 
     getAddedProfile(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.profile = [...state.profile, ...action.payload];
     },
 
     getMe(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.me = action.payload;
     },
 
     getEmployee(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.employee = action.payload;
     },
 
     getManagedGroupsSuccess(state, action) {
-      state.isLoading = true;
+      state.isLoading = false;
       state.managedGroups = action.payload;
     },
 
     getFilters(state, action) {
+      state.isLoading = false;
       state.filters = action.payload;
+    },
+
+    getUser(state, action) {
+      state.isLoading = false;
+      state.userMe = action.payload;
+    },
+
+    getUserStatistics(state, action) {
+      state.isLoading = false;
+      state.userMeStatistics = action.payload;
     }
   }
 });
@@ -237,6 +250,36 @@ export function getProfile(id = 0) {
     try {
       const response = await axios.get(`api/v1/sd/companies/${id}/`);
       dispatch(slice.actions.getProfileSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getUser() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/users/me/');
+      console.log(response);
+      dispatch(slice.actions.getUser(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getUserStatistics() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('api/v1/users/my_sd_statistics/');
+      console.log(response);
+      dispatch(slice.actions.getUserStatistics(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -707,7 +750,7 @@ export function deleteContact(id) {
 
 // ----------------------------------------------------------------------
 
-export function getChangedProfile(id, data) {
+export function getChangedProfile(id, data, callback) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
