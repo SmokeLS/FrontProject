@@ -22,7 +22,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useDispatch } from 'react-redux';
-import { setStatus, setDate, getProfile } from '../../../../redux/slices/user';
+import { setStatus, setDate, getProfile, getUser } from '../../../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +37,6 @@ export default function ProfileFollowInfo({ profile }) {
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const params = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpenErrorDialog(false);
@@ -47,12 +46,16 @@ export default function ProfileFollowInfo({ profile }) {
     const formatedValueDates = profile.date.split(' ')[0].split('.').reverse().join('.');
     const formatedValue = `${formatedValueDates} ${profile.date.split(' ')[1]}`;
     setValue(format(new Date(formatedValue), "yyyy-MM-dd'T'HH:mm"));
-  }, []);
+  }, [profile.date]);
 
   const handleChange = (id, event) => {
     setLocalStatus(event.target.value);
     dispatch(setStatus(id, event.target.value));
   };
+
+  useEffect(() => {
+    setLocalStatus(profile.status);
+  }, [dispatch, params, profile.status]);
 
   const handleChangeDate = (id, e) => {
     if (new Date(e.target.value) > new Date()) {
@@ -62,6 +65,8 @@ export default function ProfileFollowInfo({ profile }) {
       enqueueSnackbar('Нельзя ставить прошлые дату и время', { variant: 'error' });
     }
   };
+
+  console.log(localStatus);
 
   return (
     <>

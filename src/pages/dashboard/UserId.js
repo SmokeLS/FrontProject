@@ -60,7 +60,7 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 export default function UserId() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
-  const { profile, posts, followers, friends, gallery } = useSelector((state) => state.user);
+  const { profile, posts, followers, friends, gallery, isLoading } = useSelector((state) => state.user);
   const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState('Комментарии');
   const [findFriends, setFindFriends] = useState('');
@@ -124,6 +124,7 @@ export default function UserId() {
   ];
 
   if (!profile) return null;
+
   return (
     <Page title="User: Profile | Minimal-UI">
       <Container maxWidth={themeStretch ? false : 'xl'}>

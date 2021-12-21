@@ -240,7 +240,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { onToggleFollow, deleteUser, hasError, getFilters } = slice.actions;
+export const { onToggleFollow, deleteUser, hasError, getFilters, startLoading } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -750,10 +750,11 @@ export function deleteContact(id) {
 
 // ----------------------------------------------------------------------
 
-export function getChangedProfile(id, data, callback) {
+export function getChangedProfile(id, data) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
+      console.log(data);
       await axios.patch(`api/v1/sd/companies/${id}/`, {
         user: data.user.id || null,
         address: data.address || null,

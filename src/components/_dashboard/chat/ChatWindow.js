@@ -44,11 +44,8 @@ export default function ChatWindow({ profile }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { conversationKey } = useParams();
-  const { contacts, recipients, participants, activeConversationId } = useSelector((state) => state.chat);
+  const { activeConversationId } = useSelector((state) => state.chat);
   const conversation = useSelector((state) => conversationSelector(state));
-
-  const mode = conversationKey ? 'DETAIL' : 'COMPOSE';
-  const displayParticipants = participants.filter((item) => item.id !== '8864c717-587d-472a-929a-8e5f298024da-0');
 
   useEffect(() => {
     const getDetails = async () => {
@@ -74,10 +71,6 @@ export default function ChatWindow({ profile }) {
     }
   }, [dispatch, activeConversationId]);
 
-  const handleAddRecipients = (recipients) => {
-    dispatch(addRecipients(recipients));
-  };
-
   const handleSendMessage = async (value) => {
     try {
       dispatch(onSendMessage(value));
@@ -85,6 +78,8 @@ export default function ChatWindow({ profile }) {
       console.error(error);
     }
   };
+
+  if (!profile) return null;
 
   return (
     <Stack sx={{ flexGrow: 1, minWidth: '1px' }}>

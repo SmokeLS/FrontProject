@@ -28,7 +28,7 @@ import {
 } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getUserList, deleteUser } from '../../redux/slices/user';
+import { getUserList, startLoading } from '../../redux/slices/user';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -65,31 +65,13 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query, property) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(array, (_user) => _user[`${property}`].toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
-
 export default function UserList() {
   const { themeStretch } = useSettings();
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userList, count, filters } = useSelector((state) => state.user);
+  const { userList, count, filters, isLoading } = useSelector((state) => state.user);
+  const [loaded, setLoaded] = useState(false);
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -124,23 +106,12 @@ export default function UserList() {
   });
 
   useEffect(() => {
-    dispatch(getUserList(rowsPerPage, page, filters));
-  }, [dispatch, rowsPerPage, page, filters]);
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = userList.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
+    async function getUsers() {
+      await dispatch(getUserList(rowsPerPage, page, filters));
+      setLoaded(true);
     }
-    setSelected([]);
-  };
+    getUsers();
+  }, [dispatch, rowsPerPage, page, filters]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -204,43 +175,18 @@ export default function UserList() {
     }
   };
 
-  const handleDeleteUser = (userId) => {
-    dispatch(deleteUser(userId));
-  };
-
   const emptyRows = page > count / rowsPerPage ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
   let isUserNotFound = userList.length;
 
-  const filteredNumbers = applySortFilter(
-    userList,
-    getComparator(order, orderBy),
-    filterName.taxpayer_id,
-    'taxpayer_id'
-  );
-
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-  const filteredAddresses = applySortFilter(userList, getComparator(order, orderBy), filterName.address, 'address');
-  const filteredTels = applySortFilter(userList, getComparator(order, orderBy), filterName.phoneNumber, 'phoneNumber');
-  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-  const filteredCommentaries = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-  // const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName.name, 'name');
-
-  const concatedUsers = _.intersection(
-    filteredUsers,
-    filteredNumbers,
-    filteredAddresses,
-    filteredTels,
-    filteredCommentaries
-  );
-
-  if (concatedUsers.length) {
+  if (userList.length) {
     isUserNotFound = false;
   } else {
     isUserNotFound = true;
+  }
+
+  if (!loaded) {
+    return null;
   }
 
   return (
@@ -289,7 +235,7 @@ export default function UserList() {
               <Table>
                 <UserListHead headLabel={TABLE_HEAD} rowCount={userList.length} numSelected={selected.length} />
                 <TableBody>
-                  {concatedUsers.map((row, index) => {
+                  {userList.map((row, index) => {
                     const { id, user, name, date, status, taxpayer_id, comments } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 

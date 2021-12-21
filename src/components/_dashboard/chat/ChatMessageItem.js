@@ -56,6 +56,8 @@ export default function ChatMessageItem({ comment, message, conversation, onOpen
     dispatch(getMe());
   }, [dispatch]);
 
+  if (!isMe) return null;
+
   return (
     <RootStyle>
       <Box

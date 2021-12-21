@@ -80,11 +80,11 @@ export function CompanyDialog(props) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      user: profile.user,
+      user: profile.user || managers,
       name: profile.name,
       taxpayer_id: profile.taxpayer_id,
-      region: profile.region.name,
-      city: profile.city,
+      region: profile?.region?.name || regions,
+      city: profile?.city || city,
       address: profile.address
     },
     validationSchema: companySchema,
@@ -167,6 +167,7 @@ export function CompanyDialog(props) {
                       setRegions(value);
                       setFieldValue('region', value !== null ? value : '');
                     }}
+                    onInputChange={(e, value) => console.log(value)}
                     renderInput={(params) => (
                       <TextField
                         label="Регион"

@@ -2,12 +2,23 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Typography } from '@mui/material';
 
+function isValidDate(d) {
+  // eslint-disable-next-line no-restricted-globals
+  return d instanceof Date && !isNaN(d);
+}
+
 export default function Timer({ profile }) {
+  let hours = new Date().getUTCHours() + profile?.region?.timezone?.value;
+
+  if (!isValidDate(hours)) {
+    hours = new Date().getUTCHours();
+  }
+
   const date = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
     new Date().getDay(),
-    new Date().getUTCHours() + profile.region.timezone.value,
+    hours,
     new Date().getMinutes(),
     new Date().getSeconds()
   );
@@ -18,7 +29,7 @@ export default function Timer({ profile }) {
         new Date().getFullYear(),
         new Date().getMonth(),
         new Date().getDay(),
-        new Date().getUTCHours() + profile?.region?.timezone?.value,
+        hours,
         new Date().getMinutes(),
         new Date().getSeconds()
       );

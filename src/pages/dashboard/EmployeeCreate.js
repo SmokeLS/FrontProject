@@ -212,7 +212,7 @@ export default function EmployeeCreate() {
                               {...getFieldProps('position')}
                             />
                           )}
-                          isOptionEqualToValuе
+                          isOptionEqualToValue={(option, value) => option.id === value.id}
                         />
                       </ListItem>
                       <ListItem>

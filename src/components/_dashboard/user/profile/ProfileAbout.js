@@ -28,13 +28,15 @@ export default function ProfileAbout({ profile }) {
   let regionInformation;
   const params = useParams();
 
-  if (!profile?.city) {
+  if (!profile) return null;
+
+  if (!profile.city) {
     regionInformation = (
       <Stack direction="row">
         <Typography sx={{ fontWeight: 'bold' }} variant="body1">
           Регион
           <Typography variant="body1" component="span">
-            : {profile?.region.name}
+            : {profile?.region?.name}
           </Typography>
         </Typography>
       </Stack>
@@ -46,7 +48,7 @@ export default function ProfileAbout({ profile }) {
           <Typography sx={{ fontWeight: 'bold' }} variant="body1">
             Регион
             <Typography variant="body1" component="span">
-              : {profile?.city.region.name}
+              : {profile?.city?.region.name}
             </Typography>
           </Typography>
         </Stack>

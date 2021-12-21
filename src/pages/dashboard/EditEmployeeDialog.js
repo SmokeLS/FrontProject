@@ -53,14 +53,14 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
       patronymic: employee.patronymic || '',
       phone: employee.phone || '',
       email: employee.email || '',
-      position: employee.position,
+      position: employee.position || group,
       number: employee.passport_number || '',
       series: employee.passport_series || '',
       issued: employee.passport_issued || '',
       date: employee.passport_date || null,
       code: employee.passport_code || ''
     },
-    // validationSchema: EditSchema,
+    validationSchema: EditSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
       try {
         await dispatch(getChangedEmployee(params.id, values));
@@ -185,7 +185,7 @@ export default function EditEmployeeDialog({ employee, openDialog, handleClose }
                         {...getFieldProps('position')}
                       />
                     )}
-                    isOptionEqualToValuе
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
                   />
                 </ListItem>
                 <ListItem>
